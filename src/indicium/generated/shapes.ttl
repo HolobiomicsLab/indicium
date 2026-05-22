@@ -1,0 +1,139 @@
+@prefix ECO: <http://purl.obolibrary.org/obo/ECO_> .
+@prefix IAO: <http://purl.obolibrary.org/obo/IAO_> .
+@prefix asb: <https://asb.holobiomics.org/ns/asb#> .
+@prefix cito: <http://purl.org/spar/cito/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix doco: <http://purl.org/spar/doco/> .
+@prefix fabio: <http://purl.org/spar/fabio/> .
+@prefix indicium: <https://w3id.org/indicium/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sepio: <http://purl.obolibrary.org/obo/SEPIO_> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+sepio:0000002 a sh:NodeShape ;
+    rdfs:comment "An evidence line linking a Claim to a Source (SEPIO EvidenceLine)." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:float ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path indicium:confidence ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path indicium:quote ],
+        [ sh:class asb:Claim ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 5 ;
+            sh:path indicium:for_claim ],
+        [ sh:class fabio:Expression ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 4 ;
+            sh:path indicium:of_source ],
+        [ sh:in ( IAO:0000311 doco:Figure doco:Table IAO:0000536 ) ;
+            sh:maxCount 1 ;
+            sh:order 1 ;
+            sh:path indicium:source_type ],
+        [ sh:in ( ECO:0000006 ECO:0000033 ECO:0000302 ECO:0000361 ECO:0000034 ) ;
+            sh:maxCount 1 ;
+            sh:order 0 ;
+            sh:path indicium:evidence_type ] ;
+    sh:targetClass sepio:0000002 .
+
+indicium:CitationLink a sh:NodeShape ;
+    rdfs:comment "A typed link (CiTO) from a Source to a Claim." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:class asb:Claim ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 1 ;
+            sh:path indicium:for_claim ],
+        [ sh:class fabio:Expression ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 0 ;
+            sh:path indicium:of_source ],
+        [ sh:in ( cito:supports cito:disputes cito:qualifies cito:citesForInformation ) ;
+            sh:maxCount 1 ;
+            sh:order 2 ;
+            sh:path indicium:link_type ] ;
+    sh:targetClass indicium:CitationLink .
+
+fabio:Expression a sh:NodeShape ;
+    rdfs:comment "A cited source/paper with stable identity." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path dct:title ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path dct:identifier ],
+        [ sh:datatype xsd:string ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path indicium:authors ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path indicium:license_id ] ;
+    sh:targetClass fabio:Expression .
+
+asb:Claim a sh:NodeShape ;
+    rdfs:comment "A scientific claim using the Bucur 5-slot SuperPattern." ;
+    sh:closed true ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path asb:subject ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path asb:context ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path asb:relation ],
+        [ sh:in ( "causes" "prevents" "inhibits" "activates" "increases" "decreases" "correlates_with" "is_associated_with" "predicts" "interacts_with" "produces" "requires" "enables" "treats" "enhances" "reduces" "has_property" "is_part_of" "is_a" "consistent_with" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 2 ;
+            sh:path asb:qualifier ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path asb:object ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path indicium:source_excerpt ],
+        [ sh:in ( "explicit" "implicit" ) ;
+            sh:maxCount 1 ;
+            sh:order 5 ;
+            sh:path indicium:claim_type ] ;
+    sh:targetClass asb:Claim .
+
+

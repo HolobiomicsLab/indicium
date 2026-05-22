@@ -1,0 +1,233 @@
+{
+    "$defs": {
+        "CitationLink": {
+            "additionalProperties": false,
+            "description": "A typed link (CiTO) from a Source to a Claim.",
+            "properties": {
+                "for_claim": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Claim"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "link_type": {
+                    "$ref": "#/$defs/LinkType"
+                },
+                "of_source": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Source"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "title": "CitationLink",
+            "type": "object"
+        },
+        "Claim": {
+            "additionalProperties": false,
+            "description": "A scientific claim using the Bucur 5-slot SuperPattern.",
+            "properties": {
+                "claim_type": {
+                    "$ref": "#/$defs/ClaimType"
+                },
+                "context": {
+                    "type": "string"
+                },
+                "object": {
+                    "type": "string"
+                },
+                "qualifier": {
+                    "$ref": "#/$defs/SuperPatternQualifier"
+                },
+                "relation": {
+                    "type": "string"
+                },
+                "source_excerpt": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "subject": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "context",
+                "subject",
+                "qualifier",
+                "relation",
+                "object"
+            ],
+            "title": "Claim",
+            "type": "object"
+        },
+        "ClaimType": {
+            "description": "",
+            "enum": [
+                "explicit",
+                "implicit"
+            ],
+            "title": "ClaimType",
+            "type": "string"
+        },
+        "Evidence": {
+            "additionalProperties": false,
+            "description": "An evidence line linking a Claim to a Source (SEPIO EvidenceLine).",
+            "properties": {
+                "confidence": {
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
+                "evidence_type": {
+                    "$ref": "#/$defs/EvidenceType"
+                },
+                "for_claim": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Claim"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "of_source": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Source"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "quote": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "source_type": {
+                    "$ref": "#/$defs/SourceType"
+                }
+            },
+            "title": "Evidence",
+            "type": "object"
+        },
+        "EvidenceType": {
+            "description": "",
+            "enum": [
+                "data",
+                "citation",
+                "knowledge",
+                "inference",
+                "speculation"
+            ],
+            "title": "EvidenceType",
+            "type": "string"
+        },
+        "LinkType": {
+            "description": "",
+            "enum": [
+                "supports",
+                "disputes",
+                "qualifies",
+                "citesForInformation"
+            ],
+            "title": "LinkType",
+            "type": "string"
+        },
+        "Source": {
+            "additionalProperties": false,
+            "description": "A cited source/paper with stable identity.",
+            "properties": {
+                "authors": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "identifier": {
+                    "type": "string"
+                },
+                "license_id": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "identifier"
+            ],
+            "title": "Source",
+            "type": "object"
+        },
+        "SourceType": {
+            "description": "",
+            "enum": [
+                "text",
+                "figure",
+                "table",
+                "image"
+            ],
+            "title": "SourceType",
+            "type": "string"
+        },
+        "SuperPatternQualifier": {
+            "description": "20-term Bucur et al. (K-CAP 2021) qualifier vocabulary.",
+            "enum": [
+                "causes",
+                "prevents",
+                "inhibits",
+                "activates",
+                "increases",
+                "decreases",
+                "correlates_with",
+                "is_associated_with",
+                "predicts",
+                "interacts_with",
+                "produces",
+                "requires",
+                "enables",
+                "treats",
+                "enhances",
+                "reduces",
+                "has_property",
+                "is_part_of",
+                "is_a",
+                "consistent_with"
+            ],
+            "title": "SuperPatternQualifier",
+            "type": "string"
+        }
+    },
+    "$id": "https://w3id.org/indicium",
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "additionalProperties": true,
+    "metamodel_version": "1.11.0",
+    "title": "indicium",
+    "type": "object",
+    "version": null
+}
+
