@@ -1,0 +1,89 @@
+id: https://w3id.org/indicium
+name: indicium
+description: Shared claim/evidence standard — ECO/CiTO/DoCO/FaBiO/SEPIO/PROV-O + Bucur SuperPattern.
+prefixes:
+  indicium: https://w3id.org/indicium/
+  linkml: https://w3id.org/linkml/
+  ECO: http://purl.obolibrary.org/obo/ECO_
+  IAO: http://purl.obolibrary.org/obo/IAO_
+  doco: http://purl.org/spar/doco/
+  cito: http://purl.org/spar/cito/
+  fabio: http://purl.org/spar/fabio/
+  sepio: http://purl.obolibrary.org/obo/SEPIO_
+  prov: http://www.w3.org/ns/prov#
+  dct: http://purl.org/dc/terms/
+  asb: https://asb.holobiomics.org/ns/asb#
+default_prefix: indicium
+default_range: string
+imports:
+  - linkml:types
+
+enums:
+  ClaimType:
+    permissible_values:
+      explicit: {}
+      implicit: {}
+  SuperPatternQualifier:
+    description: 20-term Bucur et al. (K-CAP 2021) qualifier vocabulary.
+    permissible_values:
+      causes: {}
+      prevents: {}
+      inhibits: {}
+      activates: {}
+      increases: {}
+      decreases: {}
+      correlates_with: {}
+      is_associated_with: {}
+      predicts: {}
+      interacts_with: {}
+      produces: {}
+      requires: {}
+      enables: {}
+      treats: {}
+      enhances: {}
+      reduces: {}
+      has_property: {}
+      is_part_of: {}
+      is_a: {}
+      consistent_with: {}
+  EvidenceType:
+    permissible_values:
+      data:        { meaning: ECO:0000006 }
+      citation:    { meaning: ECO:0000033 }
+      knowledge:   { meaning: ECO:0000302 }
+      inference:   { meaning: ECO:0000361 }
+      speculation: { meaning: ECO:0000034 }
+  SourceType:
+    permissible_values:
+      text:   { meaning: IAO:0000311 }
+      figure: { meaning: doco:Figure }
+      table:  { meaning: doco:Table }
+      image:  { meaning: IAO:0000536 }
+  LinkType:
+    permissible_values:
+      supports:            { meaning: cito:supports }
+      disputes:            { meaning: cito:disputes }
+      qualifies:           { meaning: cito:qualifies }
+      citesForInformation: { meaning: cito:citesForInformation }
+
+slots:
+  context:   { required: true, slot_uri: asb:context }
+  subject:   { required: true, slot_uri: asb:subject }
+  qualifier: { required: true, range: SuperPatternQualifier, slot_uri: asb:qualifier }
+  relation:  { required: true, slot_uri: asb:relation }
+  object:    { required: true, slot_uri: asb:object }
+  claim_type: { range: ClaimType }
+  source_excerpt: {}
+
+classes:
+  Claim:
+    class_uri: asb:Claim
+    description: A scientific claim using the Bucur 5-slot SuperPattern.
+    slots:
+      - context
+      - subject
+      - qualifier
+      - relation
+      - object
+      - claim_type
+      - source_excerpt
