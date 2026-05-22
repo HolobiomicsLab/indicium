@@ -74,6 +74,17 @@ slots:
   object:    { required: true, slot_uri: asb:object }
   claim_type: { range: ClaimType }
   source_excerpt: {}
+  evidence_type: { range: EvidenceType }
+  source_type:   { range: SourceType }
+  quote: {}
+  confidence: { range: float }
+  of_source:  { range: Source }
+  for_claim:  { range: Claim }
+  identifier: { required: true, slot_uri: dct:identifier }
+  title:      { slot_uri: dct:title }
+  authors:    { multivalued: true }
+  license_id: {}
+  link_type:  { range: LinkType }
 
 classes:
   Claim:
@@ -87,3 +98,14 @@ classes:
       - object
       - claim_type
       - source_excerpt
+  Evidence:
+    class_uri: sepio:0000002
+    description: An evidence line linking a Claim to a Source (SEPIO EvidenceLine).
+    slots: [evidence_type, source_type, quote, confidence, of_source, for_claim]
+  Source:
+    class_uri: fabio:Expression
+    description: A cited source/paper with stable identity.
+    slots: [identifier, title, authors, license_id]
+  CitationLink:
+    description: A typed link (CiTO) from a Source to a Claim.
+    slots: [of_source, for_claim, link_type]
