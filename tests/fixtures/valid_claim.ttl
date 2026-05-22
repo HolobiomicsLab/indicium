@@ -1,0 +1,11 @@
+@prefix asb: <https://asb.holobiomics.org/ns/asb#> .
+@prefix indicium: <https://w3id.org/indicium/> .
+
+<urn:indicium:claim:c001> a asb:Claim ;
+    asb:context "synthetic context" ;
+    asb:subject "subject X" ;
+    asb:qualifier "correlates_with" ;
+    asb:relation "correlated with" ;
+    asb:object "object Y" ;
+    indicium:claim_type "explicit" ;
+    indicium:source_excerpt "Cited from synthetic source" .
