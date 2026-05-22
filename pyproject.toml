@@ -3,11 +3,21 @@ name = "indicium"
 version = "0.1.0"
 description = "Shared claim/evidence standard (ECO/CiTO/SEPIO/PROV-O + Bucur SuperPattern)"
 requires-python = ">=3.11"
+# Runtime is intentionally light: validate_graph + the generated pydantic model
+# + adapters import only rdflib/pyshacl. `linkml` (the generator) and
+# `linkml-runtime` (SchemaView) are needed ONLY for `make gen` and the
+# schema-load tests — see the `codegen` extra. Keeping them out of runtime lets
+# heavy consumers (e.g. fastmcp-based servers) install indicium without the
+# linkml dependency tree, which otherwise conflicts.
 dependencies = [
-    "linkml>=1.8",
-    "linkml-runtime>=1.8",
     "pyshacl>=0.26",
     "rdflib>=7.0",
+]
+
+[project.optional-dependencies]
+codegen = [
+    "linkml>=1.8",
+    "linkml-runtime>=1.8",
     "pyyaml>=6.0",
 ]
 
@@ -19,7 +29,8 @@ build-backend = "hatchling.build"
 packages = ["src/indicium"]
 
 [dependency-groups]
-dev = ["pytest>=8.0"]
+# Dev needs the codegen toolchain to run `make gen` and the schema-load tests.
+dev = ["pytest>=8.0", "linkml>=1.8", "linkml-runtime>=1.8", "pyyaml>=6.0"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
