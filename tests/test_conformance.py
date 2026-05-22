@@ -11,13 +11,17 @@ def _verdict(fixture: str) -> bool:
     return conforms
 
 
-def test_scriptorium_valid_claim_still_conforms():
-    # Same accept verdict as Scriptorium's mb-shapes ClaimShape.
+def test_valid_claim_conforms():
+    # Encodes the core requirement Scriptorium's mb-shapes ClaimShape also
+    # enforces: a fully-populated 5-slot SuperPattern claim is accepted.
+    # (Not a mechanical cross-validation — Scriptorium's shape additionally
+    # requires dct:description and mb:claimType, which indicium does not.)
     assert _verdict("valid_claim.ttl") is True
 
 
-def test_scriptorium_invalid_claim_still_rejected():
-    # Same reject verdict — missing all five required SuperPattern slots.
+def test_claim_missing_five_slots_is_rejected():
+    # Core SuperPattern requirement, same as Scriptorium's ClaimShape:
+    # a claim missing all five required slots is rejected.
     assert _verdict("invalid_claim_missing_slots.ttl") is False
 
 
