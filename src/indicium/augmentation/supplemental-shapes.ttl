@@ -1,0 +1,3 @@
+# Supplemental SHACL — populated only if the conformance suite (a later task)
+# reveals a constraint gen-shacl cannot express. Empty by design at v0.1.
+@prefix sh: <http://www.w3.org/ns/shacl#> .

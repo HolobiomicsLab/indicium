@@ -1,0 +1,11 @@
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix indicium: <https://w3id.org/indicium/> .
+
+<https://w3id.org/indicium> a owl:Ontology ;
+    owl:versionInfo "0.1.0" ;
+    owl:imports <http://purl.obolibrary.org/obo/eco.owl> ,
+                <http://purl.org/spar/cito> ,
+                <http://purl.org/spar/doco> ,
+                <http://purl.org/spar/fabio> ,
+                <http://www.w3.org/ns/prov-o> ,
+                <http://purl.org/dc/terms> .
