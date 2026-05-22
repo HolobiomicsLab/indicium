@@ -19,3 +19,9 @@ def test_scriptorium_valid_claim_still_conforms():
 def test_scriptorium_invalid_claim_still_rejected():
     # Same reject verdict — missing all five required SuperPattern slots.
     assert _verdict("invalid_claim_missing_slots.ttl") is False
+
+
+def test_enriched_claim_with_external_properties_conforms():
+    # Open shapes: a claim carrying KGmemory/PROV-O/DC properties beyond
+    # indicium's own slots must still conform (cross-tool mergeability).
+    assert _verdict("valid_claim.ttl") is True
