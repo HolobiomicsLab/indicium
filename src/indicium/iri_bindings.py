@@ -66,3 +66,36 @@ SOURCE_TYPE_IRI: dict[str, str] = {
     "table":  "doco:Table",
     "image":  "IAO:0000536",   # image
 }
+
+# ---------------------------------------------------------------------------
+# CURIE expansion — used by Scriptorium and other consumers to build URIRefs
+# ---------------------------------------------------------------------------
+
+_ECO_BASE  = "http://purl.obolibrary.org/obo/ECO_"
+_IAO_BASE  = "http://purl.obolibrary.org/obo/IAO_"
+_DOCO_BASE = "http://purl.org/spar/doco/"
+_CITO_BASE = "http://purl.org/spar/cito/"
+
+def expand_curie(curie: str) -> str:
+    """Expand a short CURIE to a full IRI string.
+
+    Supported prefixes: ECO, IAO, doco, cito.
+
+    Examples::
+
+        expand_curie("ECO:0000006")  # → "http://purl.obolibrary.org/obo/ECO_0000006"
+        expand_curie("doco:Figure")  # → "http://purl.org/spar/doco/Figure"
+        expand_curie("IAO:0000536")  # → "http://purl.obolibrary.org/obo/IAO_0000536"
+    """
+    prefix, local = curie.split(":", 1)
+    bases = {
+        "ECO":  _ECO_BASE,
+        "IAO":  _IAO_BASE,
+        "doco": _DOCO_BASE,
+        "cito": _CITO_BASE,
+    }
+    if prefix not in bases:
+        raise ValueError(
+            f"Unknown CURIE prefix: {prefix!r}. Supported: {list(bases)}"
+        )
+    return bases[prefix] + local
