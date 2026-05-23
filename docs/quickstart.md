@@ -14,6 +14,24 @@ For codegen (regenerating pydantic model / SHACL / OWL from the LinkML source):
 pip install indicium[codegen]
 ```
 
+## The claim dict format
+
+Indicium adapters consume a **claim dict** — a plain Python dictionary with the following keys:
+
+| Key | Required | Type | Notes |
+|-----|----------|------|-------|
+| `id` | yes | `str` | Stable identifier (e.g. `"c001"`, a UUID, or a URN) |
+| `context` | yes | `str` | Experimental or conceptual setting |
+| `subject` | yes | `str` | Entity the claim is about |
+| `qualifier` | yes | `str` | One of the 20 Bucur SuperPattern terms |
+| `relation` | yes | `str` | Free-text elaboration of the relation |
+| `object` | yes | `str` | Target entity |
+| `claim_type` | no | `str` | `"explicit"` or `"implicit"` |
+| `source_excerpt` | no | `str` | Verbatim text from the source |
+| `evidence` | no | `list[dict]` | Each item may carry `doi`, `artifact`, `quote`, `evidence_type` |
+
+The formal `Claim` Pydantic model (`indicium.generated.model.Claim`) validates the same required slots and the `qualifier` enum, and produces a compatible dict via `.model_dump()`. The `evidence` list is an adapter-layer convenience; in the RDF/SHACL model, evidence is a separate `Evidence` class linked to a claim via `for_claim`.
+
 ## Round-trip example
 
 ```python
@@ -46,7 +64,7 @@ print(insight)
 snip = claim_to_evidence_snippet(claim)
 print(snip)
 # {'snippet_id': 'c001', 'source_path': 'doi:10.1234/test',
-#  'reason': 'compound A inhibits inhibits growth of cell line B (context: in vitro)',
+#  'reason': 'compound A [inhibits] inhibits growth of cell line B (context: in vitro)',
 #  'text': 'Compound A inhibited cell line B by 80%.'}
 ```
 

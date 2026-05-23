@@ -9,8 +9,8 @@ def test_claim_class_has_five_slot_pattern():
     claim = sv.get_class("Claim")
     assert claim is not None
     slots = set(sv.class_slots("Claim"))
-    for s in ("context", "subject", "qualifier", "relation", "object"):
-        assert s in slots, f"Claim missing SuperPattern slot {s}"
+    for s in ("id", "context", "subject", "qualifier", "relation", "object"):
+        assert s in slots, f"Claim missing required slot {s}"
 
 
 def test_qualifier_enum_has_20_bucur_terms():

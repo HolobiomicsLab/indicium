@@ -8,6 +8,7 @@ A scientific claim expressed using the
 
 | Slot | Required | Ontology | Description |
 |------|----------|----------|-------------|
+| `id` | yes | `dct:identifier` | Stable claim identifier (string, UUID, or URN) |
 | `context` | yes | `asb:context` | The experimental or conceptual setting |
 | `subject` | yes | `asb:subject` | What the claim is about |
 | `qualifier` | yes | `asb:qualifier` | Directional relation from the 20-term vocabulary |

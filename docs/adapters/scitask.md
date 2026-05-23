@@ -21,7 +21,7 @@ snip = claim_to_evidence_snippet(claim, source_path="results/fig1.png")
 |---------------|----------------|
 | `snippet_id` | `claim["id"]` |
 | `source_path` | First `evidence[].artifact`, then `"doi:<doi>"`, then `""` |
-| `reason` | `"{subject} {qualifier} {relation} {object} (context: {context})"` |
+| `reason` | `"{subject} [{qualifier}] {relation} {object} (context: {context})"` |
 | `text` | `claim["source_excerpt"]`, then first `evidence[].quote`, then `""` |
 
 ## Example
@@ -44,7 +44,7 @@ snip = claim_to_evidence_snippet(claim)
 # {
 #   "snippet_id": "c001",
 #   "source_path": "results/fig1.png",
-#   "reason": "compound A inhibits inhibits growth of cell line B (context: in vitro)",
+#   "reason": "compound A [inhibits] inhibits growth of cell line B (context: in vitro)",
 #   "text": "Compound A inhibited cell line B by 80%."
 # }
 ```

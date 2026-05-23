@@ -20,6 +20,8 @@ def test_required_fields_present():
     snip = claim_to_evidence_snippet(_make_claim())
     assert snip["snippet_id"] == "c001"
     assert snip["source_path"] == "results/fig1.png"
+    # qualifier is bracketed to distinguish it from the free-text relation
+    assert "[inhibits]" in snip["reason"]
     assert "compound A" in snip["reason"]
     assert snip["text"] == "Compound A inhibited cell line B by 80%."
 

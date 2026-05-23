@@ -67,6 +67,7 @@ enums:
       citesForInformation: { meaning: cito:citesForInformation }
 
 slots:
+  id:        { identifier: true, slot_uri: dct:identifier }
   context:   { required: true, slot_uri: asb:context }
   subject:   { required: true, slot_uri: asb:subject }
   qualifier: { required: true, range: SuperPatternQualifier, slot_uri: asb:qualifier }
@@ -91,6 +92,7 @@ classes:
     class_uri: asb:Claim
     description: A scientific claim using the Bucur 5-slot SuperPattern.
     slots:
+      - id
       - context
       - subject
       - qualifier

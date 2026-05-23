@@ -5,13 +5,9 @@
             "description": "A typed link (CiTO) from a Source to a Claim.",
             "properties": {
                 "for_claim": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/$defs/Claim"
-                        },
-                        {
-                            "type": "null"
-                        }
+                    "type": [
+                        "string",
+                        "null"
                     ]
                 },
                 "link_type": {
@@ -41,6 +37,9 @@
                 "context": {
                     "type": "string"
                 },
+                "id": {
+                    "type": "string"
+                },
                 "object": {
                     "type": "string"
                 },
@@ -61,6 +60,7 @@
                 }
             },
             "required": [
+                "id",
                 "context",
                 "subject",
                 "qualifier",
@@ -93,13 +93,9 @@
                     "$ref": "#/$defs/EvidenceType"
                 },
                 "for_claim": {
-                    "anyOf": [
-                        {
-                            "$ref": "#/$defs/Claim"
-                        },
-                        {
-                            "type": "null"
-                        }
+                    "type": [
+                        "string",
+                        "null"
                     ]
                 },
                 "of_source": {

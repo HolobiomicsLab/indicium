@@ -37,9 +37,12 @@ def claim_to_evidence_snippet(claim: dict, source_path: str = "") -> dict:
                 text = ev["quote"]
                 break
 
-    # Build a human-readable reason from the 5-slot SuperPattern
+    # Build a human-readable reason from the 5-slot SuperPattern.
+    # qualifier is the controlled-vocab term (e.g. "inhibits"); relation is the
+    # free-text elaboration (e.g. "inhibits growth of").  We bracket the qualifier
+    # so they read distinctly rather than "inhibits inhibits growth of".
     reason = (
-        f"{claim['subject']} {claim['qualifier']} {claim['relation']} "
+        f"{claim['subject']} [{claim['qualifier']}] {claim['relation']} "
         f"{claim['object']} (context: {claim['context']})"
     )
 

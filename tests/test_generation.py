@@ -9,9 +9,10 @@ def test_pydantic_model_imports_and_builds_a_claim():
     spec = importlib.util.spec_from_file_location("gen_model", GEN / "model.py")
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    c = mod.Claim(context="ctx", subject="s", qualifier="causes",
+    c = mod.Claim(id="c001", context="ctx", subject="s", qualifier="causes",
                   relation="leads to", object="o")
     assert c.qualifier == "causes"
+    assert c.id == "c001"
 
 
 def test_shacl_and_owl_parse():
