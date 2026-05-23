@@ -36,5 +36,6 @@ def validate_graph(
     conforms, _, report = _shacl_validate(
         data_graph=data, shacl_graph=shapes,
         inference="none", abort_on_first=False, meta_shacl=False,
+        allow_warnings=True,
     )
     return conforms, report
