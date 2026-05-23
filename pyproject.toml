@@ -1,24 +1,47 @@
 [project]
 name = "indicium"
-version = "0.1.0"
+version = "1.0.0"
 description = "Shared claim/evidence standard (ECO/CiTO/SEPIO/PROV-O + Bucur SuperPattern)"
+readme = "README.md"
 requires-python = ">=3.11"
+license = { text = "MIT" }
+keywords = [
+    "linkml", "claims", "evidence", "scientific-standard",
+    "agentic-science", "eco", "cito", "sepio", "prov-o",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
 # Runtime is intentionally light: validate_graph + the generated pydantic model
 # + adapters import only rdflib/pyshacl. `linkml` (the generator) and
 # `linkml-runtime` (SchemaView) are needed ONLY for `make gen` and the
-# schema-load tests — see the `codegen` extra. Keeping them out of runtime lets
-# heavy consumers (e.g. fastmcp-based servers) install indicium without the
-# linkml dependency tree, which otherwise conflicts.
+# schema-load tests — see the `codegen` extra.
 dependencies = [
     "pyshacl>=0.26",
     "rdflib>=7.0",
 ]
+
+[project.urls]
+Homepage = "https://holobiomicslab.github.io/indicium"
+Repository = "https://github.com/HolobiomicsLab/indicium"
+Changelog = "https://holobiomicslab.github.io/indicium/changelog/"
 
 [project.optional-dependencies]
 codegen = [
     "linkml>=1.8",
     "linkml-runtime>=1.8",
     "pyyaml>=6.0",
+]
+docs = [
+    "mkdocs-material>=9.5",
+    "mkdocstrings[python]>=0.25",
 ]
 
 [build-system]
@@ -29,8 +52,14 @@ build-backend = "hatchling.build"
 packages = ["src/indicium"]
 
 [dependency-groups]
-# Dev needs the codegen toolchain to run `make gen` and the schema-load tests.
-dev = ["pytest>=8.0", "linkml>=1.8", "linkml-runtime>=1.8", "pyyaml>=6.0"]
+dev = [
+    "pytest>=8.0",
+    "linkml>=1.8",
+    "linkml-runtime>=1.8",
+    "pyyaml>=6.0",
+    "mkdocs-material>=9.5",
+    "mkdocstrings[python]>=0.25",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
