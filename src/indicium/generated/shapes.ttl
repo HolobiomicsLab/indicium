@@ -15,35 +15,82 @@
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+indicium:IndiciumDocument a sh:NodeShape ;
+    rdfs:comment "Top-level container for a serialisable Indicium document. Holds all entity collections; enables full round-trip JSON/YAML/RDF I/O." ;
+    sh:closed false ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:class asb:Claim ;
+            sh:description "All Claim entities in this document." ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path indicium:claims ],
+        [ sh:class doco:Figure ;
+            sh:description "All Figure entities in this document." ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 3 ;
+            sh:path indicium:figures ],
+        [ sh:class indicium:CitationLink ;
+            sh:description "All CitationLink edges in this document." ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 7 ;
+            sh:path indicium:citation_links ],
+        [ sh:class fabio:Expression ;
+            sh:description "All Source entities in this document." ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 2 ;
+            sh:path indicium:sources ],
+        [ sh:class sepio:0000002 ;
+            sh:description "All Evidence entities in this document." ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 1 ;
+            sh:path indicium:evidences ],
+        [ sh:class fabio:ComputerProgram ;
+            sh:description "All Script entities in this document." ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 4 ;
+            sh:path indicium:scripts ],
+        [ sh:class dcat:Dataset ;
+            sh:description "All DataAsset entities in this document." ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 5 ;
+            sh:path indicium:datasets ],
+        [ sh:class indicium:ClaimLink ;
+            sh:description "All ClaimLink edges in this document." ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 6 ;
+            sh:path indicium:claim_links ] ;
+    sh:targetClass indicium:IndiciumDocument .
+
 sepio:0000002 a sh:NodeShape ;
     rdfs:comment "An evidence line linking a Claim to a Source (SEPIO EvidenceLine)." ;
     sh:closed false ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:string ;
-            sh:description "ASTRA-style 'decision_id.option_id' tags scoping this evidence item to a specific methodological universe. Empty list = universally applicable." ;
-            sh:nodeKind sh:Literal ;
-            sh:order 11 ;
-            sh:path indicium:decision_context ],
+    sh:property [ sh:in ( ECO:0000006 ECO:0000033 ECO:0000302 ECO:0000361 ECO:0000034 ) ;
+            sh:maxCount 1 ;
+            sh:order 0 ;
+            sh:path indicium:evidence_type ],
+        [ sh:class fabio:ComputerProgram ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 7 ;
+            sh:path indicium:of_script ],
         [ sh:class oa:TextQuoteSelector ;
             sh:maxCount 1 ;
             sh:nodeKind sh:BlankNodeOrIRI ;
             sh:order 9 ;
             sh:path indicium:text_selector ],
-        [ sh:class dcat:Dataset ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:BlankNodeOrIRI ;
-            sh:order 8 ;
-            sh:path indicium:of_dataset ],
-        [ sh:datatype xsd:float ;
+        [ sh:datatype xsd:string ;
+            sh:description "IRI or identifier of the agent (human ORCID, pipeline run ID, etc.) that asserted this item." ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 3 ;
-            sh:path indicium:confidence ],
-        [ sh:class doco:Figure ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:BlankNodeOrIRI ;
-            sh:order 6 ;
-            sh:path indicium:of_figure ],
+            sh:order 12 ;
+            sh:path prov:wasAttributedTo ],
+        [ sh:datatype xsd:string ;
+            sh:description "ASTRA-style 'decision_id.option_id' tags scoping this evidence item to a specific methodological universe. Empty list = universally applicable." ;
+            sh:nodeKind sh:Literal ;
+            sh:order 11 ;
+            sh:path indicium:decision_context ;
+            sh:pattern "^[a-zA-Z_][a-zA-Z0-9_]*\\.[a-zA-Z_][a-zA-Z0-9_]*$" ],
         [ sh:class asb:Claim ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
@@ -54,76 +101,36 @@ sepio:0000002 a sh:NodeShape ;
             sh:nodeKind sh:Literal ;
             sh:order 2 ;
             sh:path indicium:quote ],
-        [ sh:class fabio:ComputerProgram ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:BlankNodeOrIRI ;
-            sh:order 7 ;
-            sh:path indicium:of_script ],
-        [ sh:datatype xsd:string ;
-            sh:description "IRI or identifier of the agent (human ORCID, pipeline run ID, etc.) that asserted this item." ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 12 ;
-            sh:path prov:wasAttributedTo ],
-        [ sh:in ( ECO:0000006 ECO:0000033 ECO:0000302 ECO:0000361 ECO:0000034 ) ;
-            sh:maxCount 1 ;
-            sh:order 0 ;
-            sh:path indicium:evidence_type ],
-        [ sh:class oa:FragmentSelector ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:BlankNodeOrIRI ;
-            sh:order 10 ;
-            sh:path indicium:fragment_selector ],
         [ sh:in ( IAO:0000311 doco:Figure doco:Table IAO:0000536 fabio:ComputerProgram dcat:Dataset ) ;
             sh:maxCount 1 ;
             sh:order 1 ;
             sh:path indicium:source_type ],
+        [ sh:datatype xsd:float ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path indicium:confidence ],
         [ sh:class fabio:Expression ;
             sh:maxCount 1 ;
             sh:nodeKind sh:BlankNodeOrIRI ;
             sh:order 4 ;
-            sh:path indicium:of_source ] ;
-    sh:targetClass sepio:0000002 .
-
-cito:Citation a sh:NodeShape ;
-    rdfs:comment "A typed semantic link between two Claims using CiTO predicates. Enables contradiction detection, argument graphs, and claim ledger navigation." ;
-    sh:closed false ;
-    sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:class asb:Claim ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 0 ;
-            sh:path indicium:from_claim ],
-        [ sh:class asb:Claim ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 1 ;
-            sh:path indicium:to_claim ],
-        [ sh:in ( cito:supports cito:disputes cito:qualifies cito:citesForInformation cito:contradicts cito:refines cito:extends cito:agreesWith cito:disagreesWith cito:updates cito:corrects cito:usesDataFrom cito:usesMethodIn ) ;
-            sh:maxCount 1 ;
-            sh:order 2 ;
-            sh:path indicium:link_type ] ;
-    sh:targetClass cito:Citation .
-
-indicium:CitationLink a sh:NodeShape ;
-    rdfs:comment "A typed link (CiTO) from a Source to a Claim." ;
-    sh:closed false ;
-    sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:class asb:Claim ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 1 ;
-            sh:path indicium:for_claim ],
-        [ sh:in ( cito:supports cito:disputes cito:qualifies cito:citesForInformation cito:contradicts cito:refines cito:extends cito:agreesWith cito:disagreesWith cito:updates cito:corrects cito:usesDataFrom cito:usesMethodIn ) ;
-            sh:maxCount 1 ;
-            sh:order 2 ;
-            sh:path indicium:link_type ],
-        [ sh:class fabio:Expression ;
+            sh:path indicium:of_source ],
+        [ sh:class doco:Figure ;
             sh:maxCount 1 ;
             sh:nodeKind sh:BlankNodeOrIRI ;
-            sh:order 0 ;
-            sh:path indicium:of_source ] ;
-    sh:targetClass indicium:CitationLink .
+            sh:order 6 ;
+            sh:path indicium:of_figure ],
+        [ sh:class dcat:Dataset ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 8 ;
+            sh:path indicium:of_dataset ],
+        [ sh:class oa:FragmentSelector ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 10 ;
+            sh:path indicium:fragment_selector ] ;
+    sh:targetClass sepio:0000002 .
 
 oa:TextQuoteSelector a sh:NodeShape ;
     rdfs:comment "W3C TextQuoteSelector. Exact text + optional disambiguation context. Matches ASTRA's existing oa:TextQuoteSelector alignment." ;
@@ -132,40 +139,81 @@ oa:TextQuoteSelector a sh:NodeShape ;
     sh:property [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path indicium:tqs_suffix ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
             sh:order 0 ;
             sh:path indicium:tqs_exact ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 1 ;
-            sh:path indicium:tqs_prefix ] ;
+            sh:path indicium:tqs_prefix ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path indicium:tqs_suffix ] ;
     sh:targetClass oa:TextQuoteSelector .
 
-doco:Figure a sh:NodeShape ;
-    rdfs:comment "A figure, table, or other display item from a scholarly publication. Carries optional FaBiO sub-type classification (via figure_type) and provenance (source_doi). Linked from Evidence.of_figure when the evidence is grounded in a visual artefact rather than a text passage." ;
+indicium:CitationLink a sh:NodeShape ;
+    rdfs:comment "A typed link (CiTO) from a Source to a Claim." ;
+    sh:closed false ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:class fabio:Expression ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 0 ;
+            sh:path indicium:of_source ],
+        [ sh:class asb:Claim ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path indicium:for_claim ],
+        [ sh:in ( cito:supports cito:disputes cito:qualifies cito:citesForInformation cito:contradicts cito:refines cito:extends cito:agreesWith cito:disagreesWith cito:updates cito:corrects cito:usesDataFrom cito:usesMethodIn ) ;
+            sh:maxCount 1 ;
+            sh:order 2 ;
+            sh:path indicium:link_type ] ;
+    sh:targetClass indicium:CitationLink .
+
+indicium:ClaimLink a sh:NodeShape ;
+    rdfs:comment "A typed semantic link between two Claims using CiTO predicates. Enables contradiction detection, argument graphs, and claim ledger navigation." ;
+    sh:closed false ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:in ( cito:supports cito:disputes cito:qualifies cito:citesForInformation cito:contradicts cito:refines cito:extends cito:agreesWith cito:disagreesWith cito:updates cito:corrects cito:usesDataFrom cito:usesMethodIn ) ;
+            sh:maxCount 1 ;
+            sh:order 2 ;
+            sh:path indicium:link_type ],
+        [ sh:class asb:Claim ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 0 ;
+            sh:path indicium:from_claim ],
+        [ sh:class asb:Claim ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path indicium:to_claim ] ;
+    sh:targetClass indicium:ClaimLink .
+
+oa:FragmentSelector a sh:NodeShape ;
+    rdfs:comment "W3C FragmentSelector for PDF page location." ;
     sh:closed false ;
     sh:ignoredProperties ( rdf:type ) ;
     sh:property [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 0 ;
-            sh:path dct:identifier ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path indicium:caption ],
+            sh:path indicium:frag_value ],
         [ sh:datatype xsd:integer ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 5 ;
-            sh:path indicium:page ],
-        [ sh:class oa:FragmentSelector ;
+            sh:order 1 ;
+            sh:path indicium:frag_page ] ;
+    sh:targetClass oa:FragmentSelector .
+
+doco:Figure a sh:NodeShape ;
+    rdfs:comment "A figure, table, or other display item from a scholarly publication. Carries optional FaBiO sub-type classification (via figure_type) and provenance (source_doi). Linked from Evidence.of_figure when the evidence is grounded in a visual artefact rather than a text passage." ;
+    sh:closed false ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:class oa:FragmentSelector ;
             sh:maxCount 1 ;
             sh:nodeKind sh:BlankNodeOrIRI ;
             sh:order 10 ;
@@ -173,18 +221,13 @@ doco:Figure a sh:NodeShape ;
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path indicium:figure_id ],
+            sh:order 0 ;
+            sh:path dct:identifier ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 6 ;
-            sh:path indicium:media_type ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 7 ;
-            sh:path indicium:content_url ],
+            sh:order 4 ;
+            sh:path indicium:panel_label ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -193,17 +236,37 @@ doco:Figure a sh:NodeShape ;
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 4 ;
-            sh:path indicium:panel_label ],
-        [ sh:in ( fabio:DataPlot fabio:Graph fabio:Photograph fabio:Plate fabio:Diagram fabio:Flowchart fabio:Table fabio:Figure ) ;
-            sh:maxCount 1 ;
-            sh:order 3 ;
-            sh:path indicium:figure_type ],
+            sh:order 2 ;
+            sh:path indicium:caption ],
         [ sh:datatype xsd:boolean ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 9 ;
-            sh:path indicium:is_supplementary ] ;
+            sh:path indicium:is_supplementary ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path indicium:content_url ],
+        [ sh:in ( fabio:DataPlot fabio:Graph fabio:Photograph fabio:Plate fabio:Diagram fabio:Flowchart fabio:Table fabio:Figure ) ;
+            sh:maxCount 1 ;
+            sh:order 3 ;
+            sh:path indicium:figure_type ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path indicium:page ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path indicium:media_type ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path indicium:figure_id ] ;
     sh:targetClass doco:Figure .
 
 fabio:Expression a sh:NodeShape ;
@@ -232,22 +295,6 @@ fabio:Expression a sh:NodeShape ;
             sh:path indicium:authors ] ;
     sh:targetClass fabio:Expression .
 
-oa:FragmentSelector a sh:NodeShape ;
-    rdfs:comment "W3C FragmentSelector for PDF page location." ;
-    sh:closed false ;
-    sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:integer ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path indicium:frag_page ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 0 ;
-            sh:path indicium:frag_value ] ;
-    sh:targetClass oa:FragmentSelector .
-
 asb:Claim a sh:NodeShape ;
     rdfs:comment "A scientific claim using the Bucur 5-slot SuperPattern." ;
     sh:closed false ;
@@ -256,49 +303,44 @@ asb:Claim a sh:NodeShape ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 5 ;
-            sh:path asb:object ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 0 ;
-            sh:path dct:identifier ],
+            sh:order 4 ;
+            sh:path asb:relation ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 7 ;
             sh:path indicium:source_excerpt ],
         [ sh:datatype xsd:string ;
-            sh:description "IRI or identifier of the agent (human ORCID, pipeline run ID, etc.) that asserted this item." ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 9 ;
-            sh:path prov:wasAttributedTo ],
-        [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 4 ;
-            sh:path asb:relation ],
-        [ sh:in ( "draft" "verified" "published" "retracted" "superseded" ) ;
-            sh:maxCount 1 ;
-            sh:order 8 ;
-            sh:path indicium:claim_status ],
+            sh:order 5 ;
+            sh:path asb:object ],
         [ sh:in ( "causes" "prevents" "inhibits" "activates" "increases" "decreases" "correlates_with" "is_associated_with" "predicts" "interacts_with" "produces" "requires" "enables" "treats" "enhances" "reduces" "has_property" "is_part_of" "is_a" "consistent_with" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:order 3 ;
             sh:path asb:qualifier ],
         [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path asb:context ],
+        [ sh:in ( "explicit" "implicit" ) ;
+            sh:maxCount 1 ;
+            sh:order 6 ;
+            sh:path indicium:claim_type ],
+        [ sh:datatype xsd:string ;
             sh:description "Reference to the originating ASTRA insight in 'analysis_id/insight_id' format." ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 10 ;
             sh:path indicium:astra_insight_ref ],
-        [ sh:in ( "explicit" "implicit" ) ;
+        [ sh:in ( "draft" "verified" "published" "retracted" "superseded" ) ;
             sh:maxCount 1 ;
-            sh:order 6 ;
-            sh:path indicium:claim_type ],
+            sh:order 8 ;
+            sh:path indicium:claim_status ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
@@ -307,25 +349,36 @@ asb:Claim a sh:NodeShape ;
             sh:path asb:subject ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
-            sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path asb:context ] ;
+            sh:order 0 ;
+            sh:path dct:identifier ],
+        [ sh:datatype xsd:string ;
+            sh:description "IRI or identifier of the agent (human ORCID, pipeline run ID, etc.) that asserted this item." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path prov:wasAttributedTo ],
+        [ sh:description "URI of the Claim that supersedes this one. Must be set when claim_status is 'superseded'. Allows external Claim IRIs for cross-document lineage." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 11 ;
+            sh:path indicium:superseded_by ] ;
     sh:targetClass asb:Claim .
 
 fabio:ComputerProgram a sh:NodeShape ;
     rdfs:comment "A code artefact (script, notebook, or pipeline) from a scholarly publication. Carries role classification (script_type), programming language, repository URL, and optional pinned commit. Linked from Evidence.of_script when the evidence is grounded in code rather than a text passage or figure." ;
     sh:closed false ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:in ( fabio:ComputerProgram fabio:ComputerProgram fabio:ComputerProgram fabio:ComputerProgram fabio:ComputerProgram fabio:ComputerProgram ) ;
+    sh:property [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
-            sh:order 2 ;
-            sh:path indicium:script_type ],
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path dct:identifier ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 7 ;
-            sh:path indicium:commit_sha ],
+            sh:order 6 ;
+            sh:path indicium:content_url ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -339,8 +392,17 @@ fabio:ComputerProgram a sh:NodeShape ;
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path indicium:script_id ],
+            sh:order 7 ;
+            sh:path indicium:commit_sha ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path indicium:language ],
+        [ sh:in ( fabio:ComputerProgram fabio:ComputerProgram fabio:ComputerProgram fabio:ComputerProgram fabio:ComputerProgram fabio:ComputerProgram ) ;
+            sh:maxCount 1 ;
+            sh:order 2 ;
+            sh:path indicium:script_type ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -349,23 +411,13 @@ fabio:ComputerProgram a sh:NodeShape ;
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 6 ;
-            sh:path indicium:content_url ],
+            sh:order 1 ;
+            sh:path indicium:script_id ],
         [ sh:datatype xsd:boolean ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 9 ;
-            sh:path indicium:is_supplementary ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 3 ;
-            sh:path indicium:language ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 0 ;
-            sh:path dct:identifier ] ;
+            sh:path indicium:is_supplementary ] ;
     sh:targetClass fabio:ComputerProgram .
 
 dcat:Dataset a sh:NodeShape ;
@@ -375,13 +427,8 @@ dcat:Dataset a sh:NodeShape ;
     sh:property [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 7 ;
-            sh:path indicium:source_doi ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 5 ;
-            sh:path indicium:repository ],
+            sh:order 0 ;
+            sh:path dct:identifier ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -395,18 +442,13 @@ dcat:Dataset a sh:NodeShape ;
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 4 ;
-            sh:path indicium:accession ],
+            sh:order 1 ;
+            sh:path indicium:asset_id ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 6 ;
-            sh:path indicium:content_url ],
-        [ sh:datatype xsd:boolean ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 9 ;
-            sh:path indicium:is_supplementary ],
+            sh:order 4 ;
+            sh:path indicium:accession ],
         [ sh:in ( dcat:Dataset dcat:Dataset dcat:Dataset dcat:Dataset dcat:Dataset dcat:Dataset dcat:Dataset ) ;
             sh:maxCount 1 ;
             sh:order 2 ;
@@ -414,13 +456,23 @@ dcat:Dataset a sh:NodeShape ;
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path indicium:asset_id ],
+            sh:order 7 ;
+            sh:path indicium:source_doi ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 0 ;
-            sh:path dct:identifier ] ;
+            sh:order 6 ;
+            sh:path indicium:content_url ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path indicium:repository ],
+        [ sh:datatype xsd:boolean ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path indicium:is_supplementary ] ;
     sh:targetClass dcat:Dataset .
 
 

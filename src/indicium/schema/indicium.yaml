@@ -189,6 +189,7 @@ slots:
   # Universe-conditional scope (Gap 4)
   decision_context:
     multivalued: true
+    pattern: "^[a-zA-Z_][a-zA-Z0-9_]*\\.[a-zA-Z_][a-zA-Z0-9_]*$"
     description: >-
       ASTRA-style 'decision_id.option_id' tags scoping this evidence item to a
       specific methodological universe. Empty list = universally applicable.
@@ -202,8 +203,71 @@ slots:
   astra_insight_ref:
     description: >-
       Reference to the originating ASTRA insight in 'analysis_id/insight_id' format.
+  # Claim lineage slot (v1.4)
+  superseded_by:
+    range: uriorcurie
+    required: false
+    description: >-
+      URI of the Claim that supersedes this one. Must be set when claim_status
+      is 'superseded'. Allows external Claim IRIs for cross-document lineage.
+  # IndiciumDocument collection slots (v1.4)
+  claims:
+    range: Claim
+    multivalued: true
+    inlined: true
+    description: All Claim entities in this document.
+  evidences:
+    range: Evidence
+    multivalued: true
+    inlined: true
+    description: All Evidence entities in this document.
+  sources:
+    range: Source
+    multivalued: true
+    inlined: true
+    description: All Source entities in this document.
+  figures:
+    range: Figure
+    multivalued: true
+    inlined: true
+    description: All Figure entities in this document.
+  scripts:
+    range: Script
+    multivalued: true
+    inlined: true
+    description: All Script entities in this document.
+  datasets:
+    range: DataAsset
+    multivalued: true
+    inlined: true
+    description: All DataAsset entities in this document.
+  claim_links:
+    range: ClaimLink
+    multivalued: true
+    inlined: true
+    description: All ClaimLink edges in this document.
+  citation_links:
+    range: CitationLink
+    multivalued: true
+    inlined: true
+    description: All CitationLink edges in this document.
 
 classes:
+  IndiciumDocument:
+    tree_root: true
+    description: >-
+      Top-level container for a serialisable Indicium document.
+      Holds all entity collections; enables full round-trip JSON/YAML/RDF I/O.
+    slots:
+      - claims
+      - evidences
+      - sources
+      - figures
+      - scripts
+      - datasets
+      - claim_links
+      - citation_links
+
   Claim:
     class_uri: asb:Claim
     description: A scientific claim using the Bucur 5-slot SuperPattern.
@@ -219,6 +283,7 @@ classes:
       - claim_status
       - asserted_by
       - astra_insight_ref
+      - superseded_by
   Evidence:
     class_uri: sepio:0000002
     description: An evidence line linking a Claim to a Source (SEPIO EvidenceLine).
@@ -299,7 +364,6 @@ classes:
     description: A typed link (CiTO) from a Source to a Claim.
     slots: [of_source, for_claim, link_type]
   ClaimLink:
-    class_uri: cito:Citation
     description: >-
       A typed semantic link between two Claims using CiTO predicates.
       Enables contradiction detection, argument graphs, and claim ledger navigation.

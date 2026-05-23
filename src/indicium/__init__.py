@@ -16,6 +16,8 @@ from indicium.generated.model import (
     # v1.3 additions
     ClaimLink, LinkType, ClaimStatus,
     TextQuoteSelector, FragmentSelector,
+    # v1.4 additions
+    IndiciumDocument,
 )
 from indicium.iri_bindings import (
     FIGURE_TYPE_FABIO,
@@ -55,4 +57,6 @@ __all__ = [
     "FragmentSelector",
     "CLAIM_LINK_TYPE_CITO",
     "parse_decision_context",
+    # IndiciumDocument container (v1.4)
+    "IndiciumDocument",
 ]

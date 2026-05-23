@@ -216,6 +216,22 @@ class DatasetType(str, Enum):
 
 
 
+class IndiciumDocument(ConfiguredBaseModel):
+    """
+    Top-level container for a serialisable Indicium document. Holds all entity collections; enables full round-trip JSON/YAML/RDF I/O.
+    """
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'from_schema': 'https://w3id.org/indicium', 'tree_root': True})
+
+    claims: Optional[dict[str, Claim]] = Field(default=None, description="""All Claim entities in this document.""", json_schema_extra = { "linkml_meta": {'domain_of': ['IndiciumDocument']} })
+    evidences: Optional[list[Evidence]] = Field(default=None, description="""All Evidence entities in this document.""", json_schema_extra = { "linkml_meta": {'domain_of': ['IndiciumDocument']} })
+    sources: Optional[list[Source]] = Field(default=None, description="""All Source entities in this document.""", json_schema_extra = { "linkml_meta": {'domain_of': ['IndiciumDocument']} })
+    figures: Optional[list[Figure]] = Field(default=None, description="""All Figure entities in this document.""", json_schema_extra = { "linkml_meta": {'domain_of': ['IndiciumDocument']} })
+    scripts: Optional[list[Script]] = Field(default=None, description="""All Script entities in this document.""", json_schema_extra = { "linkml_meta": {'domain_of': ['IndiciumDocument']} })
+    datasets: Optional[list[DataAsset]] = Field(default=None, description="""All DataAsset entities in this document.""", json_schema_extra = { "linkml_meta": {'domain_of': ['IndiciumDocument']} })
+    claim_links: Optional[list[ClaimLink]] = Field(default=None, description="""All ClaimLink edges in this document.""", json_schema_extra = { "linkml_meta": {'domain_of': ['IndiciumDocument']} })
+    citation_links: Optional[list[CitationLink]] = Field(default=None, description="""All CitationLink edges in this document.""", json_schema_extra = { "linkml_meta": {'domain_of': ['IndiciumDocument']} })
+
+
 class Claim(ConfiguredBaseModel):
     """
     A scientific claim using the Bucur 5-slot SuperPattern.
@@ -233,6 +249,7 @@ class Claim(ConfiguredBaseModel):
     claim_status: Optional[ClaimStatus] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Claim']} })
     asserted_by: Optional[str] = Field(default=None, description="""IRI or identifier of the agent (human ORCID, pipeline run ID, etc.) that asserted this item.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Claim', 'Evidence'], 'slot_uri': 'prov:wasAttributedTo'} })
     astra_insight_ref: Optional[str] = Field(default=None, description="""Reference to the originating ASTRA insight in 'analysis_id/insight_id' format.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Claim']} })
+    superseded_by: Optional[str] = Field(default=None, description="""URI of the Claim that supersedes this one. Must be set when claim_status is 'superseded'. Allows external Claim IRIs for cross-document lineage.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Claim']} })
 
 
 class Evidence(ConfiguredBaseModel):
@@ -254,6 +271,19 @@ class Evidence(ConfiguredBaseModel):
     fragment_selector: Optional[FragmentSelector] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'Figure']} })
     decision_context: Optional[list[str]] = Field(default=None, description="""ASTRA-style 'decision_id.option_id' tags scoping this evidence item to a specific methodological universe. Empty list = universally applicable.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
     asserted_by: Optional[str] = Field(default=None, description="""IRI or identifier of the agent (human ORCID, pipeline run ID, etc.) that asserted this item.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Claim', 'Evidence'], 'slot_uri': 'prov:wasAttributedTo'} })
+
+    @field_validator('decision_context')
+    def pattern_decision_context(cls, v):
+        pattern=re.compile(r"^[a-zA-Z_][a-zA-Z0-9_]*\.[a-zA-Z_][a-zA-Z0-9_]*$")
+        if isinstance(v, list):
+            for element in v:
+                if isinstance(element, str) and not pattern.match(element):
+                    err_msg = f"Invalid decision_context format: {element}"
+                    raise ValueError(err_msg)
+        elif isinstance(v, str) and not pattern.match(v):
+            err_msg = f"Invalid decision_context format: {v}"
+            raise ValueError(err_msg)
+        return v
 
 
 class Source(ConfiguredBaseModel):
@@ -348,7 +378,7 @@ class ClaimLink(ConfiguredBaseModel):
     """
     A typed semantic link between two Claims using CiTO predicates. Enables contradiction detection, argument graphs, and claim ledger navigation.
     """
-    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'cito:Citation', 'from_schema': 'https://w3id.org/indicium'})
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'from_schema': 'https://w3id.org/indicium'})
 
     from_claim: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['ClaimLink']} })
     to_claim: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['ClaimLink']} })
@@ -379,6 +409,7 @@ class FragmentSelector(ConfiguredBaseModel):
 
 # Model rebuild
 # see https://pydantic-docs.helpmanual.io/usage/models/#rebuilding-a-model
+IndiciumDocument.model_rebuild()
 Claim.model_rebuild()
 Evidence.model_rebuild()
 Source.model_rebuild()

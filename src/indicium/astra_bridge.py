@@ -63,8 +63,8 @@ def _split_claim_text(text: str) -> tuple[str, str, str]:
     """Split a claim sentence into (subject, qualifier_str, object) via verb heuristic.
 
     Scans each word, strips trailing punctuation, looks it up in _VERB_TO_QUALIFIER.
-    Returns ("", "has_property", full_text) when no known verb is found — signals
-    to the caller to use the full text as the object slot.
+    Returns (full_text, "has_property", "") when no known verb is found — the full
+    claim text becomes the subject, signalling an opaque assertion with no object.
     """
     words = text.split()
     for i, word in enumerate(words):
@@ -74,7 +74,7 @@ def _split_claim_text(text: str) -> tuple[str, str, str]:
             qualifier = _VERB_TO_QUALIFIER[lowered]
             obj = " ".join(words[i + 1:]).strip()
             return subject, qualifier, obj
-    return "", "has_property", text
+    return text, "has_property", ""
 
 
 def insight_to_claim(

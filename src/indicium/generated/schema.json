@@ -74,6 +74,13 @@
                 },
                 "subject": {
                     "type": "string"
+                },
+                "superseded_by": {
+                    "description": "URI of the Claim that supersedes this one. Must be set when claim_status is 'superseded'. Allows external Claim IRIs for cross-document lineage.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 }
             },
             "required": [
@@ -130,6 +137,72 @@
             ],
             "title": "ClaimType",
             "type": "string"
+        },
+        "Claim__identifier_optional": {
+            "additionalProperties": false,
+            "description": "A scientific claim using the Bucur 5-slot SuperPattern.",
+            "properties": {
+                "asserted_by": {
+                    "description": "IRI or identifier of the agent (human ORCID, pipeline run ID, etc.) that asserted this item.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "astra_insight_ref": {
+                    "description": "Reference to the originating ASTRA insight in 'analysis_id/insight_id' format.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "claim_status": {
+                    "$ref": "#/$defs/ClaimStatus"
+                },
+                "claim_type": {
+                    "$ref": "#/$defs/ClaimType"
+                },
+                "context": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "object": {
+                    "type": "string"
+                },
+                "qualifier": {
+                    "$ref": "#/$defs/SuperPatternQualifier"
+                },
+                "relation": {
+                    "type": "string"
+                },
+                "source_excerpt": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "subject": {
+                    "type": "string"
+                },
+                "superseded_by": {
+                    "description": "URI of the Claim that supersedes this one. Must be set when claim_status is 'superseded'. Allows external Claim IRIs for cross-document lineage.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "context",
+                "subject",
+                "qualifier",
+                "relation",
+                "object"
+            ],
+            "title": "Claim",
+            "type": "object"
         },
         "DataAsset": {
             "additionalProperties": false,
@@ -230,6 +303,7 @@
                 "decision_context": {
                     "description": "ASTRA-style 'decision_id.option_id' tags scoping this evidence item to a specific methodological universe. Empty list = universally applicable.",
                     "items": {
+                        "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*\\.[a-zA-Z_][a-zA-Z0-9_]*$",
                         "type": "string"
                     },
                     "type": [
@@ -441,6 +515,94 @@
             "title": "FragmentSelector",
             "type": "object"
         },
+        "IndiciumDocument": {
+            "additionalProperties": false,
+            "description": "Top-level container for a serialisable Indicium document. Holds all entity collections; enables full round-trip JSON/YAML/RDF I/O.",
+            "properties": {
+                "citation_links": {
+                    "description": "All CitationLink edges in this document.",
+                    "items": {
+                        "$ref": "#/$defs/CitationLink"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "claim_links": {
+                    "description": "All ClaimLink edges in this document.",
+                    "items": {
+                        "$ref": "#/$defs/ClaimLink"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "claims": {
+                    "additionalProperties": {
+                        "$ref": "#/$defs/Claim__identifier_optional"
+                    },
+                    "description": "All Claim entities in this document.",
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "datasets": {
+                    "description": "All DataAsset entities in this document.",
+                    "items": {
+                        "$ref": "#/$defs/DataAsset"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "evidences": {
+                    "description": "All Evidence entities in this document.",
+                    "items": {
+                        "$ref": "#/$defs/Evidence"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "figures": {
+                    "description": "All Figure entities in this document.",
+                    "items": {
+                        "$ref": "#/$defs/Figure"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "scripts": {
+                    "description": "All Script entities in this document.",
+                    "items": {
+                        "$ref": "#/$defs/Script"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "sources": {
+                    "description": "All Source entities in this document.",
+                    "items": {
+                        "$ref": "#/$defs/Source"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                }
+            },
+            "title": "IndiciumDocument",
+            "type": "object"
+        },
         "LinkType": {
             "description": "",
             "enum": [
@@ -644,7 +806,90 @@
     "$id": "https://w3id.org/indicium",
     "$schema": "https://json-schema.org/draft/2019-09/schema",
     "additionalProperties": true,
+    "description": "Top-level container for a serialisable Indicium document. Holds all entity collections; enables full round-trip JSON/YAML/RDF I/O.",
     "metamodel_version": "1.11.0",
+    "properties": {
+        "citation_links": {
+            "description": "All CitationLink edges in this document.",
+            "items": {
+                "$ref": "#/$defs/CitationLink"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "claim_links": {
+            "description": "All ClaimLink edges in this document.",
+            "items": {
+                "$ref": "#/$defs/ClaimLink"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "claims": {
+            "additionalProperties": {
+                "$ref": "#/$defs/Claim__identifier_optional"
+            },
+            "description": "All Claim entities in this document.",
+            "type": [
+                "object",
+                "null"
+            ]
+        },
+        "datasets": {
+            "description": "All DataAsset entities in this document.",
+            "items": {
+                "$ref": "#/$defs/DataAsset"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "evidences": {
+            "description": "All Evidence entities in this document.",
+            "items": {
+                "$ref": "#/$defs/Evidence"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "figures": {
+            "description": "All Figure entities in this document.",
+            "items": {
+                "$ref": "#/$defs/Figure"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "scripts": {
+            "description": "All Script entities in this document.",
+            "items": {
+                "$ref": "#/$defs/Script"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "sources": {
+            "description": "All Source entities in this document.",
+            "items": {
+                "$ref": "#/$defs/Source"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        }
+    },
     "title": "indicium",
     "type": "object",
     "version": null
