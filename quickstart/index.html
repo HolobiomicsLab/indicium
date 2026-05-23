@@ -493,6 +493,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#the-claim-dict-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The claim dict format
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#round-trip-example" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -930,6 +941,75 @@
 <p>For codegen (regenerating pydantic model / SHACL / OWL from the LinkML source):</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>indicium<span class="o">[</span>codegen<span class="o">]</span>
 </code></pre></div>
+<h2 id="the-claim-dict-format">The claim dict format<a class="headerlink" href="#the-claim-dict-format" title="Permanent link">&para;</a></h2>
+<p>Indicium adapters consume a <strong>claim dict</strong> — a plain Python dictionary with the following keys:</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Required</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>yes</td>
+<td><code>str</code></td>
+<td>Stable identifier (e.g. <code>"c001"</code>, a UUID, or a URN)</td>
+</tr>
+<tr>
+<td><code>context</code></td>
+<td>yes</td>
+<td><code>str</code></td>
+<td>Experimental or conceptual setting</td>
+</tr>
+<tr>
+<td><code>subject</code></td>
+<td>yes</td>
+<td><code>str</code></td>
+<td>Entity the claim is about</td>
+</tr>
+<tr>
+<td><code>qualifier</code></td>
+<td>yes</td>
+<td><code>str</code></td>
+<td>One of the 20 Bucur SuperPattern terms</td>
+</tr>
+<tr>
+<td><code>relation</code></td>
+<td>yes</td>
+<td><code>str</code></td>
+<td>Free-text elaboration of the relation</td>
+</tr>
+<tr>
+<td><code>object</code></td>
+<td>yes</td>
+<td><code>str</code></td>
+<td>Target entity</td>
+</tr>
+<tr>
+<td><code>claim_type</code></td>
+<td>no</td>
+<td><code>str</code></td>
+<td><code>"explicit"</code> or <code>"implicit"</code></td>
+</tr>
+<tr>
+<td><code>source_excerpt</code></td>
+<td>no</td>
+<td><code>str</code></td>
+<td>Verbatim text from the source</td>
+</tr>
+<tr>
+<td><code>evidence</code></td>
+<td>no</td>
+<td><code>list[dict]</code></td>
+<td>Each item may carry <code>doi</code>, <code>artifact</code>, <code>quote</code>, <code>evidence_type</code></td>
+</tr>
+</tbody>
+</table>
+<p>The formal <code>Claim</code> Pydantic model (<code>indicium.generated.model.Claim</code>) validates the same required slots and the <code>qualifier</code> enum, and produces a compatible dict via <code>.model_dump()</code>. The <code>evidence</code> list is an adapter-layer convenience; in the RDF/SHACL model, evidence is a separate <code>Evidence</code> class linked to a claim via <code>for_claim</code>.</p>
 <h2 id="round-trip-example">Round-trip example<a class="headerlink" href="#round-trip-example" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">indicium</span><span class="w"> </span><span class="kn">import</span> <span class="n">validate_graph</span><span class="p">,</span> <span class="n">claim_to_insight</span><span class="p">,</span> <span class="n">claim_to_evidence_snippet</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
@@ -960,7 +1040,7 @@
 <a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="n">snip</span> <span class="o">=</span> <span class="n">claim_to_evidence_snippet</span><span class="p">(</span><span class="n">claim</span><span class="p">)</span>
 <a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="nb">print</span><span class="p">(</span><span class="n">snip</span><span class="p">)</span>
 <a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="c1"># {&#39;snippet_id&#39;: &#39;c001&#39;, &#39;source_path&#39;: &#39;doi:10.1234/test&#39;,</span>
-<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="c1">#  &#39;reason&#39;: &#39;compound A inhibits inhibits growth of cell line B (context: in vitro)&#39;,</span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="c1">#  &#39;reason&#39;: &#39;compound A [inhibits] inhibits growth of cell line B (context: in vitro)&#39;,</span>
 <a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="c1">#  &#39;text&#39;: &#39;Compound A inhibited cell line B by 80%.&#39;}</span>
 </code></pre></div>
 <h2 id="shacl-validation">SHACL validation<a class="headerlink" href="#shacl-validation" title="Permanent link">&para;</a></h2>

@@ -16,10 +16,10 @@ sepio:0000002 a sh:NodeShape ;
     rdfs:comment "An evidence line linking a Claim to a Source (SEPIO EvidenceLine)." ;
     sh:closed false ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:in ( IAO:0000311 doco:Figure doco:Table IAO:0000536 ) ;
+    sh:property [ sh:in ( ECO:0000006 ECO:0000033 ECO:0000302 ECO:0000361 ECO:0000034 ) ;
             sh:maxCount 1 ;
-            sh:order 1 ;
-            sh:path indicium:source_type ],
+            sh:order 0 ;
+            sh:path indicium:evidence_type ],
         [ sh:datatype xsd:float ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -27,43 +27,43 @@ sepio:0000002 a sh:NodeShape ;
             sh:path indicium:confidence ],
         [ sh:class asb:Claim ;
             sh:maxCount 1 ;
-            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:nodeKind sh:IRI ;
             sh:order 5 ;
             sh:path indicium:for_claim ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path indicium:quote ],
         [ sh:class fabio:Expression ;
             sh:maxCount 1 ;
             sh:nodeKind sh:BlankNodeOrIRI ;
             sh:order 4 ;
             sh:path indicium:of_source ],
-        [ sh:in ( ECO:0000006 ECO:0000033 ECO:0000302 ECO:0000361 ECO:0000034 ) ;
+        [ sh:in ( IAO:0000311 doco:Figure doco:Table IAO:0000536 ) ;
             sh:maxCount 1 ;
-            sh:order 0 ;
-            sh:path indicium:evidence_type ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path indicium:quote ] ;
+            sh:order 1 ;
+            sh:path indicium:source_type ] ;
     sh:targetClass sepio:0000002 .
 
 indicium:CitationLink a sh:NodeShape ;
     rdfs:comment "A typed link (CiTO) from a Source to a Claim." ;
     sh:closed false ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:class fabio:Expression ;
+    sh:property [ sh:in ( cito:supports cito:disputes cito:qualifies cito:citesForInformation ) ;
+            sh:maxCount 1 ;
+            sh:order 2 ;
+            sh:path indicium:link_type ],
+        [ sh:class asb:Claim ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path indicium:for_claim ],
+        [ sh:class fabio:Expression ;
             sh:maxCount 1 ;
             sh:nodeKind sh:BlankNodeOrIRI ;
             sh:order 0 ;
-            sh:path indicium:of_source ],
-        [ sh:class asb:Claim ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:BlankNodeOrIRI ;
-            sh:order 1 ;
-            sh:path indicium:for_claim ],
-        [ sh:in ( cito:supports cito:disputes cito:qualifies cito:citesForInformation ) ;
-            sh:maxCount 1 ;
-            sh:order 2 ;
-            sh:path indicium:link_type ] ;
+            sh:path indicium:of_source ] ;
     sh:targetClass indicium:CitationLink .
 
 fabio:Expression a sh:NodeShape ;
@@ -71,6 +71,12 @@ fabio:Expression a sh:NodeShape ;
     sh:closed false ;
     sh:ignoredProperties ( rdf:type ) ;
     sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path dct:identifier ],
+        [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 3 ;
@@ -83,13 +89,7 @@ fabio:Expression a sh:NodeShape ;
         [ sh:datatype xsd:string ;
             sh:nodeKind sh:Literal ;
             sh:order 2 ;
-            sh:path indicium:authors ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 0 ;
-            sh:path dct:identifier ] ;
+            sh:path indicium:authors ] ;
     sh:targetClass fabio:Expression .
 
 asb:Claim a sh:NodeShape ;
@@ -100,40 +100,45 @@ asb:Claim a sh:NodeShape ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 4 ;
-            sh:path asb:object ],
-        [ sh:in ( "causes" "prevents" "inhibits" "activates" "increases" "decreases" "correlates_with" "is_associated_with" "predicts" "interacts_with" "produces" "requires" "enables" "treats" "enhances" "reduces" "has_property" "is_part_of" "is_a" "consistent_with" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 2 ;
-            sh:path asb:qualifier ],
-        [ sh:in ( "explicit" "implicit" ) ;
-            sh:maxCount 1 ;
-            sh:order 5 ;
-            sh:path indicium:claim_type ],
+            sh:order 1 ;
+            sh:path asb:context ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 3 ;
+            sh:order 2 ;
+            sh:path asb:subject ],
+        [ sh:in ( "explicit" "implicit" ) ;
+            sh:maxCount 1 ;
+            sh:order 6 ;
+            sh:path indicium:claim_type ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path dct:identifier ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
             sh:path asb:relation ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 0 ;
-            sh:path asb:context ],
+            sh:order 5 ;
+            sh:path asb:object ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 6 ;
+            sh:order 7 ;
             sh:path indicium:source_excerpt ],
-        [ sh:datatype xsd:string ;
+        [ sh:in ( "causes" "prevents" "inhibits" "activates" "increases" "decreases" "correlates_with" "is_associated_with" "predicts" "interacts_with" "produces" "requires" "enables" "treats" "enhances" "reduces" "has_property" "is_part_of" "is_a" "consistent_with" ) ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path asb:subject ] ;
+            sh:order 3 ;
+            sh:path asb:qualifier ] ;
     sh:targetClass asb:Claim .
 
 
