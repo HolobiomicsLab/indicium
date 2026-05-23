@@ -98,6 +98,16 @@
                         "null"
                     ]
                 },
+                "of_figure": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Figure"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
                 "of_source": {
                     "anyOf": [
                         {
@@ -131,6 +141,86 @@
                 "speculation"
             ],
             "title": "EvidenceType",
+            "type": "string"
+        },
+        "Figure": {
+            "additionalProperties": false,
+            "description": "A figure, table, or other display item from a scholarly publication. Carries optional FaBiO sub-type classification (via figure_type) and provenance (source_doi). Linked from Evidence.of_figure when the evidence is grounded in a visual artefact rather than a text passage.",
+            "properties": {
+                "caption": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "content_url": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "figure_id": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "figure_type": {
+                    "$ref": "#/$defs/FigureType"
+                },
+                "identifier": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "is_supplementary": {
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                },
+                "media_type": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "page": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "panel_label": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "source_doi": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "title": "Figure",
+            "type": "object"
+        },
+        "FigureType": {
+            "description": "FaBiO-aligned classification of figure and display item types found in scholarly publications. Values map to FaBiO sub-classes of fabio:Figure and fabio:Table.",
+            "enum": [
+                "data_plot",
+                "graph",
+                "photograph",
+                "plate",
+                "diagram",
+                "flowchart",
+                "table",
+                "generic"
+            ],
+            "title": "FigureType",
             "type": "string"
         },
         "LinkType": {

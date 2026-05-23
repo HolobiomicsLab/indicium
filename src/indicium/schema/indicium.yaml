@@ -65,6 +65,20 @@ enums:
       disputes:            { meaning: cito:disputes }
       qualifies:           { meaning: cito:qualifies }
       citesForInformation: { meaning: cito:citesForInformation }
+  FigureType:
+    description: >-
+      FaBiO-aligned classification of figure and display item types found in
+      scholarly publications. Values map to FaBiO sub-classes of fabio:Figure
+      and fabio:Table.
+    permissible_values:
+      data_plot:   { meaning: fabio:DataPlot }
+      graph:       { meaning: fabio:Graph }
+      photograph:  { meaning: fabio:Photograph }
+      plate:       { meaning: fabio:Plate }
+      diagram:     { meaning: fabio:Diagram }
+      flowchart:   { meaning: fabio:Flowchart }
+      table:       { meaning: fabio:Table }
+      generic:     { meaning: fabio:Figure }
 
 slots:
   id:        { identifier: true, slot_uri: dct:identifier }
@@ -86,6 +100,17 @@ slots:
   authors:    { multivalued: true }
   license_id: {}
   link_type:  { range: LinkType }
+  # Figure-specific slots
+  figure_id:        {}
+  caption:          {}
+  figure_type:      { range: FigureType }
+  panel_label:      {}
+  page:             { range: integer }
+  media_type:       {}
+  content_url:      {}
+  source_doi:       {}
+  is_supplementary: { range: boolean }
+  of_figure:        { range: Figure }
 
 classes:
   Claim:
@@ -103,11 +128,32 @@ classes:
   Evidence:
     class_uri: sepio:0000002
     description: An evidence line linking a Claim to a Source (SEPIO EvidenceLine).
-    slots: [evidence_type, source_type, quote, confidence, of_source, for_claim]
+    slots: [evidence_type, source_type, quote, confidence, of_source, for_claim, of_figure]
   Source:
     class_uri: fabio:Expression
     description: A cited source/paper with stable identity.
     slots: [identifier, title, authors, license_id]
+  Figure:
+    class_uri: doco:Figure
+    description: >-
+      A figure, table, or other display item from a scholarly publication.
+      Carries optional FaBiO sub-type classification (via figure_type) and
+      provenance (source_doi). Linked from Evidence.of_figure when the
+      evidence is grounded in a visual artefact rather than a text passage.
+    slots:
+      - identifier
+      - figure_id
+      - caption
+      - figure_type
+      - panel_label
+      - page
+      - media_type
+      - content_url
+      - source_doi
+      - is_supplementary
+    slot_usage:
+      identifier:
+        required: false
   CitationLink:
     description: A typed link (CiTO) from a Source to a Claim.
     slots: [of_source, for_claim, link_type]

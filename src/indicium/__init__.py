@@ -11,6 +11,8 @@ from indicium.validate import validate_graph
 from indicium.adapters.astra import claim_to_insight
 from indicium.adapters.kgmemory import claim_jsonld, MEM_NS
 from indicium.adapters.scitask import claim_to_evidence_snippet
+from indicium.generated.model import Figure, FigureType
+from indicium.iri_bindings import FIGURE_TYPE_FABIO, expand_curie
 
 __all__ = [
     "validate_graph",
@@ -18,4 +20,9 @@ __all__ = [
     "claim_jsonld",
     "MEM_NS",
     "claim_to_evidence_snippet",
+    # Figure extension (v1.1)
+    "Figure",
+    "FigureType",
+    "FIGURE_TYPE_FABIO",
+    "expand_curie",
 ]

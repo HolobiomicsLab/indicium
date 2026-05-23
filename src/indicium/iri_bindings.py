@@ -67,34 +67,50 @@ SOURCE_TYPE_IRI: dict[str, str] = {
     "image":  "IAO:0000536",   # image
 }
 
+# FaBiO — figure sub-type classification (FigureType enum meanings).
+# All terms verified to exist in FaBiO 2.1 (http://purl.org/spar/fabio/).
+FIGURE_TYPE_FABIO: dict[str, str] = {
+    "data_plot":  "fabio:DataPlot",
+    "graph":      "fabio:Graph",
+    "photograph": "fabio:Photograph",
+    "plate":      "fabio:Plate",
+    "diagram":    "fabio:Diagram",
+    "flowchart":  "fabio:Flowchart",
+    "table":      "fabio:Table",
+    "generic":    "fabio:Figure",
+}
+
 # ---------------------------------------------------------------------------
 # CURIE expansion — used by Scriptorium and other consumers to build URIRefs
 # ---------------------------------------------------------------------------
 
-_ECO_BASE  = "http://purl.obolibrary.org/obo/ECO_"
-_IAO_BASE  = "http://purl.obolibrary.org/obo/IAO_"
-_DOCO_BASE = "http://purl.org/spar/doco/"
-_CITO_BASE = "http://purl.org/spar/cito/"
+_ECO_BASE   = "http://purl.obolibrary.org/obo/ECO_"
+_IAO_BASE   = "http://purl.obolibrary.org/obo/IAO_"
+_DOCO_BASE  = "http://purl.org/spar/doco/"
+_CITO_BASE  = "http://purl.org/spar/cito/"
+_FABIO_BASE = "http://purl.org/spar/fabio/"
 
 def expand_curie(curie: str) -> str:
     """Expand a short CURIE to a full IRI string.
 
-    Supported prefixes: ECO, IAO, doco, cito.
+    Supported prefixes: ECO, IAO, doco, cito, fabio.
 
     Examples::
 
-        expand_curie("ECO:0000006")  # → "http://purl.obolibrary.org/obo/ECO_0000006"
-        expand_curie("doco:Figure")  # → "http://purl.org/spar/doco/Figure"
-        expand_curie("IAO:0000536")  # → "http://purl.obolibrary.org/obo/IAO_0000536"
+        expand_curie("ECO:0000006")    # → "http://purl.obolibrary.org/obo/ECO_0000006"
+        expand_curie("doco:Figure")    # → "http://purl.org/spar/doco/Figure"
+        expand_curie("IAO:0000536")    # → "http://purl.obolibrary.org/obo/IAO_0000536"
+        expand_curie("fabio:DataPlot") # → "http://purl.org/spar/fabio/DataPlot"
     """
     if ":" not in curie:
         raise ValueError(f"Not a valid CURIE (missing ':'): {curie!r}")
     prefix, local = curie.split(":", 1)
     bases = {
-        "ECO":  _ECO_BASE,
-        "IAO":  _IAO_BASE,
-        "doco": _DOCO_BASE,
-        "cito": _CITO_BASE,
+        "ECO":   _ECO_BASE,
+        "IAO":   _IAO_BASE,
+        "doco":  _DOCO_BASE,
+        "cito":  _CITO_BASE,
+        "fabio": _FABIO_BASE,
     }
     if prefix not in bases:
         raise ValueError(

@@ -20,7 +20,13 @@
 indicium:CitationLink a owl:Class ;
     rdfs:label "CitationLink" ;
     rdfs:subClassOf [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:for_claim ],
+        [ a owl:Restriction ;
             owl:allValuesFrom indicium:Source ;
+            owl:onProperty indicium:of_source ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
             owl:onProperty indicium:of_source ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
@@ -29,23 +35,17 @@ indicium:CitationLink a owl:Class ;
             owl:allValuesFrom indicium:LinkType ;
             owl:onProperty indicium:link_type ],
         [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:link_type ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:of_source ],
+        [ a owl:Restriction ;
             owl:allValuesFrom indicium:Claim ;
             owl:onProperty indicium:for_claim ],
         [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:of_source ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:for_claim ],
-        [ a owl:Restriction ;
             owl:minCardinality 0 ;
-            owl:onProperty indicium:for_claim ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty indicium:of_source ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:link_type ] ;
+            owl:onProperty indicium:for_claim ] ;
     skos:definition "A typed link (CiTO) from a Source to a Claim." ;
     skos:inScheme <https://w3id.org/indicium> .
 
@@ -55,56 +55,65 @@ indicium:Evidence a owl:Class ;
             owl:allValuesFrom xsd:string ;
             owl:onProperty indicium:quote ],
         [ a owl:Restriction ;
-            owl:allValuesFrom indicium:SourceType ;
-            owl:onProperty indicium:source_type ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty indicium:source_type ],
-        [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty indicium:source_type ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom indicium:Source ;
-            owl:onProperty indicium:of_source ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:for_claim ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom indicium:EvidenceType ;
-            owl:onProperty indicium:evidence_type ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:of_source ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:confidence ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty indicium:evidence_type ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:quote ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty indicium:of_source ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
             owl:onProperty indicium:quote ],
         [ a owl:Restriction ;
             owl:allValuesFrom indicium:Claim ;
             owl:onProperty indicium:for_claim ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
+            owl:onProperty indicium:of_figure ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom indicium:EvidenceType ;
+            owl:onProperty indicium:evidence_type ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:for_claim ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:confidence ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:source_type ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:of_figure ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
             owl:onProperty indicium:for_claim ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
+            owl:onProperty indicium:evidence_type ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:quote ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:of_source ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:float ;
             owl:onProperty indicium:confidence ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom indicium:SourceType ;
+            owl:onProperty indicium:source_type ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:of_source ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:source_type ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty indicium:evidence_type ],
         [ a owl:Restriction ;
-            owl:allValuesFrom xsd:float ;
-            owl:onProperty indicium:confidence ] ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:confidence ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom indicium:Figure ;
+            owl:onProperty indicium:of_figure ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom indicium:Source ;
+            owl:onProperty indicium:of_source ] ;
     skos:definition "An evidence line linking a Claim to a Source (SEPIO EvidenceLine)." ;
     skos:exactMatch sepio:0000002 ;
     skos:inScheme <https://w3id.org/indicium> .
@@ -153,13 +162,41 @@ cito:supports a owl:Class ;
     rdfs:label "supports" ;
     rdfs:subClassOf indicium:LinkType .
 
-doco:Figure a owl:Class ;
-    rdfs:label "figure" ;
-    rdfs:subClassOf indicium:SourceType .
-
 doco:Table a owl:Class ;
     rdfs:label "table" ;
     rdfs:subClassOf indicium:SourceType .
+
+fabio:DataPlot a owl:Class ;
+    rdfs:label "data_plot" ;
+    rdfs:subClassOf indicium:FigureType .
+
+fabio:Diagram a owl:Class ;
+    rdfs:label "diagram" ;
+    rdfs:subClassOf indicium:FigureType .
+
+fabio:Figure a owl:Class ;
+    rdfs:label "generic" ;
+    rdfs:subClassOf indicium:FigureType .
+
+fabio:Flowchart a owl:Class ;
+    rdfs:label "flowchart" ;
+    rdfs:subClassOf indicium:FigureType .
+
+fabio:Graph a owl:Class ;
+    rdfs:label "graph" ;
+    rdfs:subClassOf indicium:FigureType .
+
+fabio:Photograph a owl:Class ;
+    rdfs:label "photograph" ;
+    rdfs:subClassOf indicium:FigureType .
+
+fabio:Plate a owl:Class ;
+    rdfs:label "plate" ;
+    rdfs:subClassOf indicium:FigureType .
+
+fabio:Table a owl:Class ;
+    rdfs:label "table" ;
+    rdfs:subClassOf indicium:FigureType .
 
 <https://w3id.org/indicium/ClaimType#explicit> a owl:Class ;
     rdfs:label "explicit" ;
@@ -168,6 +205,102 @@ doco:Table a owl:Class ;
 <https://w3id.org/indicium/ClaimType#implicit> a owl:Class ;
     rdfs:label "implicit" ;
     rdfs:subClassOf indicium:ClaimType .
+
+indicium:Figure a owl:Class ;
+    rdfs:label "Figure" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom indicium:FigureType ;
+            owl:onProperty indicium:figure_type ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:source_doi ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:identifier ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:integer ;
+            owl:onProperty indicium:page ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:caption ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:source_doi ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:figure_type ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:caption ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:source_doi ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:media_type ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:figure_id ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:boolean ;
+            owl:onProperty indicium:is_supplementary ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:media_type ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:panel_label ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:content_url ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:content_url ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:panel_label ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:media_type ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:figure_type ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:figure_id ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:identifier ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:content_url ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:page ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:panel_label ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:is_supplementary ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:page ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty indicium:identifier ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:is_supplementary ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:figure_id ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:caption ] ;
+    skos:definition "A figure, table, or other display item from a scholarly publication. Carries optional FaBiO sub-type classification (via figure_type) and provenance (source_doi). Linked from Evidence.of_figure when the evidence is grounded in a visual artefact rather than a text passage." ;
+    skos:exactMatch doco:Figure ;
+    skos:inScheme <https://w3id.org/indicium> .
 
 <https://w3id.org/indicium/SuperPatternQualifier#activates> a owl:Class ;
     rdfs:label "activates" ;
@@ -253,77 +386,81 @@ indicium:authors a owl:DatatypeProperty ;
     rdfs:label "authors" ;
     skos:inScheme <https://w3id.org/indicium> .
 
+doco:Figure a owl:Class ;
+    rdfs:label "figure" ;
+    rdfs:subClassOf indicium:SourceType .
+
 indicium:Claim a owl:Class ;
     rdfs:label "Claim" ;
     rdfs:subClassOf [ a owl:Restriction ;
-            owl:allValuesFrom xsd:string ;
-            owl:onProperty indicium:context ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:id ],
-        [ a owl:Restriction ;
-            owl:minCardinality 1 ;
-            owl:onProperty indicium:relation ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty indicium:claim_type ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:claim_type ],
-        [ a owl:Restriction ;
-            owl:minCardinality 1 ;
-            owl:onProperty indicium:qualifier ],
-        [ a owl:Restriction ;
             owl:allValuesFrom xsd:string ;
             owl:onProperty indicium:relation ],
         [ a owl:Restriction ;
             owl:minCardinality 1 ;
             owl:onProperty indicium:subject ],
         [ a owl:Restriction ;
-            owl:allValuesFrom xsd:string ;
-            owl:onProperty indicium:object ],
+            owl:minCardinality 1 ;
+            owl:onProperty indicium:context ],
         [ a owl:Restriction ;
             owl:minCardinality 0 ;
             owl:onProperty indicium:source_excerpt ],
         [ a owl:Restriction ;
             owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:source_excerpt ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:source_excerpt ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:context ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:id ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:claim_type ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
             owl:onProperty indicium:subject ],
         [ a owl:Restriction ;
             owl:allValuesFrom indicium:ClaimType ;
             owl:onProperty indicium:claim_type ],
         [ a owl:Restriction ;
             owl:minCardinality 1 ;
-            owl:onProperty indicium:id ],
+            owl:onProperty indicium:object ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
-            owl:onProperty indicium:source_excerpt ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom xsd:string ;
-            owl:onProperty indicium:id ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom xsd:string ;
-            owl:onProperty indicium:source_excerpt ],
-        [ a owl:Restriction ;
-            owl:minCardinality 1 ;
-            owl:onProperty indicium:context ],
+            owl:onProperty indicium:qualifier ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty indicium:object ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:object ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:context ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty indicium:qualifier ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty indicium:relation ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:claim_type ],
         [ a owl:Restriction ;
             owl:allValuesFrom indicium:SuperPatternQualifier ;
             owl:onProperty indicium:qualifier ],
         [ a owl:Restriction ;
-            owl:minCardinality 1 ;
-            owl:onProperty indicium:object ],
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:id ],
         [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:qualifier ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:context ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
+            owl:allValuesFrom xsd:string ;
             owl:onProperty indicium:subject ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty indicium:id ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty indicium:relation ] ;
@@ -335,39 +472,43 @@ indicium:Source a owl:Class ;
     rdfs:label "Source" ;
     rdfs:subClassOf [ a owl:Restriction ;
             owl:minCardinality 0 ;
+            owl:onProperty indicium:authors ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
             owl:onProperty indicium:license_id ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:title ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:identifier ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:title ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:license_id ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:identifier ],
         [ a owl:Restriction ;
             owl:minCardinality 1 ;
             owl:onProperty indicium:identifier ],
         [ a owl:Restriction ;
-            owl:allValuesFrom xsd:string ;
-            owl:onProperty indicium:identifier ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom xsd:string ;
-            owl:onProperty indicium:license_id ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:title ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom xsd:string ;
-            owl:onProperty indicium:title ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:identifier ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom xsd:string ;
-            owl:onProperty indicium:authors ],
-        [ a owl:Restriction ;
             owl:minCardinality 0 ;
             owl:onProperty indicium:title ],
         [ a owl:Restriction ;
             owl:maxCardinality 1 ;
             owl:onProperty indicium:license_id ],
         [ a owl:Restriction ;
-            owl:minCardinality 0 ;
+            owl:allValuesFrom xsd:string ;
             owl:onProperty indicium:authors ] ;
     skos:definition "A cited source/paper with stable identity." ;
     skos:exactMatch fabio:Expression ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:caption a owl:DatatypeProperty ;
+    rdfs:label "caption" ;
     skos:inScheme <https://w3id.org/indicium> .
 
 indicium:claim_type a owl:ObjectProperty ;
@@ -380,6 +521,10 @@ indicium:confidence a owl:DatatypeProperty ;
     rdfs:range xsd:float ;
     skos:inScheme <https://w3id.org/indicium> .
 
+indicium:content_url a owl:DatatypeProperty ;
+    rdfs:label "content_url" ;
+    skos:inScheme <https://w3id.org/indicium> .
+
 indicium:context a owl:DatatypeProperty ;
     rdfs:label "context" ;
     skos:inScheme <https://w3id.org/indicium> .
@@ -389,12 +534,22 @@ indicium:evidence_type a owl:ObjectProperty ;
     rdfs:range indicium:EvidenceType ;
     skos:inScheme <https://w3id.org/indicium> .
 
+indicium:figure_id a owl:DatatypeProperty ;
+    rdfs:label "figure_id" ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:figure_type a owl:ObjectProperty ;
+    rdfs:label "figure_type" ;
+    rdfs:range indicium:FigureType ;
+    skos:inScheme <https://w3id.org/indicium> .
+
 indicium:id a owl:DatatypeProperty ;
     rdfs:label "id" ;
     skos:inScheme <https://w3id.org/indicium> .
 
-indicium:identifier a owl:DatatypeProperty ;
-    rdfs:label "identifier" ;
+indicium:is_supplementary a owl:DatatypeProperty ;
+    rdfs:label "is_supplementary" ;
+    rdfs:range xsd:boolean ;
     skos:inScheme <https://w3id.org/indicium> .
 
 indicium:license_id a owl:DatatypeProperty ;
@@ -406,8 +561,26 @@ indicium:link_type a owl:ObjectProperty ;
     rdfs:range indicium:LinkType ;
     skos:inScheme <https://w3id.org/indicium> .
 
+indicium:media_type a owl:DatatypeProperty ;
+    rdfs:label "media_type" ;
+    skos:inScheme <https://w3id.org/indicium> .
+
 indicium:object a owl:DatatypeProperty ;
     rdfs:label "object" ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:of_figure a owl:ObjectProperty ;
+    rdfs:label "of_figure" ;
+    rdfs:range indicium:Figure ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:page a owl:DatatypeProperty ;
+    rdfs:label "page" ;
+    rdfs:range xsd:integer ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:panel_label a owl:DatatypeProperty ;
+    rdfs:label "panel_label" ;
     skos:inScheme <https://w3id.org/indicium> .
 
 indicium:qualifier a owl:ObjectProperty ;
@@ -421,6 +594,10 @@ indicium:quote a owl:DatatypeProperty ;
 
 indicium:relation a owl:DatatypeProperty ;
     rdfs:label "relation" ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:source_doi a owl:DatatypeProperty ;
+    rdfs:label "source_doi" ;
     skos:inScheme <https://w3id.org/indicium> .
 
 indicium:source_excerpt a owl:DatatypeProperty ;
@@ -470,6 +647,10 @@ indicium:for_claim a owl:ObjectProperty ;
     rdfs:range indicium:Claim ;
     skos:inScheme <https://w3id.org/indicium> .
 
+indicium:identifier a owl:DatatypeProperty ;
+    rdfs:label "identifier" ;
+    skos:inScheme <https://w3id.org/indicium> .
+
 indicium:of_source a owl:ObjectProperty ;
     rdfs:label "of_source" ;
     rdfs:range indicium:Source ;
@@ -484,6 +665,20 @@ indicium:EvidenceType a owl:Class ;
         ECO:0000034,
         ECO:0000302,
         ECO:0000361 .
+
+indicium:FigureType a owl:Class ;
+    rdfs:label "FigureType" ;
+    owl:unionOf ( fabio:DataPlot fabio:Graph fabio:Photograph fabio:Plate fabio:Diagram fabio:Flowchart fabio:Table fabio:Figure ) ;
+    skos:definition "FaBiO-aligned classification of figure and display item types found in scholarly publications. Values map to FaBiO sub-classes of fabio:Figure and fabio:Table." ;
+    skos:inScheme <https://w3id.org/indicium> ;
+    linkml:permissible_values fabio:DataPlot,
+        fabio:Diagram,
+        fabio:Figure,
+        fabio:Flowchart,
+        fabio:Graph,
+        fabio:Photograph,
+        fabio:Plate,
+        fabio:Table .
 
 indicium:SuperPatternQualifier a owl:Class ;
     rdfs:label "SuperPatternQualifier" ;

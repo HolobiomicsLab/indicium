@@ -150,6 +150,20 @@ class LinkType(str, Enum):
     citesForInformation = "citesForInformation"
 
 
+class FigureType(str, Enum):
+    """
+    FaBiO-aligned classification of figure and display item types found in scholarly publications. Values map to FaBiO sub-classes of fabio:Figure and fabio:Table.
+    """
+    data_plot = "data_plot"
+    graph = "graph"
+    photograph = "photograph"
+    plate = "plate"
+    diagram = "diagram"
+    flowchart = "flowchart"
+    table = "table"
+    generic = "generic"
+
+
 
 class Claim(ConfiguredBaseModel):
     """
@@ -179,6 +193,7 @@ class Evidence(ConfiguredBaseModel):
     confidence: Optional[float] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
     of_source: Optional[Source] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'CitationLink']} })
     for_claim: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'CitationLink']} })
+    of_figure: Optional[Figure] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
 
 
 class Source(ConfiguredBaseModel):
@@ -187,10 +202,30 @@ class Source(ConfiguredBaseModel):
     """
     linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'fabio:Expression', 'from_schema': 'https://w3id.org/indicium'})
 
-    identifier: str = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Source'], 'slot_uri': 'dct:identifier'} })
+    identifier: str = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Source', 'Figure'], 'slot_uri': 'dct:identifier'} })
     title: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Source'], 'slot_uri': 'dct:title'} })
     authors: Optional[list[str]] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Source']} })
     license_id: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Source']} })
+
+
+class Figure(ConfiguredBaseModel):
+    """
+    A figure, table, or other display item from a scholarly publication. Carries optional FaBiO sub-type classification (via figure_type) and provenance (source_doi). Linked from Evidence.of_figure when the evidence is grounded in a visual artefact rather than a text passage.
+    """
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'doco:Figure',
+         'from_schema': 'https://w3id.org/indicium',
+         'slot_usage': {'identifier': {'name': 'identifier', 'required': False}}})
+
+    identifier: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Source', 'Figure'], 'slot_uri': 'dct:identifier'} })
+    figure_id: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
+    caption: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
+    figure_type: Optional[FigureType] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
+    panel_label: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
+    page: Optional[int] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
+    media_type: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
+    content_url: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
+    source_doi: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
+    is_supplementary: Optional[bool] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
 
 
 class CitationLink(ConfiguredBaseModel):
@@ -209,4 +244,5 @@ class CitationLink(ConfiguredBaseModel):
 Claim.model_rebuild()
 Evidence.model_rebuild()
 Source.model_rebuild()
+Figure.model_rebuild()
 CitationLink.model_rebuild()
