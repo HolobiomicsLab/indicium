@@ -1,3 +1,5 @@
+import warnings
+
 import rdflib
 import indicium
 from indicium import claim_to_evidence_snippet
@@ -8,8 +10,12 @@ def test_public_api_round_trip():
              "qualifier": "inhibits", "relation": "inhibits", "object": "B",
              "evidence": [{"doi": "10.1/x", "quote": "A inhibits B"}]}
 
-    # ASTRA projection
-    insight = indicium.claim_to_insight(claim)
+    # ASTRA projection — intentionally testing the deprecated dict-based API
+    # for backward-compat; suppress DeprecationWarning so the warning is
+    # not surfaced as a test runner noise item.
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", DeprecationWarning)
+        insight = indicium.claim_to_insight(claim)
     assert insight["evidence"][0]["doi"] == "10.1/x"
 
     # KGmemory-ready JSON-LD
