@@ -13,6 +13,7 @@ prefixes:
   prov: http://www.w3.org/ns/prov#
   dct: http://purl.org/dc/terms/
   asb: https://asb.holobiomics.org/ns/asb#
+  dcat: http://www.w3.org/ns/dcat#
 default_prefix: indicium
 default_range: string
 imports:
@@ -59,6 +60,8 @@ enums:
       figure: { meaning: doco:Figure }
       table:  { meaning: doco:Table }
       image:  { meaning: IAO:0000536 }
+      code:   { meaning: fabio:ComputerProgram }
+      data:   { meaning: dcat:Dataset }
   LinkType:
     permissible_values:
       supports:            { meaning: cito:supports }
@@ -79,6 +82,31 @@ enums:
       flowchart:   { meaning: fabio:Flowchart }
       table:       { meaning: fabio:Table }
       generic:     { meaning: fabio:Figure }
+  ScriptType:
+    description: >-
+      Role-based classification of code artefacts in scholarly publications.
+      All values map to fabio:ComputerProgram; the enum value itself conveys
+      the functional role within the paper's methodology.
+    permissible_values:
+      analysis:      { meaning: fabio:ComputerProgram }
+      visualization: { meaning: fabio:ComputerProgram }
+      workflow:      { meaning: fabio:ComputerProgram }
+      notebook:      { meaning: fabio:ComputerProgram }
+      utility:       { meaning: fabio:ComputerProgram }
+      generic:       { meaning: fabio:ComputerProgram }
+  DatasetType:
+    description: >-
+      Content-type classification of data artefacts in scholarly publications.
+      Values map to dcat:Dataset; the enum value conveys the domain/format
+      category of the data.
+    permissible_values:
+      tabular:     { meaning: dcat:Dataset }
+      sequence:    { meaning: dcat:Dataset }
+      spectral:    { meaning: dcat:Dataset }
+      image_stack: { meaning: dcat:Dataset }
+      network:     { meaning: dcat:Dataset }
+      model:       { meaning: dcat:Dataset }
+      generic:     { meaning: dcat:Dataset }
 
 slots:
   id:        { identifier: true, slot_uri: dct:identifier }
@@ -111,6 +139,22 @@ slots:
   source_doi:       {}
   is_supplementary: { range: boolean }
   of_figure:        { range: Figure }
+  # Script-specific slots
+  script_id:        {}
+  script_type:      { range: ScriptType }
+  language:         {}
+  purpose:          {}
+  repository_url:   {}
+  commit_sha:       {}
+  of_script:        { range: Script }
+  # DataAsset-specific slots
+  asset_id:         {}
+  dataset_type:     { range: DatasetType }
+  data_format:      {}
+  accession:        {}
+  repository:       {}
+  n_samples:        { range: integer }
+  of_dataset:       { range: DataAsset }
 
 classes:
   Claim:
@@ -128,7 +172,8 @@ classes:
   Evidence:
     class_uri: sepio:0000002
     description: An evidence line linking a Claim to a Source (SEPIO EvidenceLine).
-    slots: [evidence_type, source_type, quote, confidence, of_source, for_claim, of_figure]
+    slots: [evidence_type, source_type, quote, confidence, of_source, for_claim,
+            of_figure, of_script, of_dataset]
   Source:
     class_uri: fabio:Expression
     description: A cited source/paper with stable identity.
@@ -150,6 +195,50 @@ classes:
       - media_type
       - content_url
       - source_doi
+      - is_supplementary
+    slot_usage:
+      identifier:
+        required: false
+  Script:
+    class_uri: fabio:ComputerProgram
+    description: >-
+      A code artefact (script, notebook, or pipeline) from a scholarly
+      publication. Carries role classification (script_type), programming
+      language, repository URL, and optional pinned commit. Linked from
+      Evidence.of_script when the evidence is grounded in code rather than
+      a text passage or figure.
+    slots:
+      - identifier
+      - script_id
+      - script_type
+      - language
+      - purpose
+      - repository_url
+      - content_url
+      - commit_sha
+      - source_doi
+      - is_supplementary
+    slot_usage:
+      identifier:
+        required: false
+  DataAsset:
+    class_uri: dcat:Dataset
+    description: >-
+      A data artefact (dataset, supplementary file, or public repository
+      deposit) from a scholarly publication. Carries content-type
+      classification (dataset_type), file format, accession number, and
+      hosting repository. Linked from Evidence.of_dataset when the evidence
+      is grounded in data rather than a text passage.
+    slots:
+      - identifier
+      - asset_id
+      - dataset_type
+      - data_format
+      - accession
+      - repository
+      - content_url
+      - source_doi
+      - n_samples
       - is_supplementary
     slot_usage:
       identifier:

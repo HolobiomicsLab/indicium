@@ -2,6 +2,7 @@
 @prefix IAO: <http://purl.obolibrary.org/obo/IAO_> .
 @prefix asb: <https://asb.holobiomics.org/ns/asb#> .
 @prefix cito: <http://purl.org/spar/cito/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix dct: <http://purl.org/dc/terms/> .
 @prefix doco: <http://purl.org/spar/doco/> .
 @prefix fabio: <http://purl.org/spar/fabio/> .
@@ -16,31 +17,21 @@ sepio:0000002 a sh:NodeShape ;
     rdfs:comment "An evidence line linking a Claim to a Source (SEPIO EvidenceLine)." ;
     sh:closed false ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path indicium:quote ],
-        [ sh:in ( ECO:0000006 ECO:0000033 ECO:0000302 ECO:0000361 ECO:0000034 ) ;
+    sh:property [ sh:in ( ECO:0000006 ECO:0000033 ECO:0000302 ECO:0000361 ECO:0000034 ) ;
             sh:maxCount 1 ;
             sh:order 0 ;
             sh:path indicium:evidence_type ],
-        [ sh:datatype xsd:float ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 3 ;
-            sh:path indicium:confidence ],
-        [ sh:class doco:Figure ;
+        [ sh:class dcat:Dataset ;
             sh:maxCount 1 ;
             sh:nodeKind sh:BlankNodeOrIRI ;
-            sh:order 6 ;
-            sh:path indicium:of_figure ],
+            sh:order 8 ;
+            sh:path indicium:of_dataset ],
         [ sh:class fabio:Expression ;
             sh:maxCount 1 ;
             sh:nodeKind sh:BlankNodeOrIRI ;
             sh:order 4 ;
             sh:path indicium:of_source ],
-        [ sh:in ( IAO:0000311 doco:Figure doco:Table IAO:0000536 ) ;
+        [ sh:in ( IAO:0000311 doco:Figure doco:Table IAO:0000536 fabio:ComputerProgram dcat:Dataset ) ;
             sh:maxCount 1 ;
             sh:order 1 ;
             sh:path indicium:source_type ],
@@ -48,7 +39,27 @@ sepio:0000002 a sh:NodeShape ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 5 ;
-            sh:path indicium:for_claim ] ;
+            sh:path indicium:for_claim ],
+        [ sh:class doco:Figure ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 6 ;
+            sh:path indicium:of_figure ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path indicium:quote ],
+        [ sh:class fabio:ComputerProgram ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:BlankNodeOrIRI ;
+            sh:order 7 ;
+            sh:path indicium:of_script ],
+        [ sh:datatype xsd:float ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path indicium:confidence ] ;
     sh:targetClass sepio:0000002 .
 
 indicium:CitationLink a sh:NodeShape ;
@@ -60,45 +71,31 @@ indicium:CitationLink a sh:NodeShape ;
             sh:nodeKind sh:BlankNodeOrIRI ;
             sh:order 0 ;
             sh:path indicium:of_source ],
-        [ sh:in ( cito:supports cito:disputes cito:qualifies cito:citesForInformation ) ;
-            sh:maxCount 1 ;
-            sh:order 2 ;
-            sh:path indicium:link_type ],
         [ sh:class asb:Claim ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 1 ;
-            sh:path indicium:for_claim ] ;
+            sh:path indicium:for_claim ],
+        [ sh:in ( cito:supports cito:disputes cito:qualifies cito:citesForInformation ) ;
+            sh:maxCount 1 ;
+            sh:order 2 ;
+            sh:path indicium:link_type ] ;
     sh:targetClass indicium:CitationLink .
 
 doco:Figure a sh:NodeShape ;
     rdfs:comment "A figure, table, or other display item from a scholarly publication. Carries optional FaBiO sub-type classification (via figure_type) and provenance (source_doi). Linked from Evidence.of_figure when the evidence is grounded in a visual artefact rather than a text passage." ;
     sh:closed false ;
     sh:ignoredProperties ( rdf:type ) ;
-    sh:property [ sh:datatype xsd:boolean ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 9 ;
-            sh:path indicium:is_supplementary ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path indicium:figure_id ],
-        [ sh:datatype xsd:string ;
+    sh:property [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 4 ;
             sh:path indicium:panel_label ],
-        [ sh:datatype xsd:integer ;
+        [ sh:datatype xsd:boolean ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 5 ;
-            sh:path indicium:page ],
-        [ sh:in ( fabio:DataPlot fabio:Graph fabio:Photograph fabio:Plate fabio:Diagram fabio:Flowchart fabio:Table fabio:Figure ) ;
-            sh:maxCount 1 ;
-            sh:order 3 ;
-            sh:path indicium:figure_type ],
+            sh:order 9 ;
+            sh:path indicium:is_supplementary ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -107,23 +104,37 @@ doco:Figure a sh:NodeShape ;
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 7 ;
-            sh:path indicium:content_url ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
             sh:order 6 ;
             sh:path indicium:media_type ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 0 ;
-            sh:path dct:identifier ],
+            sh:order 2 ;
+            sh:path indicium:caption ],
+        [ sh:in ( fabio:DataPlot fabio:Graph fabio:Photograph fabio:Plate fabio:Diagram fabio:Flowchart fabio:Table fabio:Figure ) ;
+            sh:maxCount 1 ;
+            sh:order 3 ;
+            sh:path indicium:figure_type ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path indicium:caption ] ;
+            sh:order 7 ;
+            sh:path indicium:content_url ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path indicium:figure_id ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path indicium:page ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path dct:identifier ] ;
     sh:targetClass doco:Figure .
 
 fabio:Expression a sh:NodeShape ;
@@ -131,6 +142,11 @@ fabio:Expression a sh:NodeShape ;
     sh:closed false ;
     sh:ignoredProperties ( rdf:type ) ;
     sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path dct:title ],
+        [ sh:datatype xsd:string ;
             sh:nodeKind sh:Literal ;
             sh:order 2 ;
             sh:path indicium:authors ],
@@ -140,11 +156,6 @@ fabio:Expression a sh:NodeShape ;
             sh:nodeKind sh:Literal ;
             sh:order 0 ;
             sh:path dct:identifier ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 1 ;
-            sh:path dct:title ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -169,19 +180,8 @@ asb:Claim a sh:NodeShape ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 4 ;
-            sh:path asb:relation ],
-        [ sh:in ( "causes" "prevents" "inhibits" "activates" "increases" "decreases" "correlates_with" "is_associated_with" "predicts" "interacts_with" "produces" "requires" "enables" "treats" "enhances" "reduces" "has_property" "is_part_of" "is_a" "consistent_with" ) ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:order 3 ;
-            sh:path asb:qualifier ],
-        [ sh:datatype xsd:string ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 5 ;
-            sh:path asb:object ],
+            sh:order 2 ;
+            sh:path asb:subject ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -191,14 +191,135 @@ asb:Claim a sh:NodeShape ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path asb:subject ],
+            sh:order 5 ;
+            sh:path asb:object ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 1 ;
-            sh:path asb:context ] ;
+            sh:path asb:context ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path asb:relation ],
+        [ sh:in ( "causes" "prevents" "inhibits" "activates" "increases" "decreases" "correlates_with" "is_associated_with" "predicts" "interacts_with" "produces" "requires" "enables" "treats" "enhances" "reduces" "has_property" "is_part_of" "is_a" "consistent_with" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:order 3 ;
+            sh:path asb:qualifier ] ;
     sh:targetClass asb:Claim .
+
+fabio:ComputerProgram a sh:NodeShape ;
+    rdfs:comment "A code artefact (script, notebook, or pipeline) from a scholarly publication. Carries role classification (script_type), programming language, repository URL, and optional pinned commit. Linked from Evidence.of_script when the evidence is grounded in code rather than a text passage or figure." ;
+    sh:closed false ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path indicium:repository_url ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 8 ;
+            sh:path indicium:source_doi ],
+        [ sh:datatype xsd:boolean ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path indicium:is_supplementary ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path indicium:commit_sha ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path indicium:language ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path indicium:script_id ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path dct:identifier ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path indicium:content_url ],
+        [ sh:in ( fabio:ComputerProgram fabio:ComputerProgram fabio:ComputerProgram fabio:ComputerProgram fabio:ComputerProgram fabio:ComputerProgram ) ;
+            sh:maxCount 1 ;
+            sh:order 2 ;
+            sh:path indicium:script_type ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path indicium:purpose ] ;
+    sh:targetClass fabio:ComputerProgram .
+
+dcat:Dataset a sh:NodeShape ;
+    rdfs:comment "A data artefact (dataset, supplementary file, or public repository deposit) from a scholarly publication. Carries content-type classification (dataset_type), file format, accession number, and hosting repository. Linked from Evidence.of_dataset when the evidence is grounded in data rather than a text passage." ;
+    sh:closed false ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:datatype xsd:boolean ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 9 ;
+            sh:path indicium:is_supplementary ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 7 ;
+            sh:path indicium:source_doi ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 6 ;
+            sh:path indicium:content_url ],
+        [ sh:datatype xsd:integer ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 8 ;
+            sh:path indicium:n_samples ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path dct:identifier ],
+        [ sh:in ( dcat:Dataset dcat:Dataset dcat:Dataset dcat:Dataset dcat:Dataset dcat:Dataset dcat:Dataset ) ;
+            sh:maxCount 1 ;
+            sh:order 2 ;
+            sh:path indicium:dataset_type ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 4 ;
+            sh:path indicium:accession ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path indicium:repository ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 1 ;
+            sh:path indicium:asset_id ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 3 ;
+            sh:path indicium:data_format ] ;
+    sh:targetClass dcat:Dataset .
 
 

@@ -81,6 +81,8 @@ linkml_meta = LinkMLMeta({'default_prefix': 'indicium',
                           'prefix_reference': 'https://asb.holobiomics.org/ns/asb#'},
                   'cito': {'prefix_prefix': 'cito',
                            'prefix_reference': 'http://purl.org/spar/cito/'},
+                  'dcat': {'prefix_prefix': 'dcat',
+                           'prefix_reference': 'http://www.w3.org/ns/dcat#'},
                   'dct': {'prefix_prefix': 'dct',
                           'prefix_reference': 'http://purl.org/dc/terms/'},
                   'doco': {'prefix_prefix': 'doco',
@@ -141,6 +143,8 @@ class SourceType(str, Enum):
     figure = "figure"
     table = "table"
     image = "image"
+    code = "code"
+    data = "data"
 
 
 class LinkType(str, Enum):
@@ -161,6 +165,31 @@ class FigureType(str, Enum):
     diagram = "diagram"
     flowchart = "flowchart"
     table = "table"
+    generic = "generic"
+
+
+class ScriptType(str, Enum):
+    """
+    Role-based classification of code artefacts in scholarly publications. All values map to fabio:ComputerProgram; the enum value itself conveys the functional role within the paper's methodology.
+    """
+    analysis = "analysis"
+    visualization = "visualization"
+    workflow = "workflow"
+    notebook = "notebook"
+    utility = "utility"
+    generic = "generic"
+
+
+class DatasetType(str, Enum):
+    """
+    Content-type classification of data artefacts in scholarly publications. Values map to dcat:Dataset; the enum value conveys the domain/format category of the data.
+    """
+    tabular = "tabular"
+    sequence = "sequence"
+    spectral = "spectral"
+    image_stack = "image_stack"
+    network = "network"
+    model = "model"
     generic = "generic"
 
 
@@ -194,6 +223,8 @@ class Evidence(ConfiguredBaseModel):
     of_source: Optional[Source] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'CitationLink']} })
     for_claim: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'CitationLink']} })
     of_figure: Optional[Figure] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
+    of_script: Optional[Script] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
+    of_dataset: Optional[DataAsset] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
 
 
 class Source(ConfiguredBaseModel):
@@ -202,7 +233,8 @@ class Source(ConfiguredBaseModel):
     """
     linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'fabio:Expression', 'from_schema': 'https://w3id.org/indicium'})
 
-    identifier: str = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Source', 'Figure'], 'slot_uri': 'dct:identifier'} })
+    identifier: str = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Source', 'Figure', 'Script', 'DataAsset'],
+         'slot_uri': 'dct:identifier'} })
     title: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Source'], 'slot_uri': 'dct:title'} })
     authors: Optional[list[str]] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Source']} })
     license_id: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Source']} })
@@ -216,16 +248,59 @@ class Figure(ConfiguredBaseModel):
          'from_schema': 'https://w3id.org/indicium',
          'slot_usage': {'identifier': {'name': 'identifier', 'required': False}}})
 
-    identifier: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Source', 'Figure'], 'slot_uri': 'dct:identifier'} })
+    identifier: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Source', 'Figure', 'Script', 'DataAsset'],
+         'slot_uri': 'dct:identifier'} })
     figure_id: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
     caption: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
     figure_type: Optional[FigureType] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
     panel_label: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
     page: Optional[int] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
     media_type: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
-    content_url: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
-    source_doi: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
-    is_supplementary: Optional[bool] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure']} })
+    content_url: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure', 'Script', 'DataAsset']} })
+    source_doi: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure', 'Script', 'DataAsset']} })
+    is_supplementary: Optional[bool] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure', 'Script', 'DataAsset']} })
+
+
+class Script(ConfiguredBaseModel):
+    """
+    A code artefact (script, notebook, or pipeline) from a scholarly publication. Carries role classification (script_type), programming language, repository URL, and optional pinned commit. Linked from Evidence.of_script when the evidence is grounded in code rather than a text passage or figure.
+    """
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'fabio:ComputerProgram',
+         'from_schema': 'https://w3id.org/indicium',
+         'slot_usage': {'identifier': {'name': 'identifier', 'required': False}}})
+
+    identifier: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Source', 'Figure', 'Script', 'DataAsset'],
+         'slot_uri': 'dct:identifier'} })
+    script_id: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Script']} })
+    script_type: Optional[ScriptType] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Script']} })
+    language: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Script']} })
+    purpose: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Script']} })
+    repository_url: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Script']} })
+    content_url: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure', 'Script', 'DataAsset']} })
+    commit_sha: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Script']} })
+    source_doi: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure', 'Script', 'DataAsset']} })
+    is_supplementary: Optional[bool] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure', 'Script', 'DataAsset']} })
+
+
+class DataAsset(ConfiguredBaseModel):
+    """
+    A data artefact (dataset, supplementary file, or public repository deposit) from a scholarly publication. Carries content-type classification (dataset_type), file format, accession number, and hosting repository. Linked from Evidence.of_dataset when the evidence is grounded in data rather than a text passage.
+    """
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'dcat:Dataset',
+         'from_schema': 'https://w3id.org/indicium',
+         'slot_usage': {'identifier': {'name': 'identifier', 'required': False}}})
+
+    identifier: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Source', 'Figure', 'Script', 'DataAsset'],
+         'slot_uri': 'dct:identifier'} })
+    asset_id: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['DataAsset']} })
+    dataset_type: Optional[DatasetType] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['DataAsset']} })
+    data_format: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['DataAsset']} })
+    accession: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['DataAsset']} })
+    repository: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['DataAsset']} })
+    content_url: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure', 'Script', 'DataAsset']} })
+    source_doi: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure', 'Script', 'DataAsset']} })
+    n_samples: Optional[int] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['DataAsset']} })
+    is_supplementary: Optional[bool] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure', 'Script', 'DataAsset']} })
 
 
 class CitationLink(ConfiguredBaseModel):
@@ -245,4 +320,6 @@ Claim.model_rebuild()
 Evidence.model_rebuild()
 Source.model_rebuild()
 Figure.model_rebuild()
+Script.model_rebuild()
+DataAsset.model_rebuild()
 CitationLink.model_rebuild()

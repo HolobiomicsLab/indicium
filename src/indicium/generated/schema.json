@@ -79,6 +79,85 @@
             "title": "ClaimType",
             "type": "string"
         },
+        "DataAsset": {
+            "additionalProperties": false,
+            "description": "A data artefact (dataset, supplementary file, or public repository deposit) from a scholarly publication. Carries content-type classification (dataset_type), file format, accession number, and hosting repository. Linked from Evidence.of_dataset when the evidence is grounded in data rather than a text passage.",
+            "properties": {
+                "accession": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "asset_id": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "content_url": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "data_format": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "dataset_type": {
+                    "$ref": "#/$defs/DatasetType"
+                },
+                "identifier": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "is_supplementary": {
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                },
+                "n_samples": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "repository": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "source_doi": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "title": "DataAsset",
+            "type": "object"
+        },
+        "DatasetType": {
+            "description": "Content-type classification of data artefacts in scholarly publications. Values map to dcat:Dataset; the enum value conveys the domain/format category of the data.",
+            "enum": [
+                "tabular",
+                "sequence",
+                "spectral",
+                "image_stack",
+                "network",
+                "model",
+                "generic"
+            ],
+            "title": "DatasetType",
+            "type": "string"
+        },
         "Evidence": {
             "additionalProperties": false,
             "description": "An evidence line linking a Claim to a Source (SEPIO EvidenceLine).",
@@ -98,10 +177,30 @@
                         "null"
                     ]
                 },
+                "of_dataset": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/DataAsset"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
                 "of_figure": {
                     "anyOf": [
                         {
                             "$ref": "#/$defs/Figure"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "of_script": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/Script"
                         },
                         {
                             "type": "null"
@@ -234,6 +333,84 @@
             "title": "LinkType",
             "type": "string"
         },
+        "Script": {
+            "additionalProperties": false,
+            "description": "A code artefact (script, notebook, or pipeline) from a scholarly publication. Carries role classification (script_type), programming language, repository URL, and optional pinned commit. Linked from Evidence.of_script when the evidence is grounded in code rather than a text passage or figure.",
+            "properties": {
+                "commit_sha": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "content_url": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "identifier": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "is_supplementary": {
+                    "type": [
+                        "boolean",
+                        "null"
+                    ]
+                },
+                "language": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "purpose": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "repository_url": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "script_id": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "script_type": {
+                    "$ref": "#/$defs/ScriptType"
+                },
+                "source_doi": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "title": "Script",
+            "type": "object"
+        },
+        "ScriptType": {
+            "description": "Role-based classification of code artefacts in scholarly publications. All values map to fabio:ComputerProgram; the enum value itself conveys the functional role within the paper's methodology.",
+            "enum": [
+                "analysis",
+                "visualization",
+                "workflow",
+                "notebook",
+                "utility",
+                "generic"
+            ],
+            "title": "ScriptType",
+            "type": "string"
+        },
         "Source": {
             "additionalProperties": false,
             "description": "A cited source/paper with stable identity.",
@@ -275,7 +452,9 @@
                 "text",
                 "figure",
                 "table",
-                "image"
+                "image",
+                "code",
+                "data"
             ],
             "title": "SourceType",
             "type": "string"

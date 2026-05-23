@@ -80,6 +80,42 @@ FIGURE_TYPE_FABIO: dict[str, str] = {
     "generic":    "fabio:Figure",
 }
 
+# FaBiO — script role classification (ScriptType enum meanings).
+# All values map to fabio:ComputerProgram; the enum value carries the role.
+SCRIPT_TYPE_IRI: dict[str, str] = {
+    "analysis":      "fabio:ComputerProgram",
+    "visualization": "fabio:ComputerProgram",
+    "workflow":      "fabio:ComputerProgram",
+    "notebook":      "fabio:ComputerProgram",
+    "utility":       "fabio:ComputerProgram",
+    "generic":       "fabio:ComputerProgram",
+}
+
+# DCAT — dataset content-type classification (DatasetType enum meanings).
+# All values map to dcat:Dataset; the enum value carries the domain category.
+DATASET_TYPE_IRI: dict[str, str] = {
+    "tabular":     "dcat:Dataset",
+    "sequence":    "dcat:Dataset",
+    "spectral":    "dcat:Dataset",
+    "image_stack": "dcat:Dataset",
+    "network":     "dcat:Dataset",
+    "model":       "dcat:Dataset",
+    "generic":     "dcat:Dataset",
+}
+
+# Well-known data repository identifiers (for DataAsset.repository).
+KNOWN_REPOSITORIES: dict[str, str] = {
+    "geo":          "https://www.ncbi.nlm.nih.gov/geo/",
+    "pride":        "https://www.ebi.ac.uk/pride/",
+    "arrayexpress": "https://www.ebi.ac.uk/arrayexpress/",
+    "zenodo":       "https://zenodo.org/",
+    "figshare":     "https://figshare.com/",
+    "dryad":        "https://datadryad.org/",
+    "osf":          "https://osf.io/",
+    "github":       "https://github.com/",
+    "gitlab":       "https://gitlab.com/",
+}
+
 # ---------------------------------------------------------------------------
 # CURIE expansion — used by Scriptorium and other consumers to build URIRefs
 # ---------------------------------------------------------------------------
@@ -89,18 +125,20 @@ _IAO_BASE   = "http://purl.obolibrary.org/obo/IAO_"
 _DOCO_BASE  = "http://purl.org/spar/doco/"
 _CITO_BASE  = "http://purl.org/spar/cito/"
 _FABIO_BASE = "http://purl.org/spar/fabio/"
+_DCAT_BASE  = "http://www.w3.org/ns/dcat#"
 
 def expand_curie(curie: str) -> str:
     """Expand a short CURIE to a full IRI string.
 
-    Supported prefixes: ECO, IAO, doco, cito, fabio.
+    Supported prefixes: ECO, IAO, doco, cito, fabio, dcat.
 
     Examples::
 
-        expand_curie("ECO:0000006")    # → "http://purl.obolibrary.org/obo/ECO_0000006"
-        expand_curie("doco:Figure")    # → "http://purl.org/spar/doco/Figure"
-        expand_curie("IAO:0000536")    # → "http://purl.obolibrary.org/obo/IAO_0000536"
-        expand_curie("fabio:DataPlot") # → "http://purl.org/spar/fabio/DataPlot"
+        expand_curie("ECO:0000006")      # → "http://purl.obolibrary.org/obo/ECO_0000006"
+        expand_curie("doco:Figure")      # → "http://purl.org/spar/doco/Figure"
+        expand_curie("IAO:0000536")      # → "http://purl.obolibrary.org/obo/IAO_0000536"
+        expand_curie("fabio:DataPlot")   # → "http://purl.org/spar/fabio/DataPlot"
+        expand_curie("dcat:Dataset")     # → "http://www.w3.org/ns/dcat#Dataset"
     """
     if ":" not in curie:
         raise ValueError(f"Not a valid CURIE (missing ':'): {curie!r}")
@@ -111,6 +149,7 @@ def expand_curie(curie: str) -> str:
         "doco":  _DOCO_BASE,
         "cito":  _CITO_BASE,
         "fabio": _FABIO_BASE,
+        "dcat":  _DCAT_BASE,
     }
     if prefix not in bases:
         raise ValueError(

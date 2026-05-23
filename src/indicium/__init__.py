@@ -11,8 +11,14 @@ from indicium.validate import validate_graph
 from indicium.adapters.astra import claim_to_insight
 from indicium.adapters.kgmemory import claim_jsonld, MEM_NS
 from indicium.adapters.scitask import claim_to_evidence_snippet
-from indicium.generated.model import Figure, FigureType
-from indicium.iri_bindings import FIGURE_TYPE_FABIO, expand_curie
+from indicium.generated.model import Figure, FigureType, Script, ScriptType, DataAsset, DatasetType
+from indicium.iri_bindings import (
+    FIGURE_TYPE_FABIO,
+    SCRIPT_TYPE_IRI,
+    DATASET_TYPE_IRI,
+    KNOWN_REPOSITORIES,
+    expand_curie,
+)
 
 __all__ = [
     "validate_graph",
@@ -24,5 +30,13 @@ __all__ = [
     "Figure",
     "FigureType",
     "FIGURE_TYPE_FABIO",
+    # Script + DataAsset extension (v1.2)
+    "Script",
+    "ScriptType",
+    "DataAsset",
+    "DatasetType",
+    "SCRIPT_TYPE_IRI",
+    "DATASET_TYPE_IRI",
+    "KNOWN_REPOSITORIES",
     "expand_curie",
 ]
