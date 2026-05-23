@@ -17,7 +17,7 @@ def test_all_five_evidence_types_present():
 
 def test_cito_and_source_maps_nonempty():
     assert len(LINK_TYPE_CITO) == 4
-    assert set(SOURCE_TYPE_IRI) == {"text", "figure", "table", "image"}
+    assert set(SOURCE_TYPE_IRI) == {"text", "figure", "table", "image", "code", "data"}
 
 
 @pytest.mark.parametrize("curie,expected", [
@@ -26,6 +26,8 @@ def test_cito_and_source_maps_nonempty():
     ("IAO:0000536", "http://purl.obolibrary.org/obo/IAO_0000536"),
     ("doco:Figure", "http://purl.org/spar/doco/Figure"),
     ("cito:supports", "http://purl.org/spar/cito/supports"),
+    ("fabio:ComputerProgram", "http://purl.org/spar/fabio/ComputerProgram"),
+    ("dcat:Dataset", "http://www.w3.org/ns/dcat#Dataset"),
 ])
 def test_expand_curie(curie, expected):
     assert expand_curie(curie) == expected

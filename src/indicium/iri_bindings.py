@@ -59,12 +59,15 @@ LINK_TYPE_CITO: dict[str, str] = {
     "citesForInformation": "cito:citesForInformation",
 }
 
-# DoCO + IAO — source/document component types.
+# DoCO + IAO + FaBiO + DCAT — source/document component types.
+# Covers all 6 SourceType enum members: text, figure, table, image, code, data.
 SOURCE_TYPE_IRI: dict[str, str] = {
-    "text":   "IAO:0000311",   # publication
+    "text":   "IAO:0000311",          # publication
     "figure": "doco:Figure",
     "table":  "doco:Table",
-    "image":  "IAO:0000536",   # image
+    "image":  "IAO:0000536",          # image
+    "code":   "fabio:ComputerProgram",
+    "data":   "dcat:Dataset",
 }
 
 # FaBiO — figure sub-type classification (FigureType enum meanings).
