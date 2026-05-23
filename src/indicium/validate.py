@@ -15,9 +15,26 @@ def _shapes_graph() -> rdflib.Graph:
     return g
 
 
-def validate_graph(data: rdflib.Graph) -> tuple[bool, str]:
+def validate_graph(
+    data: rdflib.Graph,
+    extra_shapes: rdflib.Graph | None = None,
+) -> tuple[bool, str]:
+    """SHACL-validate *data* against indicium's base shapes.
+
+    Args:
+        data: The RDF graph to validate.
+        extra_shapes: Optional additional SHACL shapes graph (e.g. from a
+            DomainAdapter) merged with the base shapes before validation.
+            Pass ``None`` (default) for identical behaviour to v0.1.
+
+    Returns:
+        ``(conforms, report_text)``
+    """
+    shapes = _shapes_graph()
+    if extra_shapes is not None:
+        shapes = shapes + extra_shapes
     conforms, _, report = _shacl_validate(
-        data_graph=data, shacl_graph=_shapes_graph(),
+        data_graph=data, shacl_graph=shapes,
         inference="none", abort_on_first=False, meta_shacl=False,
     )
     return conforms, report
