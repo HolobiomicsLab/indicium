@@ -1,3 +1,24 @@
-# Supplemental SHACL — populated only if the conformance suite (a later task)
-# reveals a constraint gen-shacl cannot express. Empty by design at v0.1.
+# Supplemental SHACL shapes — constraints that LinkML's gen-shacl cannot express.
+# These are merged with the generated shapes.ttl at validation time.
 @prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix asb: <https://asb.holobiomics.org/ns/asb#> .
+@prefix indicium: <https://w3id.org/indicium/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# v1.4: When claim_status is 'superseded', superseded_by must be present.
+# LinkML gen-shacl cannot express conditional minCount, so this lives here.
+indicium:SupersededByRequiredShape
+    a sh:NodeShape ;
+    sh:targetClass asb:Claim ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "When claim_status is 'superseded', superseded_by must be set to the URI of the replacement Claim." ;
+        sh:select """
+            PREFIX indicium: <https://w3id.org/indicium/>
+            SELECT $this
+            WHERE {
+                $this indicium:claim_status "superseded" .
+                FILTER NOT EXISTS { $this indicium:superseded_by ?_ }
+            }
+        """ ;
+    ] .
