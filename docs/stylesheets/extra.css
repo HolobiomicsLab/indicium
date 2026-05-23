@@ -1,0 +1,168 @@
+/* Indicium spec site — CNRS graphical charter
+   Token palette mirrors SciTask (scitask-spec.org) exactly.
+   Source of truth: styles/tokens.css in holobiomicslab_website.
+   ---------------------------------------------------------------- */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+/* ── Light mode tokens ── */
+:root {
+  --indicium-blue:        #00284b;
+  --indicium-blue-ink:   #001833;
+  --indicium-blue-soft:  #0d3a66;
+  --indicium-yellow:     #ffeb6e;
+  --indicium-yellow-soft:#fff5a6;
+  --indicium-paper:      #fbf7ef;
+  --indicium-paper-2:    #f3ecdc;
+  --indicium-ink:        #16242f;
+  --indicium-mute:       #5d6a78;
+  --indicium-teal:       #04919a;
+
+  --md-primary-fg-color:          var(--indicium-blue);
+  --md-primary-fg-color--light:   var(--indicium-blue-soft);
+  --md-primary-fg-color--dark:    var(--indicium-blue-ink);
+  --md-primary-bg-color:          var(--indicium-paper);
+  --md-accent-fg-color:           var(--indicium-teal);
+  --md-accent-fg-color--transparent: rgba(4, 145, 154, 0.1);
+
+  --md-default-bg-color:          var(--indicium-paper);
+  --md-default-fg-color:          var(--indicium-ink);
+  --md-default-fg-color--light:   var(--indicium-mute);
+  --md-default-fg-color--lighter: #8b95a1;
+
+  --md-code-bg-color:             var(--indicium-paper-2);
+  --md-code-fg-color:             var(--indicium-blue);
+
+  --md-typeset-a-color:           var(--indicium-teal);
+
+  --indicium-table-head-bg:       var(--indicium-blue);
+  --indicium-table-stripe:        var(--indicium-paper-2);
+}
+
+/* ── Dark (slate) mode ── */
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color:          var(--indicium-blue-ink);
+  --md-default-fg-color:          var(--indicium-paper);
+  --md-default-fg-color--light:   #aebccb;
+  --md-code-bg-color:             #00203c;
+  --md-code-fg-color:             var(--indicium-paper);
+  --md-primary-fg-color:          var(--indicium-yellow);
+  --md-accent-fg-color:           #2dd4bf;
+  --indicium-table-head-bg:       #062a4d;
+  --indicium-table-stripe:        #00203c;
+}
+
+/* ── Typography ── */
+body, .md-content, .md-typeset {
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.md-typeset h1, .md-typeset h2, .md-typeset h3,
+.md-typeset h4, .md-typeset h5 {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--indicium-blue);
+}
+
+[data-md-color-scheme="slate"] .md-typeset h1,
+[data-md-color-scheme="slate"] .md-typeset h2,
+[data-md-color-scheme="slate"] .md-typeset h3 {
+  color: var(--indicium-paper);
+}
+
+code, pre, .md-typeset code, .md-typeset pre {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+/* ── Header & tabs ── */
+.md-header {
+  background: var(--indicium-blue);
+  box-shadow: 0 1px 0 rgba(255, 235, 110, 0.3);
+}
+
+.md-tabs {
+  background: var(--indicium-blue-soft);
+}
+
+/* ── Nav active link ── */
+.md-nav__link--active,
+.md-nav__link:is(:focus, :hover) {
+  color: var(--indicium-teal) !important;
+}
+
+.md-tabs__link--active,
+.md-tabs__link:hover {
+  color: var(--indicium-yellow) !important;
+}
+
+/* ── Sidebar ── */
+.md-sidebar { background: var(--indicium-paper); }
+[data-md-color-scheme="slate"] .md-sidebar { background: #00203c; }
+
+/* ── Admonitions — yellow left-rule ── */
+.md-typeset .admonition, .md-typeset details {
+  border-left: 4px solid var(--indicium-yellow) !important;
+  background: var(--indicium-yellow-soft) !important;
+  border-radius: 4px;
+}
+
+.md-typeset .admonition-title, .md-typeset summary {
+  background: rgba(255, 235, 110, 0.35) !important;
+  color: var(--indicium-blue) !important;
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  font-weight: 600;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .admonition,
+[data-md-color-scheme="slate"] .md-typeset details {
+  background: #1a2d3f !important;
+  border-left-color: var(--indicium-yellow) !important;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .admonition-title {
+  background: rgba(255, 235, 110, 0.12) !important;
+  color: var(--indicium-yellow) !important;
+}
+
+/* ── Tables ── */
+.md-typeset table:not([class]) th {
+  background: var(--indicium-table-head-bg);
+  color: var(--indicium-paper);
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  font-weight: 600;
+}
+
+.md-typeset table:not([class]) tr:nth-child(even) {
+  background: var(--indicium-table-stripe);
+}
+
+/* ── Clipboard ── */
+.md-clipboard { color: var(--indicium-teal); }
+.md-clipboard:hover { color: var(--indicium-blue); }
+
+/* ── Footer ── */
+.md-footer { background: var(--indicium-blue-ink); color: var(--indicium-paper); }
+.md-footer a { color: var(--indicium-yellow); }
+
+/* ── Selection ── */
+::selection { background: var(--indicium-yellow); color: var(--indicium-blue); }
+
+/* ── Scrollbar (WebKit) ── */
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb {
+  background: rgba(0, 40, 75, 0.2);
+  border-radius: 999px;
+}
+[data-md-color-scheme="slate"] *::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
