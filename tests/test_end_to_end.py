@@ -1,5 +1,6 @@
 import rdflib
 import indicium
+from indicium import claim_to_evidence_snippet
 
 
 def test_public_api_round_trip():
@@ -24,3 +25,8 @@ def test_public_api_round_trip():
 """, format="turtle")
     conforms, _ = indicium.validate_graph(g)
     assert conforms is True
+
+    # SciTask adapter
+    snip = claim_to_evidence_snippet(claim)
+    assert snip["snippet_id"] == claim["id"]
+    assert isinstance(snip["text"], str)

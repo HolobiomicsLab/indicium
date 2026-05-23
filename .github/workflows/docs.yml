@@ -22,10 +22,7 @@ jobs:
       - name: Install dependencies
         run: uv sync --extra codegen --extra docs
 
-      - name: Regenerate schema artefacts
-        run: uv run make gen
-
-      - name: Copy schema artefacts to docs
+      - name: Build schema artefacts and copy to docs
         run: make schema-assets
 
       - name: Deploy site
