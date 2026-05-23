@@ -12,7 +12,14 @@ from indicium.adapters.astra import claim_to_insight
 from indicium.adapters.kgmemory import claim_jsonld, MEM_NS
 from indicium.adapters.scitask import claim_to_evidence_snippet
 from indicium.generated.model import (
-    Figure, FigureType, Script, ScriptType, DataAsset, DatasetType,
+    # Core model classes
+    Claim, Evidence, Source, CitationLink,
+    # Core enums
+    ClaimType, EvidenceType, SourceType, SuperPatternQualifier,
+    # Figure extension (v1.1)
+    Figure, FigureType,
+    # Script + DataAsset (v1.2)
+    Script, ScriptType, DataAsset, DatasetType,
     # v1.3 additions
     ClaimLink, LinkType, ClaimStatus,
     TextQuoteSelector, FragmentSelector,
@@ -36,6 +43,16 @@ __all__ = [
     "claim_jsonld",
     "MEM_NS",
     "claim_to_evidence_snippet",
+    # Core model classes
+    "Claim",
+    "Evidence",
+    "Source",
+    "CitationLink",
+    # Core enums
+    "ClaimType",
+    "EvidenceType",
+    "SourceType",
+    "SuperPatternQualifier",
     # Figure extension (v1.1)
     "Figure",
     "FigureType",
