@@ -8,7 +8,7 @@ A scientific claim expressed using the
 
 | Slot | Required | Ontology | Description |
 |------|----------|----------|-------------|
-| `id` | yes | `dct:identifier` | Stable claim identifier (string, UUID, or URN) |
+| `id` | yes | `dct:identifier` | Stable claim identifier (string, UUID, or URN). Note: LinkML's `identifier: true` generates `sh:maxCount 1` in SHACL but not `sh:minCount 1`; `id` is enforced as required by the Pydantic model and JSON Schema instead. |
 | `context` | yes | `asb:context` | The experimental or conceptual setting |
 | `subject` | yes | `asb:subject` | What the claim is about |
 | `qualifier` | yes | `asb:qualifier` | Directional relation from the 20-term vocabulary |
