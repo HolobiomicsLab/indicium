@@ -1,0 +1,51 @@
+"""Project an indicium Claim onto a SciTask EvidenceSnippet dict.
+
+SciTask EvidenceSnippet fields: snippet_id, source_path, reason, text.
+See: scitask-schema/src/scitask_schema/scitask_card.yaml → EvidenceSnippet.
+"""
+from __future__ import annotations
+
+
+def claim_to_evidence_snippet(claim: dict, source_path: str = "") -> dict:
+    """Map an Indicium Claim dict to a SciTask EvidenceSnippet dict.
+
+    Args:
+        claim: An Indicium claim dict with at minimum: id, context, subject,
+               qualifier, relation, object. Optional: source_excerpt, evidence.
+        source_path: Explicit source path override. When omitted, the first
+                     evidence artifact path is used; falls back to doi:<doi>.
+
+    Returns:
+        A dict with snippet_id, source_path, reason, text — all required fields
+        for a SciTask EvidenceSnippet.
+    """
+    # Resolve source_path from evidence if not supplied
+    if not source_path:
+        for ev in claim.get("evidence", []):
+            if ev.get("artifact"):
+                source_path = ev["artifact"]
+                break
+            elif ev.get("doi"):
+                source_path = f"doi:{ev['doi']}"
+                break
+
+    # Resolve text from source_excerpt, then evidence quotes
+    text = claim.get("source_excerpt", "")
+    if not text:
+        for ev in claim.get("evidence", []):
+            if ev.get("quote"):
+                text = ev["quote"]
+                break
+
+    # Build a human-readable reason from the 5-slot SuperPattern
+    reason = (
+        f"{claim['subject']} {claim['qualifier']} {claim['relation']} "
+        f"{claim['object']} (context: {claim['context']})"
+    )
+
+    return {
+        "snippet_id": claim["id"],
+        "source_path": source_path,
+        "reason": reason,
+        "text": text,
+    }
