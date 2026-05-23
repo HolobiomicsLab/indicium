@@ -435,7 +435,7 @@ wheels = [
 
 [[package]]
 name = "indicium"
-version = "1.1.0"
+version = "1.4.0"
 source = { editable = "." }
 dependencies = [
     { name = "pyshacl" },
@@ -443,6 +443,9 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
+astra = [
+    { name = "pyyaml" },
+]
 codegen = [
     { name = "linkml" },
     { name = "linkml-runtime" },
@@ -470,10 +473,11 @@ requires-dist = [
     { name = "mkdocs-material", marker = "extra == 'docs'", specifier = ">=9.5" },
     { name = "mkdocstrings", extras = ["python"], marker = "extra == 'docs'", specifier = ">=0.25" },
     { name = "pyshacl", specifier = ">=0.26" },
+    { name = "pyyaml", marker = "extra == 'astra'", specifier = ">=6.0" },
     { name = "pyyaml", marker = "extra == 'codegen'", specifier = ">=6.0" },
     { name = "rdflib", specifier = ">=7.0" },
 ]
-provides-extras = ["codegen", "docs"]
+provides-extras = ["codegen", "astra", "docs"]
 
 [package.metadata.requires-dev]
 dev = [
