@@ -1,3 +1,4 @@
+import warnings
 from indicium.adapters.astra import claim_to_insight
 
 
@@ -9,7 +10,9 @@ def test_claim_projects_to_astra_insight():
         "object": "cell line B",
         "evidence": [{"doi": "10.1234/x", "quote": "A inhibited B"}],
     }
-    insight = claim_to_insight(claim)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", DeprecationWarning)
+        insight = claim_to_insight(claim)
     assert insight["id"] == "c001"
     assert "compound A" in insight["claim"]
     assert insight["evidence"][0]["doi"] == "10.1234/x"

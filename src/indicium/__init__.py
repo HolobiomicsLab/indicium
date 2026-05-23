@@ -8,7 +8,7 @@ except PackageNotFoundError:  # not installed (e.g. running from a raw checkout)
     __version__ = "0.0.0+unknown"
 
 from indicium.validate import validate_graph
-from indicium.adapters.astra import claim_to_insight
+from indicium.adapters.astra import claim_to_insight  # deprecated dict-based version; use astra_bridge.claim_to_insight for typed Claim objects
 from indicium.adapters.kgmemory import claim_jsonld, MEM_NS
 from indicium.adapters.scitask import claim_to_evidence_snippet
 from indicium.generated.model import (
@@ -39,7 +39,7 @@ from indicium.iri_bindings import (
 
 __all__ = [
     "validate_graph",
-    "claim_to_insight",
+    "claim_to_insight",  # deprecated; use from indicium.astra_bridge import claim_to_insight
     "claim_jsonld",
     "MEM_NS",
     "claim_to_evidence_snippet",
