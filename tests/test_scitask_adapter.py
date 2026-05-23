@@ -31,8 +31,10 @@ def test_source_path_falls_back_to_doi():
 
 
 def test_text_falls_back_to_quote():
-    claim = _make_claim(source_excerpt="")
-    claim["evidence"] = [{"doi": "10.1234/x", "quote": "A inhibited B"}]
+    claim = _make_claim(
+        source_excerpt="",
+        evidence=[{"doi": "10.1234/x", "quote": "A inhibited B"}],
+    )
     snip = claim_to_evidence_snippet(claim)
     assert snip["text"] == "A inhibited B"
 
