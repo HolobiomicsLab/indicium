@@ -1,0 +1,58 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: Install dependencies
+        run: uv sync --extra codegen --extra docs
+
+      - name: Regenerate schema artefacts
+        run: uv run make gen
+
+      - name: Copy schema artefacts
+        run: make schema-assets
+
+      - name: Build wheel and sdist
+        run: uv build
+
+      - name: Extract changelog for this release
+        id: changelog
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          BODY=$(awk "/^## Indicium ${TAG}/{found=1; next} found && /^## /{exit} found{print}" docs/changelog.md)
+          echo "body<<EOF" >> $GITHUB_OUTPUT
+          echo "$BODY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body: ${{ steps.changelog.outputs.body }}
+          files: |
+            dist/*
+            docs/schema-assets/indicium.schema.json
+            docs/schema-assets/indicium.owl.ttl
+            docs/schema-assets/indicium.shapes.ttl
+
+      # PyPI publish — uncomment when PYPI_TOKEN secret is configured:
+      # - name: Publish to PyPI
+      #   run: uv publish
+      #   env:
+      #     UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}

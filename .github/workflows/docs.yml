@@ -1,0 +1,32 @@
+name: Deploy docs
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: Install dependencies
+        run: uv sync --extra codegen --extra docs
+
+      - name: Regenerate schema artefacts
+        run: uv run make gen
+
+      - name: Copy schema artefacts to docs
+        run: make schema-assets
+
+      - name: Deploy site
+        run: uv run mkdocs gh-deploy --force
