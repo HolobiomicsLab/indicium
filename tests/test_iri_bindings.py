@@ -34,3 +34,13 @@ def test_expand_curie(curie, expected):
 def test_expand_curie_unknown_prefix_raises():
     with pytest.raises(ValueError, match="Unknown CURIE prefix"):
         expand_curie("owl:Class")
+
+
+@pytest.mark.parametrize("curie", [
+    *EVIDENCE_TYPE_ECO.values(),
+    *LINK_TYPE_CITO.values(),
+    *SOURCE_TYPE_IRI.values(),
+])
+def test_expand_curie_covers_all_dict_values(curie):
+    iri = expand_curie(curie)
+    assert iri.startswith("http")

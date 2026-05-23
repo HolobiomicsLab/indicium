@@ -87,6 +87,8 @@ def expand_curie(curie: str) -> str:
         expand_curie("doco:Figure")  # → "http://purl.org/spar/doco/Figure"
         expand_curie("IAO:0000536")  # → "http://purl.obolibrary.org/obo/IAO_0000536"
     """
+    if ":" not in curie:
+        raise ValueError(f"Not a valid CURIE (missing ':'): {curie!r}")
     prefix, local = curie.split(":", 1)
     bases = {
         "ECO":  _ECO_BASE,
