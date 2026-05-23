@@ -1,0 +1,501 @@
+@prefix ECO: <http://purl.obolibrary.org/obo/ECO_> .
+@prefix IAO: <http://purl.obolibrary.org/obo/IAO_> .
+@prefix asb: <https://asb.holobiomics.org/ns/asb#> .
+@prefix cito: <http://purl.org/spar/cito/> .
+@prefix doco: <http://purl.org/spar/doco/> .
+@prefix fabio: <http://purl.org/spar/fabio/> .
+@prefix indicium: <https://w3id.org/indicium/> .
+@prefix linkml: <https://w3id.org/linkml/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sepio: <http://purl.obolibrary.org/obo/SEPIO_> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://w3id.org/indicium.owl.ttl> a owl:Ontology ;
+    rdfs:label "indicium" ;
+    skos:definition "Shared claim/evidence standard — ECO/CiTO/DoCO/FaBiO/SEPIO/PROV-O + Bucur SuperPattern." .
+
+indicium:CitationLink a owl:Class ;
+    rdfs:label "CitationLink" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:link_type ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom indicium:LinkType ;
+            owl:onProperty indicium:link_type ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom indicium:Claim ;
+            owl:onProperty indicium:for_claim ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:of_source ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:for_claim ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:for_claim ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:link_type ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:of_source ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom indicium:Source ;
+            owl:onProperty indicium:of_source ] ;
+    skos:definition "A typed link (CiTO) from a Source to a Claim." ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:Evidence a owl:Class ;
+    rdfs:label "Evidence" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:evidence_type ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:of_source ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:float ;
+            owl:onProperty indicium:confidence ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:quote ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom indicium:Claim ;
+            owl:onProperty indicium:for_claim ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:confidence ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom indicium:Source ;
+            owl:onProperty indicium:of_source ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:of_source ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:for_claim ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:source_type ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:quote ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:confidence ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:evidence_type ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom indicium:SourceType ;
+            owl:onProperty indicium:source_type ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:source_type ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom indicium:EvidenceType ;
+            owl:onProperty indicium:evidence_type ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:quote ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:for_claim ] ;
+    skos:definition "An evidence line linking a Claim to a Source (SEPIO EvidenceLine)." ;
+    skos:exactMatch sepio:0000002 ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+ECO:0000006 a owl:Class ;
+    rdfs:label "data" ;
+    rdfs:subClassOf indicium:EvidenceType .
+
+ECO:0000033 a owl:Class ;
+    rdfs:label "citation" ;
+    rdfs:subClassOf indicium:EvidenceType .
+
+ECO:0000034 a owl:Class ;
+    rdfs:label "speculation" ;
+    rdfs:subClassOf indicium:EvidenceType .
+
+ECO:0000302 a owl:Class ;
+    rdfs:label "knowledge" ;
+    rdfs:subClassOf indicium:EvidenceType .
+
+ECO:0000361 a owl:Class ;
+    rdfs:label "inference" ;
+    rdfs:subClassOf indicium:EvidenceType .
+
+IAO:0000311 a owl:Class ;
+    rdfs:label "text" ;
+    rdfs:subClassOf indicium:SourceType .
+
+IAO:0000536 a owl:Class ;
+    rdfs:label "image" ;
+    rdfs:subClassOf indicium:SourceType .
+
+cito:citesForInformation a owl:Class ;
+    rdfs:label "citesForInformation" ;
+    rdfs:subClassOf indicium:LinkType .
+
+cito:disputes a owl:Class ;
+    rdfs:label "disputes" ;
+    rdfs:subClassOf indicium:LinkType .
+
+cito:qualifies a owl:Class ;
+    rdfs:label "qualifies" ;
+    rdfs:subClassOf indicium:LinkType .
+
+cito:supports a owl:Class ;
+    rdfs:label "supports" ;
+    rdfs:subClassOf indicium:LinkType .
+
+doco:Figure a owl:Class ;
+    rdfs:label "figure" ;
+    rdfs:subClassOf indicium:SourceType .
+
+doco:Table a owl:Class ;
+    rdfs:label "table" ;
+    rdfs:subClassOf indicium:SourceType .
+
+<https://w3id.org/indicium/ClaimType#explicit> a owl:Class ;
+    rdfs:label "explicit" ;
+    rdfs:subClassOf indicium:ClaimType .
+
+<https://w3id.org/indicium/ClaimType#implicit> a owl:Class ;
+    rdfs:label "implicit" ;
+    rdfs:subClassOf indicium:ClaimType .
+
+<https://w3id.org/indicium/SuperPatternQualifier#activates> a owl:Class ;
+    rdfs:label "activates" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#causes> a owl:Class ;
+    rdfs:label "causes" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#consistent_with> a owl:Class ;
+    rdfs:label "consistent_with" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#correlates_with> a owl:Class ;
+    rdfs:label "correlates_with" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#decreases> a owl:Class ;
+    rdfs:label "decreases" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#enables> a owl:Class ;
+    rdfs:label "enables" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#enhances> a owl:Class ;
+    rdfs:label "enhances" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#has_property> a owl:Class ;
+    rdfs:label "has_property" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#increases> a owl:Class ;
+    rdfs:label "increases" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#inhibits> a owl:Class ;
+    rdfs:label "inhibits" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#interacts_with> a owl:Class ;
+    rdfs:label "interacts_with" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#is_a> a owl:Class ;
+    rdfs:label "is_a" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#is_associated_with> a owl:Class ;
+    rdfs:label "is_associated_with" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#is_part_of> a owl:Class ;
+    rdfs:label "is_part_of" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#predicts> a owl:Class ;
+    rdfs:label "predicts" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#prevents> a owl:Class ;
+    rdfs:label "prevents" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#produces> a owl:Class ;
+    rdfs:label "produces" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#reduces> a owl:Class ;
+    rdfs:label "reduces" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#requires> a owl:Class ;
+    rdfs:label "requires" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+<https://w3id.org/indicium/SuperPatternQualifier#treats> a owl:Class ;
+    rdfs:label "treats" ;
+    rdfs:subClassOf indicium:SuperPatternQualifier .
+
+indicium:authors a owl:DatatypeProperty ;
+    rdfs:label "authors" ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:Claim a owl:Class ;
+    rdfs:label "Claim" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty indicium:object ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty indicium:relation ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:relation ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:context ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty indicium:subject ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:subject ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:object ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:context ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom indicium:SuperPatternQualifier ;
+            owl:onProperty indicium:qualifier ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:source_excerpt ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom indicium:ClaimType ;
+            owl:onProperty indicium:claim_type ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:relation ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:object ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:source_excerpt ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:subject ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty indicium:context ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:claim_type ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty indicium:qualifier ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:claim_type ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:source_excerpt ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:qualifier ] ;
+    skos:definition "A scientific claim using the Bucur 5-slot SuperPattern." ;
+    skos:exactMatch asb:Claim ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:Source a owl:Class ;
+    rdfs:label "Source" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:authors ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:identifier ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:authors ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:title ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:license_id ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty indicium:identifier ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:title ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:identifier ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:title ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:license_id ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:license_id ] ;
+    skos:definition "A cited source/paper with stable identity." ;
+    skos:exactMatch fabio:Expression ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:claim_type a owl:ObjectProperty ;
+    rdfs:label "claim_type" ;
+    rdfs:range indicium:ClaimType ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:confidence a owl:DatatypeProperty ;
+    rdfs:label "confidence" ;
+    rdfs:range xsd:float ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:context a owl:DatatypeProperty ;
+    rdfs:label "context" ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:evidence_type a owl:ObjectProperty ;
+    rdfs:label "evidence_type" ;
+    rdfs:range indicium:EvidenceType ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:identifier a owl:DatatypeProperty ;
+    rdfs:label "identifier" ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:license_id a owl:DatatypeProperty ;
+    rdfs:label "license_id" ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:link_type a owl:ObjectProperty ;
+    rdfs:label "link_type" ;
+    rdfs:range indicium:LinkType ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:object a owl:DatatypeProperty ;
+    rdfs:label "object" ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:qualifier a owl:ObjectProperty ;
+    rdfs:label "qualifier" ;
+    rdfs:range indicium:SuperPatternQualifier ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:quote a owl:DatatypeProperty ;
+    rdfs:label "quote" ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:relation a owl:DatatypeProperty ;
+    rdfs:label "relation" ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:source_excerpt a owl:DatatypeProperty ;
+    rdfs:label "source_excerpt" ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:source_type a owl:ObjectProperty ;
+    rdfs:label "source_type" ;
+    rdfs:range indicium:SourceType ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:subject a owl:DatatypeProperty ;
+    rdfs:label "subject" ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:title a owl:DatatypeProperty ;
+    rdfs:label "title" ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:ClaimType a owl:Class ;
+    rdfs:label "ClaimType" ;
+    owl:unionOf ( <https://w3id.org/indicium/ClaimType#explicit> <https://w3id.org/indicium/ClaimType#implicit> ) ;
+    skos:inScheme <https://w3id.org/indicium> ;
+    linkml:permissible_values <https://w3id.org/indicium/ClaimType#explicit>,
+        <https://w3id.org/indicium/ClaimType#implicit> .
+
+indicium:LinkType a owl:Class ;
+    rdfs:label "LinkType" ;
+    owl:unionOf ( cito:supports cito:disputes cito:qualifies cito:citesForInformation ) ;
+    skos:inScheme <https://w3id.org/indicium> ;
+    linkml:permissible_values cito:citesForInformation,
+        cito:disputes,
+        cito:qualifies,
+        cito:supports .
+
+indicium:SourceType a owl:Class ;
+    rdfs:label "SourceType" ;
+    owl:unionOf ( IAO:0000311 doco:Figure doco:Table IAO:0000536 ) ;
+    skos:inScheme <https://w3id.org/indicium> ;
+    linkml:permissible_values IAO:0000311,
+        IAO:0000536,
+        doco:Figure,
+        doco:Table .
+
+indicium:for_claim a owl:ObjectProperty ;
+    rdfs:label "for_claim" ;
+    rdfs:range indicium:Claim ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:of_source a owl:ObjectProperty ;
+    rdfs:label "of_source" ;
+    rdfs:range indicium:Source ;
+    skos:inScheme <https://w3id.org/indicium> .
+
+indicium:EvidenceType a owl:Class ;
+    rdfs:label "EvidenceType" ;
+    owl:unionOf ( ECO:0000006 ECO:0000033 ECO:0000302 ECO:0000361 ECO:0000034 ) ;
+    skos:inScheme <https://w3id.org/indicium> ;
+    linkml:permissible_values ECO:0000006,
+        ECO:0000033,
+        ECO:0000034,
+        ECO:0000302,
+        ECO:0000361 .
+
+indicium:SuperPatternQualifier a owl:Class ;
+    rdfs:label "SuperPatternQualifier" ;
+    owl:unionOf ( <https://w3id.org/indicium/SuperPatternQualifier#causes> <https://w3id.org/indicium/SuperPatternQualifier#prevents> <https://w3id.org/indicium/SuperPatternQualifier#inhibits> <https://w3id.org/indicium/SuperPatternQualifier#activates> <https://w3id.org/indicium/SuperPatternQualifier#increases> <https://w3id.org/indicium/SuperPatternQualifier#decreases> <https://w3id.org/indicium/SuperPatternQualifier#correlates_with> <https://w3id.org/indicium/SuperPatternQualifier#is_associated_with> <https://w3id.org/indicium/SuperPatternQualifier#predicts> <https://w3id.org/indicium/SuperPatternQualifier#interacts_with> <https://w3id.org/indicium/SuperPatternQualifier#produces> <https://w3id.org/indicium/SuperPatternQualifier#requires> <https://w3id.org/indicium/SuperPatternQualifier#enables> <https://w3id.org/indicium/SuperPatternQualifier#treats> <https://w3id.org/indicium/SuperPatternQualifier#enhances> <https://w3id.org/indicium/SuperPatternQualifier#reduces> <https://w3id.org/indicium/SuperPatternQualifier#has_property> <https://w3id.org/indicium/SuperPatternQualifier#is_part_of> <https://w3id.org/indicium/SuperPatternQualifier#is_a> <https://w3id.org/indicium/SuperPatternQualifier#consistent_with> ) ;
+    skos:definition "20-term Bucur et al. (K-CAP 2021) qualifier vocabulary." ;
+    skos:inScheme <https://w3id.org/indicium> ;
+    linkml:permissible_values <https://w3id.org/indicium/SuperPatternQualifier#activates>,
+        <https://w3id.org/indicium/SuperPatternQualifier#causes>,
+        <https://w3id.org/indicium/SuperPatternQualifier#consistent_with>,
+        <https://w3id.org/indicium/SuperPatternQualifier#correlates_with>,
+        <https://w3id.org/indicium/SuperPatternQualifier#decreases>,
+        <https://w3id.org/indicium/SuperPatternQualifier#enables>,
+        <https://w3id.org/indicium/SuperPatternQualifier#enhances>,
+        <https://w3id.org/indicium/SuperPatternQualifier#has_property>,
+        <https://w3id.org/indicium/SuperPatternQualifier#increases>,
+        <https://w3id.org/indicium/SuperPatternQualifier#inhibits>,
+        <https://w3id.org/indicium/SuperPatternQualifier#interacts_with>,
+        <https://w3id.org/indicium/SuperPatternQualifier#is_a>,
+        <https://w3id.org/indicium/SuperPatternQualifier#is_associated_with>,
+        <https://w3id.org/indicium/SuperPatternQualifier#is_part_of>,
+        <https://w3id.org/indicium/SuperPatternQualifier#predicts>,
+        <https://w3id.org/indicium/SuperPatternQualifier#prevents>,
+        <https://w3id.org/indicium/SuperPatternQualifier#produces>,
+        <https://w3id.org/indicium/SuperPatternQualifier#reduces>,
+        <https://w3id.org/indicium/SuperPatternQualifier#requires>,
+        <https://w3id.org/indicium/SuperPatternQualifier#treats> .
+
+
