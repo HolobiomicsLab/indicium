@@ -59,6 +59,24 @@ LINK_TYPE_CITO: dict[str, str] = {
     "citesForInformation": "cito:citesForInformation",
 }
 
+# CiTO — all 13 Claim→Claim link types (Source→Claim set + 9 new Claim→Claim predicates).
+# Used by ClaimLink class. All predicates resolve at http://purl.org/spar/cito/<predicate>
+CLAIM_LINK_TYPE_CITO: dict[str, str] = {
+    "supports":            "cito:supports",
+    "disputes":            "cito:disputes",
+    "qualifies":           "cito:qualifies",
+    "citesForInformation": "cito:citesForInformation",
+    "contradicts":         "cito:contradicts",
+    "refines":             "cito:refines",
+    "extends":             "cito:extends",
+    "agreesWith":          "cito:agreesWith",
+    "disagreesWith":       "cito:disagreesWith",
+    "updates":             "cito:updates",
+    "corrects":            "cito:corrects",
+    "usesDataFrom":        "cito:usesDataFrom",
+    "usesMethodIn":        "cito:usesMethodIn",
+}
+
 # DoCO + IAO + FaBiO + DCAT — source/document component types.
 # Covers all 6 SourceType enum members: text, figure, table, image, code, data.
 SOURCE_TYPE_IRI: dict[str, str] = {
@@ -129,19 +147,21 @@ _DOCO_BASE  = "http://purl.org/spar/doco/"
 _CITO_BASE  = "http://purl.org/spar/cito/"
 _FABIO_BASE = "http://purl.org/spar/fabio/"
 _DCAT_BASE  = "http://www.w3.org/ns/dcat#"
+_OA_BASE    = "http://www.w3.org/ns/oa#"
 
 def expand_curie(curie: str) -> str:
     """Expand a short CURIE to a full IRI string.
 
-    Supported prefixes: ECO, IAO, doco, cito, fabio, dcat.
+    Supported prefixes: ECO, IAO, doco, cito, fabio, dcat, oa.
 
     Examples::
 
-        expand_curie("ECO:0000006")      # → "http://purl.obolibrary.org/obo/ECO_0000006"
-        expand_curie("doco:Figure")      # → "http://purl.org/spar/doco/Figure"
-        expand_curie("IAO:0000536")      # → "http://purl.obolibrary.org/obo/IAO_0000536"
-        expand_curie("fabio:DataPlot")   # → "http://purl.org/spar/fabio/DataPlot"
-        expand_curie("dcat:Dataset")     # → "http://www.w3.org/ns/dcat#Dataset"
+        expand_curie("ECO:0000006")               # → "http://purl.obolibrary.org/obo/ECO_0000006"
+        expand_curie("doco:Figure")               # → "http://purl.org/spar/doco/Figure"
+        expand_curie("IAO:0000536")               # → "http://purl.obolibrary.org/obo/IAO_0000536"
+        expand_curie("fabio:DataPlot")            # → "http://purl.org/spar/fabio/DataPlot"
+        expand_curie("dcat:Dataset")              # → "http://www.w3.org/ns/dcat#Dataset"
+        expand_curie("oa:TextQuoteSelector")      # → "http://www.w3.org/ns/oa#TextQuoteSelector"
     """
     if ":" not in curie:
         raise ValueError(f"Not a valid CURIE (missing ':'): {curie!r}")
@@ -153,9 +173,37 @@ def expand_curie(curie: str) -> str:
         "cito":  _CITO_BASE,
         "fabio": _FABIO_BASE,
         "dcat":  _DCAT_BASE,
+        "oa":    _OA_BASE,
     }
     if prefix not in bases:
         raise ValueError(
             f"Unknown CURIE prefix: {prefix!r}. Supported: {list(bases)}"
         )
     return bases[prefix] + local
+
+
+def parse_decision_context(tags: list[str]) -> list[tuple[str, str]]:
+    """Split 'decision_id.option_id' tags into (decision_id, option_id) pairs.
+
+    Matches ASTRA's constraint syntax: each tag must contain exactly one '.'.
+
+    Raises ValueError for tags that do not contain exactly one '.'.
+
+    Examples::
+
+        parse_decision_context(["fit_method.robust_linear"])
+        # → [("fit_method", "robust_linear")]
+
+        parse_decision_context([])
+        # → []
+    """
+    result = []
+    for tag in tags:
+        parts = tag.split(".")
+        if len(parts) != 2:
+            raise ValueError(
+                f"decision_context tag must have exactly one '.': {tag!r} "
+                f"(got {len(parts) - 1} dots)"
+            )
+        result.append((parts[0], parts[1]))
+    return result

@@ -31,6 +31,23 @@
             "additionalProperties": false,
             "description": "A scientific claim using the Bucur 5-slot SuperPattern.",
             "properties": {
+                "asserted_by": {
+                    "description": "IRI or identifier of the agent (human ORCID, pipeline run ID, etc.) that asserted this item.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "astra_insight_ref": {
+                    "description": "Reference to the originating ASTRA insight in 'analysis_id/insight_id' format.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "claim_status": {
+                    "$ref": "#/$defs/ClaimStatus"
+                },
                 "claim_type": {
                     "$ref": "#/$defs/ClaimType"
                 },
@@ -69,6 +86,41 @@
             ],
             "title": "Claim",
             "type": "object"
+        },
+        "ClaimLink": {
+            "additionalProperties": false,
+            "description": "A typed semantic link between two Claims using CiTO predicates. Enables contradiction detection, argument graphs, and claim ledger navigation.",
+            "properties": {
+                "from_claim": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "link_type": {
+                    "$ref": "#/$defs/LinkType"
+                },
+                "to_claim": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "title": "ClaimLink",
+            "type": "object"
+        },
+        "ClaimStatus": {
+            "description": "Lifecycle state of a Claim.",
+            "enum": [
+                "draft",
+                "verified",
+                "published",
+                "retracted",
+                "superseded"
+            ],
+            "title": "ClaimStatus",
+            "type": "string"
         },
         "ClaimType": {
             "description": "",
@@ -162,9 +214,26 @@
             "additionalProperties": false,
             "description": "An evidence line linking a Claim to a Source (SEPIO EvidenceLine).",
             "properties": {
+                "asserted_by": {
+                    "description": "IRI or identifier of the agent (human ORCID, pipeline run ID, etc.) that asserted this item.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "confidence": {
                     "type": [
                         "number",
+                        "null"
+                    ]
+                },
+                "decision_context": {
+                    "description": "ASTRA-style 'decision_id.option_id' tags scoping this evidence item to a specific methodological universe. Empty list = universally applicable.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
                         "null"
                     ]
                 },
@@ -175,6 +244,16 @@
                     "type": [
                         "string",
                         "null"
+                    ]
+                },
+                "fragment_selector": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/FragmentSelector"
+                        },
+                        {
+                            "type": "null"
+                        }
                     ]
                 },
                 "of_dataset": {
@@ -225,6 +304,16 @@
                 },
                 "source_type": {
                     "$ref": "#/$defs/SourceType"
+                },
+                "text_selector": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/TextQuoteSelector"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
                 }
             },
             "title": "Evidence",
@@ -266,6 +355,16 @@
                 },
                 "figure_type": {
                     "$ref": "#/$defs/FigureType"
+                },
+                "fragment_selector": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/$defs/FragmentSelector"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
                 },
                 "identifier": {
                     "type": [
@@ -322,13 +421,42 @@
             "title": "FigureType",
             "type": "string"
         },
+        "FragmentSelector": {
+            "additionalProperties": false,
+            "description": "W3C FragmentSelector for PDF page location.",
+            "properties": {
+                "frag_page": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ]
+                },
+                "frag_value": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "title": "FragmentSelector",
+            "type": "object"
+        },
         "LinkType": {
             "description": "",
             "enum": [
                 "supports",
                 "disputes",
                 "qualifies",
-                "citesForInformation"
+                "citesForInformation",
+                "contradicts",
+                "refines",
+                "extends",
+                "agreesWith",
+                "disagreesWith",
+                "updates",
+                "corrects",
+                "usesDataFrom",
+                "usesMethodIn"
             ],
             "title": "LinkType",
             "type": "string"
@@ -485,6 +613,32 @@
             ],
             "title": "SuperPatternQualifier",
             "type": "string"
+        },
+        "TextQuoteSelector": {
+            "additionalProperties": false,
+            "description": "W3C TextQuoteSelector. Exact text + optional disambiguation context. Matches ASTRA's existing oa:TextQuoteSelector alignment.",
+            "properties": {
+                "tqs_exact": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "tqs_prefix": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "tqs_suffix": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "title": "TextQuoteSelector",
+            "type": "object"
         }
     },
     "$id": "https://w3id.org/indicium",

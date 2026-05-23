@@ -41,7 +41,7 @@ class ConfiguredBaseModel(BaseModel):
         validate_default = True,
         extra = "forbid",
         arbitrary_types_allowed = True,
-        use_enum_values = True,
+        use_enum_values = False,
         strict = False,
     )
 
@@ -93,6 +93,8 @@ linkml_meta = LinkMLMeta({'default_prefix': 'indicium',
                                'prefix_reference': 'https://w3id.org/indicium/'},
                   'linkml': {'prefix_prefix': 'linkml',
                              'prefix_reference': 'https://w3id.org/linkml/'},
+                  'oa': {'prefix_prefix': 'oa',
+                         'prefix_reference': 'http://www.w3.org/ns/oa#'},
                   'prov': {'prefix_prefix': 'prov',
                            'prefix_reference': 'http://www.w3.org/ns/prov#'},
                   'sepio': {'prefix_prefix': 'sepio',
@@ -147,11 +149,31 @@ class SourceType(str, Enum):
     data = "data"
 
 
+class ClaimStatus(str, Enum):
+    """
+    Lifecycle state of a Claim.
+    """
+    draft = "draft"
+    verified = "verified"
+    published = "published"
+    retracted = "retracted"
+    superseded = "superseded"
+
+
 class LinkType(str, Enum):
     supports = "supports"
     disputes = "disputes"
     qualifies = "qualifies"
     citesForInformation = "citesForInformation"
+    contradicts = "contradicts"
+    refines = "refines"
+    extends = "extends"
+    agreesWith = "agreesWith"
+    disagreesWith = "disagreesWith"
+    updates = "updates"
+    corrects = "corrects"
+    usesDataFrom = "usesDataFrom"
+    usesMethodIn = "usesMethodIn"
 
 
 class FigureType(str, Enum):
@@ -208,6 +230,9 @@ class Claim(ConfiguredBaseModel):
     object: str = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Claim'], 'slot_uri': 'asb:object'} })
     claim_type: Optional[ClaimType] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Claim']} })
     source_excerpt: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Claim']} })
+    claim_status: Optional[ClaimStatus] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Claim']} })
+    asserted_by: Optional[str] = Field(default=None, description="""IRI or identifier of the agent (human ORCID, pipeline run ID, etc.) that asserted this item.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Claim', 'Evidence'], 'slot_uri': 'prov:wasAttributedTo'} })
+    astra_insight_ref: Optional[str] = Field(default=None, description="""Reference to the originating ASTRA insight in 'analysis_id/insight_id' format.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Claim']} })
 
 
 class Evidence(ConfiguredBaseModel):
@@ -225,6 +250,10 @@ class Evidence(ConfiguredBaseModel):
     of_figure: Optional[Figure] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
     of_script: Optional[Script] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
     of_dataset: Optional[DataAsset] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
+    text_selector: Optional[TextQuoteSelector] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
+    fragment_selector: Optional[FragmentSelector] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'Figure']} })
+    decision_context: Optional[list[str]] = Field(default=None, description="""ASTRA-style 'decision_id.option_id' tags scoping this evidence item to a specific methodological universe. Empty list = universally applicable.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
+    asserted_by: Optional[str] = Field(default=None, description="""IRI or identifier of the agent (human ORCID, pipeline run ID, etc.) that asserted this item.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Claim', 'Evidence'], 'slot_uri': 'prov:wasAttributedTo'} })
 
 
 class Source(ConfiguredBaseModel):
@@ -259,6 +288,7 @@ class Figure(ConfiguredBaseModel):
     content_url: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure', 'Script', 'DataAsset']} })
     source_doi: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure', 'Script', 'DataAsset']} })
     is_supplementary: Optional[bool] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Figure', 'Script', 'DataAsset']} })
+    fragment_selector: Optional[FragmentSelector] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'Figure']} })
 
 
 class Script(ConfiguredBaseModel):
@@ -311,7 +341,40 @@ class CitationLink(ConfiguredBaseModel):
 
     of_source: Optional[Source] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'CitationLink']} })
     for_claim: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'CitationLink']} })
-    link_type: Optional[LinkType] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['CitationLink']} })
+    link_type: Optional[LinkType] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['CitationLink', 'ClaimLink']} })
+
+
+class ClaimLink(ConfiguredBaseModel):
+    """
+    A typed semantic link between two Claims using CiTO predicates. Enables contradiction detection, argument graphs, and claim ledger navigation.
+    """
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'cito:Citation', 'from_schema': 'https://w3id.org/indicium'})
+
+    from_claim: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['ClaimLink']} })
+    to_claim: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['ClaimLink']} })
+    link_type: Optional[LinkType] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['CitationLink', 'ClaimLink']} })
+
+
+class TextQuoteSelector(ConfiguredBaseModel):
+    """
+    W3C TextQuoteSelector. Exact text + optional disambiguation context. Matches ASTRA's existing oa:TextQuoteSelector alignment.
+    """
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'oa:TextQuoteSelector',
+         'from_schema': 'https://w3id.org/indicium'})
+
+    tqs_exact: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['TextQuoteSelector']} })
+    tqs_prefix: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['TextQuoteSelector']} })
+    tqs_suffix: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['TextQuoteSelector']} })
+
+
+class FragmentSelector(ConfiguredBaseModel):
+    """
+    W3C FragmentSelector for PDF page location.
+    """
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'oa:FragmentSelector', 'from_schema': 'https://w3id.org/indicium'})
+
+    frag_value: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['FragmentSelector']} })
+    frag_page: Optional[int] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['FragmentSelector']} })
 
 
 # Model rebuild
@@ -323,3 +386,6 @@ Figure.model_rebuild()
 Script.model_rebuild()
 DataAsset.model_rebuild()
 CitationLink.model_rebuild()
+ClaimLink.model_rebuild()
+TextQuoteSelector.model_rebuild()
+FragmentSelector.model_rebuild()

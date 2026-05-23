@@ -14,6 +14,7 @@ prefixes:
   dct: http://purl.org/dc/terms/
   asb: https://asb.holobiomics.org/ns/asb#
   dcat: http://www.w3.org/ns/dcat#
+  oa: http://www.w3.org/ns/oa#
 default_prefix: indicium
 default_range: string
 imports:
@@ -62,12 +63,29 @@ enums:
       image:  { meaning: IAO:0000536 }
       code:   { meaning: fabio:ComputerProgram }
       data:   { meaning: dcat:Dataset }
+  ClaimStatus:
+    description: Lifecycle state of a Claim.
+    permissible_values:
+      draft:      {}
+      verified:   {}
+      published:  {}
+      retracted:  {}
+      superseded: {}
   LinkType:
     permissible_values:
       supports:            { meaning: cito:supports }
       disputes:            { meaning: cito:disputes }
       qualifies:           { meaning: cito:qualifies }
       citesForInformation: { meaning: cito:citesForInformation }
+      contradicts:         { meaning: cito:contradicts }
+      refines:             { meaning: cito:refines }
+      extends:             { meaning: cito:extends }
+      agreesWith:          { meaning: cito:agreesWith }
+      disagreesWith:       { meaning: cito:disagreesWith }
+      updates:             { meaning: cito:updates }
+      corrects:            { meaning: cito:corrects }
+      usesDataFrom:        { meaning: cito:usesDataFrom }
+      usesMethodIn:        { meaning: cito:usesMethodIn }
   FigureType:
     description: >-
       FaBiO-aligned classification of figure and display item types found in
@@ -155,6 +173,35 @@ slots:
   repository:       {}
   n_samples:        { range: integer }
   of_dataset:       { range: DataAsset }
+  # ClaimLink slots (Gap 1)
+  from_claim:       { range: Claim }
+  to_claim:         { range: Claim }
+  # ClaimStatus slot (Gap 2)
+  claim_status:     { range: ClaimStatus }
+  # W3C OA selector slots (Gap 3)
+  tqs_exact:        {}
+  tqs_prefix:       {}
+  tqs_suffix:       {}
+  frag_value:       {}
+  frag_page:        { range: integer }
+  text_selector:    { range: TextQuoteSelector }
+  fragment_selector: { range: FragmentSelector }
+  # Universe-conditional scope (Gap 4)
+  decision_context:
+    multivalued: true
+    description: >-
+      ASTRA-style 'decision_id.option_id' tags scoping this evidence item to a
+      specific methodological universe. Empty list = universally applicable.
+  # Agent attribution (Gap 5)
+  asserted_by:
+    slot_uri: prov:wasAttributedTo
+    description: >-
+      IRI or identifier of the agent (human ORCID, pipeline run ID, etc.) that
+      asserted this item.
+  # ASTRA bridge slot (Gap 6)
+  astra_insight_ref:
+    description: >-
+      Reference to the originating ASTRA insight in 'analysis_id/insight_id' format.
 
 classes:
   Claim:
@@ -169,11 +216,15 @@ classes:
       - object
       - claim_type
       - source_excerpt
+      - claim_status
+      - asserted_by
+      - astra_insight_ref
   Evidence:
     class_uri: sepio:0000002
     description: An evidence line linking a Claim to a Source (SEPIO EvidenceLine).
     slots: [evidence_type, source_type, quote, confidence, of_source, for_claim,
-            of_figure, of_script, of_dataset]
+            of_figure, of_script, of_dataset, text_selector, fragment_selector,
+            decision_context, asserted_by]
   Source:
     class_uri: fabio:Expression
     description: A cited source/paper with stable identity.
@@ -196,6 +247,7 @@ classes:
       - content_url
       - source_doi
       - is_supplementary
+      - fragment_selector
     slot_usage:
       identifier:
         required: false
@@ -246,3 +298,19 @@ classes:
   CitationLink:
     description: A typed link (CiTO) from a Source to a Claim.
     slots: [of_source, for_claim, link_type]
+  ClaimLink:
+    class_uri: cito:Citation
+    description: >-
+      A typed semantic link between two Claims using CiTO predicates.
+      Enables contradiction detection, argument graphs, and claim ledger navigation.
+    slots: [from_claim, to_claim, link_type]
+  TextQuoteSelector:
+    class_uri: oa:TextQuoteSelector
+    description: >-
+      W3C TextQuoteSelector. Exact text + optional disambiguation context.
+      Matches ASTRA's existing oa:TextQuoteSelector alignment.
+    slots: [tqs_exact, tqs_prefix, tqs_suffix]
+  FragmentSelector:
+    class_uri: oa:FragmentSelector
+    description: W3C FragmentSelector for PDF page location.
+    slots: [frag_value, frag_page]

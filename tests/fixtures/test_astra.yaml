@@ -1,0 +1,25 @@
+name: test_analysis
+version: "1.0"
+inputs: []
+outputs: []
+decisions: {}
+findings:
+  - id: f1
+    claim: "gut microbiome diversity decreases with antibiotic treatment"
+    created_at: "2026-01-01T00:00:00Z"
+    evidence:
+      - id: e1
+        doi: "10.1000/test.001"
+  - id: f2
+    claim: "Bacteroidetes increases in response to dietary fiber"
+    created_at: "2026-01-01T00:00:00Z"
+    evidence:
+      - id: e2
+        artifact: "output_diversity"
+prior_insights:
+  - id: pi1
+    claim: "Firmicutes increases with high-fat diet"
+    created_at: "2026-01-01T00:00:00Z"
+    evidence:
+      - id: e3
+        doi: "10.1000/test.002"

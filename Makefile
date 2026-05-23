@@ -7,6 +7,8 @@ ASSETS=docs/schema-assets
 gen:
 	mkdir -p $(GEN)
 	uv run gen-pydantic $(SCHEMA) > $(GEN)/model.py
+	# Patch: preserve enum members so StrEnum .value attribute is accessible.
+	sed -i '' 's/use_enum_values = True/use_enum_values = False/' $(GEN)/model.py
 	uv run gen-shacl --non-closed $(SCHEMA) > $(GEN)/shapes.ttl
 	uv run gen-owl $(SCHEMA) > $(GEN)/ontology.ttl
 	uv run gen-json-schema $(SCHEMA) > $(GEN)/schema.json
