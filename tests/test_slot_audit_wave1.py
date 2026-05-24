@@ -149,3 +149,72 @@ def test_indicium_document_holds_software_entities(sv):
     assert induced.range == "SoftwareEntity"
     assert induced.multivalued is True
     assert induced.inlined is True
+
+
+def test_fixture_loads_against_schema():
+    """Canonical round-trip fixture parses with the generated Pydantic models.
+
+    Plan 1c (indicium-adapters) consumes this same fixture to verify its
+    ASB → indicium adapter round-trips without loss.
+    """
+    import json
+    from indicium.generated import model
+
+    fixture = (
+        Path(__file__).parent
+        / "fixtures/asb_skill_roundtrip/skill_to_claim.json"
+    )
+    data = json.loads(fixture.read_text())
+
+    # --- Minimal JSON-LD → Pydantic bridge (smoke-test only) ---
+    # The generated Pydantic model uses:
+    #   claims: dict[str, Claim]  (keyed by id, because Claim has `id` identifier)
+    #   evidences/sources/software_entities: list[Entity]
+    # We normalise the JSON-LD arrays into the shapes the model expects.
+
+    # Classes with an `id` identifier slot (maps @id → id)
+    ID_CLASSES = {"Claim"}
+    # Classes with an `identifier` slot (maps @id → identifier)
+    IDENTIFIER_CLASSES = {"Source", "SoftwareEntity"}
+    # Classes with no primary key (drop @id)
+    NO_KEY_CLASSES = {"Evidence"}
+
+    def _strip_entity(obj, class_hint=None):
+        """Remove @type, map @id to the right field, drop IRI-valued relation slots."""
+        if not isinstance(obj, dict):
+            return obj
+        class_name = obj.pop("@type", class_hint)
+        at_id = obj.pop("@id", None)
+        if at_id is not None:
+            if class_name in ID_CLASSES:
+                obj["id"] = at_id
+            elif class_name in IDENTIFIER_CLASSES:
+                obj.setdefault("identifier", at_id)
+            # else: drop @id (no primary key slot, e.g. Evidence)
+        # Drop slots that carry IRI strings for related objects (not nested dicts);
+        # they would fail Pydantic's model-type validation in this simple bridge.
+        for key in ("of_source", "for_claim", "supports_claim"):
+            if key in obj and isinstance(obj[key], str):
+                obj.pop(key)
+        return obj
+
+    data.pop("@context", None)
+    data.pop("@type", None)
+
+    # claims → dict[str, Claim] (Claim has `id` identifier slot)
+    claims_list = data.pop("claims", [])
+    data["claims"] = {
+        c["@id"]: _strip_entity(c, "Claim")
+        for c in claims_list
+    }
+
+    # evidences / sources / software_entities → list (strip in place)
+    for key, hint in (("evidences", "Evidence"), ("sources", "Source"),
+                      ("software_entities", "SoftwareEntity")):
+        data[key] = [_strip_entity(e, hint) for e in data.get(key, [])]
+
+    doc = model.IndiciumDocument(**data)
+    assert len(doc.claims) == 1
+    assert len(doc.evidences) == 1
+    assert len(doc.sources) == 1
+    assert len(doc.software_entities) == 1

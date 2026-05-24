@@ -1,0 +1,53 @@
+{
+  "@context": "https://holobiomicslab.github.io/indicium/context.jsonld",
+  "@type": "IndiciumDocument",
+  "claims": [
+    {
+      "@id": "https://w3id.org/indicium/claim/11111111-1111-1111-1111-111111111111",
+      "@type": "Claim",
+      "context": "LC-MS feature detection on Orbitrap raw data",
+      "subject": "MZmine 4 feature detector",
+      "qualifier": "produces",
+      "super_pattern": "produces",
+      "relation": "produces",
+      "predicate": "produces",
+      "object": "feature table with retention time, m/z, intensity per peak",
+      "claim_type": "explicit"
+    }
+  ],
+  "evidences": [
+    {
+      "@id": "https://w3id.org/indicium/evidence/22222222-2222-2222-2222-222222222222",
+      "@type": "Evidence",
+      "eco_code": "textual_quotation",
+      "quote_exact": "MZmine 4's modular feature detector produces a feature table from LC-MS raw data with retention time, m/z, and intensity per peak.",
+      "quote_location": "p-23",
+      "supports_claim": "https://w3id.org/indicium/claim/11111111-1111-1111-1111-111111111111",
+      "of_source": "https://w3id.org/indicium/source/33333333-3333-3333-3333-333333333333"
+    }
+  ],
+  "sources": [
+    {
+      "@id": "https://w3id.org/indicium/source/33333333-3333-3333-3333-333333333333",
+      "@type": "Source",
+      "identifier": "10.1038/s41587-023-01690-2",
+      "doi": "10.1038/s41587-023-01690-2",
+      "title": "MZmine 4: A modular framework for feature detection in mass spectrometry data",
+      "paragraph_id": "p-23"
+    }
+  ],
+  "software_entities": [
+    {
+      "@id": "https://w3id.org/holobiomicslab/asb-tool/mzmine",
+      "@type": "SoftwareEntity",
+      "identifier": "https://w3id.org/holobiomicslab/asb-tool/mzmine",
+      "canonical_url": "https://mzmine.github.io/",
+      "version": "4.0.0",
+      "edam_operation": "http://edamontology.org/operation_3215",
+      "edam_topics": [
+        "http://edamontology.org/topic_3172"
+      ],
+      "bio_tools_id": "mzmine"
+    }
+  ]
+}
