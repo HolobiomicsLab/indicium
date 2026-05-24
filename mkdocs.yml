@@ -65,6 +65,9 @@ nav:
     - ASTRA: adapters/astra.md
     - SciTask: adapters/scitask.md
     - KGmemory: adapters/kgmemory.md
+  - Reference:
+    - SEPIO Assertion Pattern: sepio-assertion.md
+    - URI Scheme: uri-scheme.md
   - API Reference: api-reference.md
   - Changelog: changelog.md
 
