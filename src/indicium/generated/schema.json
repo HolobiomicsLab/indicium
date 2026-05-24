@@ -60,6 +60,13 @@
                 "object": {
                     "type": "string"
                 },
+                "predicate": {
+                    "description": "Spec-required name for the CiTO/SEPIO predicate. Shares slot_uri with `relation`; ASB adapter targets this name. Either may be set; they MUST agree if both are populated (enforced by downstream adapter, not at schema level).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "qualifier": {
                     "$ref": "#/$defs/SuperPatternQualifier"
                 },
@@ -74,6 +81,10 @@
                 },
                 "subject": {
                     "type": "string"
+                },
+                "super_pattern": {
+                    "$ref": "#/$defs/SuperPatternQualifier",
+                    "description": "Spec-required name for the Bucur SuperPattern qualifier. Aliases `qualifier`; the ASB adapter targets this name. Either may be set; both must agree if both are populated."
                 },
                 "superseded_by": {
                     "description": "URI of the Claim that supersedes this one. Must be set when claim_status is 'superseded'. Allows external Claim IRIs for cross-document lineage.",
@@ -171,6 +182,13 @@
                 "object": {
                     "type": "string"
                 },
+                "predicate": {
+                    "description": "Spec-required name for the CiTO/SEPIO predicate. Shares slot_uri with `relation`; ASB adapter targets this name. Either may be set; they MUST agree if both are populated (enforced by downstream adapter, not at schema level).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "qualifier": {
                     "$ref": "#/$defs/SuperPatternQualifier"
                 },
@@ -185,6 +203,10 @@
                 },
                 "subject": {
                     "type": "string"
+                },
+                "super_pattern": {
+                    "$ref": "#/$defs/SuperPatternQualifier",
+                    "description": "Spec-required name for the Bucur SuperPattern qualifier. Aliases `qualifier`; the ASB adapter targets this name. Either may be set; both must agree if both are populated."
                 },
                 "superseded_by": {
                     "description": "URI of the Claim that supersedes this one. Must be set when claim_status is 'superseded'. Allows external Claim IRIs for cross-document lineage.",
@@ -283,6 +305,21 @@
             "title": "DatasetType",
             "type": "string"
         },
+        "EcoCodeAsbSubset": {
+            "description": "ASB-emitted subset of the Evidence Code Ontology (ECO). The full ECO is large; ASB only emits these 8 values. Downstream consumers can treat this as a closed enum for ASB-sourced Evidence records.",
+            "enum": [
+                "textual_quotation",
+                "computational_evidence",
+                "expert_curation",
+                "inference_from_background_knowledge",
+                "author_statement",
+                "experimental_evidence",
+                "combinatorial_evidence",
+                "traceable_author_statement"
+            ],
+            "title": "EcoCodeAsbSubset",
+            "type": "string"
+        },
         "Evidence": {
             "additionalProperties": false,
             "description": "An evidence line linking a Claim to a Source (SEPIO EvidenceLine).",
@@ -310,6 +347,10 @@
                         "array",
                         "null"
                     ]
+                },
+                "eco_code": {
+                    "$ref": "#/$defs/EcoCodeAsbSubset",
+                    "description": "ASB-subset ECO classification of this evidence line. Carries an ECO IRI via the enum's `meaning`. Coexists with `evidence_type` (broader, lifecycle-oriented): `eco_code` is the canonical ASB-emitted vocabulary, `evidence_type` remains for back-compat."
                 },
                 "evidence_type": {
                     "$ref": "#/$defs/EvidenceType"
@@ -376,8 +417,29 @@
                         "null"
                     ]
                 },
+                "quote_exact": {
+                    "description": "Spec-required name for the verbatim text excerpt supporting a claim. Aliases `quote`; ASB adapter targets this name. SHACL-level constraint that exactly one of {quote, quote_exact} is set is deferred to v1.7.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "quote_location": {
+                    "description": "Free-form locator for the quote \u2014 paragraph id, XPath pointer, page-offset string, or W3C OA fragment IRI. Use when the structured `text_selector` / `fragment_selector` classes are overkill (e.g. the ASB adapter passes a `paragraph_id` string from its source paper).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "source_type": {
                     "$ref": "#/$defs/SourceType"
+                },
+                "supports_claim": {
+                    "description": "Spec-required name for the SEPIO `is_evidence_for` relation. Aliases `for_claim`. ASB adapter targets this name. `sepio:0000007` is the SEPIO `is evidence for` predicate.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
                 "text_selector": {
                     "anyOf": [
@@ -589,6 +651,16 @@
                         "null"
                     ]
                 },
+                "software_entities": {
+                    "description": "All SoftwareEntity records in this document.",
+                    "items": {
+                        "$ref": "#/$defs/SoftwareEntity"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
                 "sources": {
                     "description": "All Source entities in this document.",
                     "items": {
@@ -701,6 +773,60 @@
             "title": "ScriptType",
             "type": "string"
         },
+        "SoftwareEntity": {
+            "additionalProperties": false,
+            "description": "A software tool / package with stable identity, EDAM annotations, and optional bio.tools cross-reference. Distinct from `Script` (in-paper code artefact): SoftwareEntity is a globally identified tool (e.g. MZmine, OpenMS) that multiple papers may cite.",
+            "properties": {
+                "bio_tools_id": {
+                    "description": "bio.tools registry ID for cross-reference / federation.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "canonical_url": {
+                    "description": "Canonical homepage / source URL of the software entity.",
+                    "format": "uri",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "edam_operation": {
+                    "description": "EDAM operation IRI (e.g. http://edamontology.org/operation_3215).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "edam_topics": {
+                    "description": "EDAM topic IRIs (multivalued).",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "identifier": {
+                    "description": "Stable IRI (e.g. w3id.org/holobiomicslab/asb-tool/<slug>) or URN identifying the software entity.",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "Version string (e.g. SemVer, git tag, release name).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "identifier"
+            ],
+            "title": "SoftwareEntity",
+            "type": "object"
+        },
         "Source": {
             "additionalProperties": false,
             "description": "A cited source/paper with stable identity.",
@@ -714,6 +840,13 @@
                         "null"
                     ]
                 },
+                "doi": {
+                    "description": "DOI of this Source (paper, dataset, preprint). String form, no `doi:` prefix; canonical IRI is `https://doi.org/<value>`. Distinct from generic `identifier` so adapters can target it unambiguously.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "identifier": {
                     "type": "string"
                 },
@@ -723,7 +856,21 @@
                         "null"
                     ]
                 },
+                "paragraph_id": {
+                    "description": "Stable per-paragraph identifier within the Source (e.g. the `id` attribute of a JATS `<p>` element, or an ASB-emitted `p-<n>` synthetic id). Pairs with `Evidence.quote_location`.",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "title": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "xpath_pointer": {
+                    "description": "XPath expression locating a node within the Source's structured representation (JATS XML, TEI, HTML). Alternative to `paragraph_id` when finer granularity is needed.",
                     "type": [
                         "string",
                         "null"
@@ -873,6 +1020,16 @@
             "description": "All Script entities in this document.",
             "items": {
                 "$ref": "#/$defs/Script"
+            },
+            "type": [
+                "array",
+                "null"
+            ]
+        },
+        "software_entities": {
+            "description": "All SoftwareEntity records in this document.",
+            "items": {
+                "$ref": "#/$defs/SoftwareEntity"
             },
             "type": [
                 "array",
