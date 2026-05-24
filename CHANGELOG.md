@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.6.0] - 2026-05-24
+
+### Added
+
+- **Claim aliases:** `predicate` (alias for `relation`) and `super_pattern`
+  (alias for `qualifier`) — explicit names matching the ASB spec.
+- **Evidence aliases + new slots:** `quote_exact` (alias for `quote`),
+  `supports_claim` (alias for `for_claim`, mapped to `sepio:0000007`),
+  `quote_location` (string locator), `eco_code` (range:
+  `EcoCodeAsbSubset`).
+- **`EcoCodeAsbSubset` enum** — 8 ECO codes ASB emits (textual_quotation,
+  computational_evidence, expert_curation, inference_from_background_knowledge,
+  author_statement, experimental_evidence, combinatorial_evidence,
+  traceable_author_statement).
+- **Source slots:** `doi`, `paragraph_id`, `xpath_pointer` — explicit
+  forms of the InformationSource locators ASB targets.
+- **`SoftwareEntity` class** — new class for globally-identified tools
+  (`canonical_url`, `version`, `edam_operation`, `edam_topics`,
+  `bio_tools_id`). Added to `IndiciumDocument.software_entities`.
+- **JSON-LD `@context`** at `docs/context.jsonld` — stable mapping for
+  downstream consumers. To be served at `w3id.org/indicium/context.jsonld`
+  pending the w3id PR; currently published at
+  `holobiomicslab.github.io/indicium/context.jsonld`.
+- **`docs/sepio-assertion.md`** — reference for the SEPIO assertion
+  pattern (skill → claim).
+- **`docs/uri-scheme.md`** — reference for `indicium:claim/<uuid>` +
+  content-hash citation variant.
+- **`tests/fixtures/asb_skill_roundtrip/`** — canonical fixture consumed
+  by Plan 1c's round-trip CI test in indicium-adapters.
+
+### Compatibility
+
+All Wave 1 changes are **additive**: every new slot is non-required and
+shares its `slot_uri` with an existing slot (where one exists). v1.5
+serialisations remain valid; v1.6 consumers gain the spec-required
+names.
+
+---
+
 ## [1.5.0] - 2026-05-23
 
 ### Added
