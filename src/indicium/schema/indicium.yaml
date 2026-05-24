@@ -131,13 +131,55 @@ slots:
   context:   { required: true, slot_uri: asb:context }
   subject:   { required: true, slot_uri: asb:subject }
   qualifier: { required: true, range: SuperPatternQualifier, slot_uri: asb:qualifier }
+  super_pattern:
+    required: false
+    range: SuperPatternQualifier
+    slot_uri: asb:qualifier
+    aliases: [qualifier]
+    description: >-
+      Spec-required name for the Bucur SuperPattern qualifier. Aliases
+      `qualifier`; the ASB adapter targets this name. Either may be set;
+      both must agree if both are populated.
   relation:  { required: true, slot_uri: asb:relation }
+  predicate:
+    required: false
+    slot_uri: asb:relation
+    aliases: [relation]
+    description: >-
+      Spec-required name for the CiTO/SEPIO predicate. Shares slot_uri
+      with `relation`; ASB adapter targets this name. Either may be set;
+      they MUST agree if both are populated (enforced by downstream
+      adapter, not at schema level).
   object:    { required: true, slot_uri: asb:object }
   claim_type: { range: ClaimType }
   source_excerpt: {}
   evidence_type: { range: EvidenceType }
   source_type:   { range: SourceType }
   quote: {}
+  quote_exact:
+    required: false
+    aliases: [quote]
+    description: >-
+      Spec-required name for the verbatim text excerpt supporting a claim.
+      Aliases `quote`; ASB adapter targets this name. SHACL-level constraint
+      that exactly one of {quote, quote_exact} is set is deferred to v1.7.
+  quote_location:
+    required: false
+    range: string
+    description: >-
+      Free-form locator for the quote — paragraph id, XPath pointer,
+      page-offset string, or W3C OA fragment IRI. Use when the structured
+      `text_selector` / `fragment_selector` classes are overkill (e.g. the
+      ASB adapter passes a `paragraph_id` string from its source paper).
+  supports_claim:
+    required: false
+    range: Claim
+    aliases: [for_claim]
+    slot_uri: sepio:0000007
+    description: >-
+      Spec-required name for the SEPIO `is_evidence_for` relation. Aliases
+      `for_claim`. ASB adapter targets this name. `sepio:0000007` is the
+      SEPIO `is evidence for` predicate.
   confidence: { range: float }
   of_source:  { range: Source }
   for_claim:  { range: Claim }
@@ -276,7 +318,9 @@ classes:
       - context
       - subject
       - qualifier
+      - super_pattern
       - relation
+      - predicate
       - object
       - claim_type
       - source_excerpt
@@ -287,7 +331,8 @@ classes:
   Evidence:
     class_uri: sepio:0000002
     description: An evidence line linking a Claim to a Source (SEPIO EvidenceLine).
-    slots: [evidence_type, source_type, quote, confidence, of_source, for_claim,
+    slots: [evidence_type, source_type, quote, quote_exact, quote_location,
+            confidence, of_source, for_claim, supports_claim,
             of_figure, of_script, of_dataset, text_selector, fragment_selector,
             decision_context, asserted_by]
   Source:
