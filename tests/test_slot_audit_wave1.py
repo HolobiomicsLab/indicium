@@ -66,3 +66,86 @@ def test_evidence_has_quote_location_slot(sv):
     assert "quote_location" in slots, "Evidence.quote_location missing"
     induced = sv.induced_slot("quote_location", "Evidence")
     assert induced.range == "string"
+
+
+def test_eco_code_asb_subset_enum_exists(sv):
+    enum = sv.get_enum("EcoCodeAsbSubset")
+    assert enum is not None, "EcoCodeAsbSubset enum missing"
+    pv = enum.permissible_values
+    expected = {
+        "textual_quotation",
+        "computational_evidence",
+        "expert_curation",
+        "inference_from_background_knowledge",
+        "author_statement",
+        "experimental_evidence",
+        "combinatorial_evidence",
+        "traceable_author_statement",
+    }
+    assert expected <= set(pv.keys()), (
+        f"missing values: {expected - set(pv.keys())}"
+    )
+
+
+def test_eco_code_asb_subset_values_have_eco_meanings(sv):
+    enum = sv.get_enum("EcoCodeAsbSubset")
+    for name, pv in enum.permissible_values.items():
+        assert pv.meaning is not None and pv.meaning.startswith("ECO:"), (
+            f"EcoCodeAsbSubset.{name} must carry an ECO: meaning"
+        )
+
+
+def test_evidence_has_eco_code_slot(sv):
+    slots = set(sv.class_slots("Evidence"))
+    assert "eco_code" in slots, "Evidence.eco_code missing"
+    induced = sv.induced_slot("eco_code", "Evidence")
+    assert induced.range == "EcoCodeAsbSubset", (
+        f"eco_code range must be EcoCodeAsbSubset (got {induced.range})"
+    )
+
+
+def test_source_has_doi_slot(sv):
+    slots = set(sv.class_slots("Source"))
+    assert "doi" in slots
+    induced = sv.induced_slot("doi", "Source")
+    assert induced.slot_uri == "dct:identifier" or "doi" in (induced.slot_uri or ""), (
+        f"doi slot should expose a dct:identifier-compatible IRI (got {induced.slot_uri})"
+    )
+
+
+def test_source_has_paragraph_id_slot(sv):
+    slots = set(sv.class_slots("Source"))
+    assert "paragraph_id" in slots
+
+
+def test_source_has_xpath_pointer_slot(sv):
+    slots = set(sv.class_slots("Source"))
+    assert "xpath_pointer" in slots
+
+
+def test_software_entity_class_exists(sv):
+    assert sv.get_class("SoftwareEntity") is not None, "SoftwareEntity class missing"
+
+
+def test_software_entity_has_required_slots(sv):
+    slots = set(sv.class_slots("SoftwareEntity"))
+    expected = {
+        "identifier", "canonical_url", "version",
+        "edam_operation", "edam_topics", "bio_tools_id",
+    }
+    missing = expected - slots
+    assert not missing, f"SoftwareEntity missing slots: {missing}"
+
+
+def test_software_entity_edam_topics_multivalued(sv):
+    induced = sv.induced_slot("edam_topics", "SoftwareEntity")
+    assert induced.multivalued is True, "edam_topics must be multivalued"
+
+
+def test_indicium_document_holds_software_entities(sv):
+    slots = set(sv.class_slots("IndiciumDocument"))
+    assert "software_entities" in slots
+    induced = sv.induced_slot("software_entities", "IndiciumDocument")
+    assert induced.range == "SoftwareEntity"
+    assert induced.multivalued is True
+    assert induced.inlined is True
