@@ -435,7 +435,7 @@ wheels = [
 
 [[package]]
 name = "indicium"
-version = "1.4.0"
+version = "1.6.1"
 source = { editable = "." }
 dependencies = [
     { name = "pyshacl" },

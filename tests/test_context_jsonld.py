@@ -41,3 +41,19 @@ def test_context_maps_asserts_to_sepio_predicate():
     entry = ctx["asserts"]
     target = entry["@id"] if isinstance(entry, dict) else entry
     assert target == "sepio:0000130", f"asserts must map to sepio:0000130 (got {target})"
+
+
+def test_context_is_loadable_via_importlib_resources():
+    """The context.jsonld must ship inside the installable package so that
+    downstream consumers (Scriptorium, etc.) can find it via
+    `importlib.resources.files('indicium.schema') / 'context.jsonld'`."""
+    from importlib import resources
+    ref = resources.files("indicium.schema") / "context.jsonld"
+    assert ref.is_file(), (
+        "indicium.schema/context.jsonld is not packaged. "
+        "It must live under src/indicium/schema/ so wheels include it."
+    )
+    import json
+    payload = json.loads(ref.read_text())
+    assert "@context" in payload
+    assert payload["@context"]["asb"].startswith("https://asb")

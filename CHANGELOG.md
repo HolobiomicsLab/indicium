@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.6.1] - 2026-05-26
+
+### Fixed
+
+- **Package `context.jsonld` for downstream consumers.** Move
+  `docs/context.jsonld` into `src/indicium/schema/context.jsonld` (canonical
+  location) and symlink it back to `docs/` so mkdocs continues to publish it.
+  Wheels now ship the file, so consumers can load it via
+  `importlib.resources.files("indicium.schema") / "context.jsonld"`.
+
+---
+
 ## [1.6.0] - 2026-05-24
 
 ### Added
