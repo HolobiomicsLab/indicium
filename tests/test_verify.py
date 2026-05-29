@@ -108,3 +108,48 @@ def test_none_candidate_skipped_match_in_valid_one():
     assert res.status == VERIFIED
     assert res.matched_index == 1
     assert res.quote_exact == "calcium signaling"
+
+
+def test_char_span_on_verbatim_match():
+    src = "Cells exhibit aerobic glycolysis under hypoxia."
+    res = verify_quote("aerobic glycolysis", [src])
+    assert res.status == VERIFIED
+    assert res.char_span is not None
+    s, e = res.char_span
+    assert src[s:e] == "aerobic glycolysis"
+
+
+def test_char_span_maps_to_original_whitespace():
+    src = "the quick brown\n    fox jumps over"
+    res = verify_quote("quick brown fox", [src])
+    assert res.status == VERIFIED
+    s, e = res.char_span
+    assert src[s:e] == "quick brown\n    fox"
+
+
+def test_char_span_none_when_unverified():
+    res = verify_quote("totally absent phrase", ["unrelated source text here"])
+    assert res.status == UNVERIFIED
+    assert res.char_span is None
+
+
+def test_punctuation_flexible_matches_punctuation_shift():
+    src = "PERMANOVA with Canberra distance: P = 0.001, R2 = 0.140 overall."
+    res = verify_quote("P=0.001 R2=0.140", [src], punctuation_flexible=True)
+    assert res.status == VERIFIED
+    assert res.score == 1.0
+    s, e = res.char_span
+    assert src[s:e] == "P = 0.001, R2 = 0.140"
+
+
+def test_punctuation_flexible_off_by_default_does_not_match():
+    # Without the flag the LCS ratio is below threshold -> unverified.
+    src = "the value P = 0.001 was significant"
+    res = verify_quote("P=0.001", [src])
+    assert res.status == UNVERIFIED
+
+
+def test_punctuation_flexible_respects_token_boundaries():
+    # "cat" must not match inside "category".
+    res = verify_quote("cat dog", ["category dog"], punctuation_flexible=True)
+    assert res.status != VERIFIED

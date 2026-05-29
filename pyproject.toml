@@ -1,6 +1,6 @@
 [project]
 name = "indicium"
-version = "1.8.0"
+version = "1.9.0"
 description = "Shared claim/evidence standard (ECO/CiTO/SEPIO/PROV-O + Bucur SuperPattern)"
 readme = "README.md"
 requires-python = ">=3.11"

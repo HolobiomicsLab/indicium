@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.9.0] - 2026-05-29
+
+### Added
+
+- **`VerificationResult.char_span`** — a 5th, defaulted field
+  (`tuple[int, int] | None = None`) giving `(start, end)` offsets into the
+  matched candidate's *original* (un-normalized) text. Populated for verified
+  matches from the regex span; best-effort for repaired matches (the recovered
+  span is re-located in the original candidate, and may remain `None`). Lets
+  callers highlight or re-slice the exact source region without re-searching.
+- **`verify_quote(..., punctuation_flexible=True)`** — an opt-in pass between
+  exact containment and LCS that matches the quote's alphanumeric tokens
+  (`[A-Za-z0-9]+(?:\.[A-Za-z0-9]+)*`) in order across arbitrary non-alphanumeric
+  padding, with per-token boundary guards. A hit is `verified` with `score = 1.0`
+  and a `char_span` spanning first-token-start → last-token-end. This recognises
+  a verbatim-modulo-punctuation quote (e.g. `P=0.001` ~ `P = 0.001,`) instead of
+  degrading it to a sub-threshold LCS, mirroring ASB `claim_ledger`'s
+  token-sequence matcher.
+
+### Why
+
+Lets ASB `claim_ledger` and Perspicacité consume one shared verification kernel:
+`char_span` carries the exact source offsets downstream, and the opt-in
+punctuation-flexible pass matches numeric/statistical quotes whose punctuation
+shifts between extraction and source. **Backward-compatible and additive only**:
+both changes are defaulted off / defaulted `None`, existing thresholds and the 11
+prior kernel tests are unchanged, and there are no changes to `generated/model.py`,
+the SHACL shapes, or any enum.
+
+---
+
 ## [1.8.0] - 2026-05-29
 
 ### Added
