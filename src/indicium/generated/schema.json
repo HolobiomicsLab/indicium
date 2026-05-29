@@ -54,6 +54,14 @@
                 "context": {
                     "type": "string"
                 },
+                "domain_qualifier": {
+                    "description": "Open-vocabulary qualifier contributed by a DomainAdapter (indicium-adapters), e.g. 'aligned_with' or 'differentially_expressed_in'. This is NOT the closed Bucur SuperPattern \u2014 values are snake_case domain terms. A Claim must carry at least one of {qualifier, domain_qualifier} (enforced by the supplemental QualifierPresenceShape, since `qualifier` itself is no longer required at the slot level).",
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "id": {
                     "type": "string"
                 },
@@ -98,7 +106,6 @@
                 "id",
                 "context",
                 "subject",
-                "qualifier",
                 "relation",
                 "object"
             ],
@@ -176,6 +183,14 @@
                 "context": {
                     "type": "string"
                 },
+                "domain_qualifier": {
+                    "description": "Open-vocabulary qualifier contributed by a DomainAdapter (indicium-adapters), e.g. 'aligned_with' or 'differentially_expressed_in'. This is NOT the closed Bucur SuperPattern \u2014 values are snake_case domain terms. A Claim must carry at least one of {qualifier, domain_qualifier} (enforced by the supplemental QualifierPresenceShape, since `qualifier` itself is no longer required at the slot level).",
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "id": {
                     "type": "string"
                 },
@@ -219,7 +234,6 @@
             "required": [
                 "context",
                 "subject",
-                "qualifier",
                 "relation",
                 "object"
             ],

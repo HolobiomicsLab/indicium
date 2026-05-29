@@ -280,8 +280,9 @@ class Claim(ConfiguredBaseModel):
     id: str = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Claim'], 'slot_uri': 'dct:identifier'} })
     context: str = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Claim'], 'slot_uri': 'asb:context'} })
     subject: str = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Claim'], 'slot_uri': 'asb:subject'} })
-    qualifier: SuperPatternQualifier = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Claim'], 'slot_uri': 'asb:qualifier'} })
+    qualifier: Optional[SuperPatternQualifier] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Claim'], 'slot_uri': 'asb:qualifier'} })
     super_pattern: Optional[SuperPatternQualifier] = Field(default=None, description="""Spec-required name for the Bucur SuperPattern qualifier. Aliases `qualifier`; the ASB adapter targets this name. Either may be set; both must agree if both are populated.""", json_schema_extra = { "linkml_meta": {'aliases': ['qualifier'], 'domain_of': ['Claim'], 'slot_uri': 'asb:qualifier'} })
+    domain_qualifier: Optional[str] = Field(default=None, description="""Open-vocabulary qualifier contributed by a DomainAdapter (indicium-adapters), e.g. 'aligned_with' or 'differentially_expressed_in'. This is NOT the closed Bucur SuperPattern — values are snake_case domain terms. A Claim must carry at least one of {qualifier, domain_qualifier} (enforced by the supplemental QualifierPresenceShape, since `qualifier` itself is no longer required at the slot level).""", json_schema_extra = { "linkml_meta": {'domain_of': ['Claim'], 'slot_uri': 'asb:domainQualifier'} })
     relation: str = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Claim'], 'slot_uri': 'asb:relation'} })
     predicate: Optional[str] = Field(default=None, description="""Spec-required name for the CiTO/SEPIO predicate. Shares slot_uri with `relation`; ASB adapter targets this name. Either may be set; they MUST agree if both are populated (enforced by downstream adapter, not at schema level).""", json_schema_extra = { "linkml_meta": {'aliases': ['relation'], 'domain_of': ['Claim'], 'slot_uri': 'asb:relation'} })
     object: str = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Claim'], 'slot_uri': 'asb:object'} })
@@ -291,6 +292,19 @@ class Claim(ConfiguredBaseModel):
     asserted_by: Optional[str] = Field(default=None, description="""IRI or identifier of the agent (human ORCID, pipeline run ID, etc.) that asserted this item.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Claim', 'Evidence'], 'slot_uri': 'prov:wasAttributedTo'} })
     astra_insight_ref: Optional[str] = Field(default=None, description="""Reference to the originating ASTRA insight in 'analysis_id/insight_id' format.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Claim']} })
     superseded_by: Optional[str] = Field(default=None, description="""URI of the Claim that supersedes this one. Must be set when claim_status is 'superseded'. Allows external Claim IRIs for cross-document lineage.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Claim']} })
+
+    @field_validator('domain_qualifier')
+    def pattern_domain_qualifier(cls, v):
+        pattern=re.compile(r"^[a-z][a-z0-9_]*$")
+        if isinstance(v, list):
+            for element in v:
+                if isinstance(element, str) and not pattern.match(element):
+                    err_msg = f"Invalid domain_qualifier format: {element}"
+                    raise ValueError(err_msg)
+        elif isinstance(v, str) and not pattern.match(v):
+            err_msg = f"Invalid domain_qualifier format: {v}"
+            raise ValueError(err_msg)
+        return v
 
 
 class Evidence(ConfiguredBaseModel):

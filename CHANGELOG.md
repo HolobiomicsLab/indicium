@@ -7,6 +7,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.7.0] - 2026-05-29
+
+### Added
+
+- **`domain_qualifier` slot** (`slot_uri: asb:domainQualifier`) — an OPEN,
+  snake_case-patterned (`^[a-z][a-z0-9_]*$`) qualifier slot for domain-adapter
+  vocabularies (e.g. transcriptomics `aligned_with`,
+  `differentially_expressed_in`). This is the standard's side-channel for
+  domain extensions, mirroring how enrichment terms ride on
+  `asb:*_ontology_term`. The closed Bucur `SuperPatternQualifier` enum on
+  `asb:qualifier` is **unchanged** — domain terms never pollute it.
+- **`QualifierPresenceShape`** (supplemental SHACL, `sh:or`) — a Claim must
+  carry at least one of `asb:qualifier` (closed Bucur SuperPattern) or
+  `asb:domainQualifier` (open domain extension).
+
+### Changed
+
+- **`qualifier` slot is no longer `required` on its own.** A Claim previously
+  had to carry a core Bucur qualifier; it may now satisfy the "at least one
+  qualifier" rule via `domain_qualifier` instead. The closed enum and its
+  `maxCount 1` are retained; only the slot-level `minCount 1` moved to the
+  either-or `QualifierPresenceShape`.
+
+### Why
+
+Resolves **indicium#1** (reported by Dina, 2026-05-29). Domain-adapter
+qualifiers extended `asb:qualifier` directly, but that slot is a CLOSED 20-term
+LinkML enum (Bucur K-CAP 2021), so the generated `sh:in` shapes rejected every
+extended qualifier — blocking all domain adapters (metabolomics, metabokg, emi,
+transcriptomics) and the ASB benchmark. SHACL merges additively
+(`validate_graph` graph-union), so an adapter-side shape could never relax the
+existing `sh:in`; the fix had to live in the core standard. We chose to keep
+`asb:qualifier` pristine and route domain qualifiers to a new open slot
+(Reading 1) rather than dilute the published closed vocabulary.
+
+### Compatibility
+
+Additive. v1.6 serialisations always carry a core `asb:qualifier`, so they
+still satisfy `QualifierPresenceShape` and remain valid. Consumers gain the
+`domain_qualifier` slot; no existing slot changed its `slot_uri` or range.
+
+---
+
 ## [1.6.1] - 2026-05-26
 
 ### Fixed

@@ -160,7 +160,7 @@ slots:
   id:        { identifier: true, slot_uri: dct:identifier }
   context:   { required: true, slot_uri: asb:context }
   subject:   { required: true, slot_uri: asb:subject }
-  qualifier: { required: true, range: SuperPatternQualifier, slot_uri: asb:qualifier }
+  qualifier: { required: false, range: SuperPatternQualifier, slot_uri: asb:qualifier }
   super_pattern:
     required: false
     range: SuperPatternQualifier
@@ -170,6 +170,18 @@ slots:
       Spec-required name for the Bucur SuperPattern qualifier. Aliases
       `qualifier`; the ASB adapter targets this name. Either may be set;
       both must agree if both are populated.
+  domain_qualifier:
+    required: false
+    range: string
+    pattern: "^[a-z][a-z0-9_]*$"
+    slot_uri: asb:domainQualifier
+    description: >-
+      Open-vocabulary qualifier contributed by a DomainAdapter
+      (indicium-adapters), e.g. 'aligned_with' or 'differentially_expressed_in'.
+      This is NOT the closed Bucur SuperPattern — values are snake_case domain
+      terms. A Claim must carry at least one of {qualifier, domain_qualifier}
+      (enforced by the supplemental QualifierPresenceShape, since `qualifier`
+      itself is no longer required at the slot level).
   relation:  { required: true, slot_uri: asb:relation }
   predicate:
     required: false
@@ -403,6 +415,7 @@ classes:
       - subject
       - qualifier
       - super_pattern
+      - domain_qualifier
       - relation
       - predicate
       - object

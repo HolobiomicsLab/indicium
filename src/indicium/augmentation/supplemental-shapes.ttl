@@ -5,6 +5,20 @@
 @prefix indicium: <https://w3id.org/indicium/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+# v1.7: A Claim must carry at least one qualifier — either the closed Bucur
+# SuperPattern (asb:qualifier) or an open domain-adapter qualifier
+# (asb:domainQualifier). The core `qualifier` slot is no longer required on its
+# own, so this sh:or restores the "at least one qualifier" guarantee.
+# Resolves indicium#1 (Reading 1: closed core enum + open domain slot).
+indicium:QualifierPresenceShape
+    a sh:NodeShape ;
+    sh:targetClass asb:Claim ;
+    sh:message "A Claim must carry at least one of asb:qualifier (closed Bucur SuperPattern) or asb:domainQualifier (open domain-adapter extension)." ;
+    sh:or (
+        [ sh:path asb:qualifier ; sh:minCount 1 ]
+        [ sh:path asb:domainQualifier ; sh:minCount 1 ]
+    ) .
+
 # v1.4: When claim_status is 'superseded', superseded_by must be present.
 # LinkML gen-shacl cannot express conditional minCount, so this lives here.
 indicium:SupersededByRequiredShape
