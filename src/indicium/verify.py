@@ -29,6 +29,7 @@ REPAIRED = "repaired"
 UNVERIFIED = "unverified"
 
 _WS_RE = re.compile(r"\s+")
+# Dotted runs (0.001, v1.2, R2) are one token; any other punctuation splits.
 _TOKEN_RE = re.compile(r"[A-Za-z0-9]+(?:\.[A-Za-z0-9]+)*")
 
 
@@ -136,6 +137,9 @@ def verify_quote(
             span = _punct_flexible_span(cand, quote)
             if span is not None:
                 s, e = span
+                # quote_exact is the CANDIDATE slice here, so it carries the
+                # source's punctuation/spacing (e.g. "P = 0.001, R2 = 0.140"),
+                # not the caller's quote spelling.
                 return VerificationResult(VERIFIED, i, cand[s:e], 1.0, span)
 
     # Pass 2 — longest common substring against each candidate.
