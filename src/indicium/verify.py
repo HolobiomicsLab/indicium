@@ -64,7 +64,8 @@ def verify_quote(
                     quote)). quote_exact = that LCS region from the candidate;
                     score = ratio.
       - unverified: nothing clears the threshold (likely paraphrase/hallucination).
-                    matched_index = quote_exact = None.
+                    matched_index = quote_exact = None; score = best below-threshold
+                    ratio found (0.0 when quote/candidates are empty or share no run).
 
     Never raises: empty/whitespace quote or empty candidates -> unverified.
     Ties resolved by highest score, then lowest index.
@@ -73,9 +74,10 @@ def verify_quote(
     if not norm_quote or not candidates:
         return VerificationResult(UNVERIFIED, None, None, 0.0)
 
-    # Pass 1 — exact (whitespace-flexible) containment.
+    # Pass 1 — exact (whitespace-flexible) containment. Use the normalized quote
+    # so both passes operate on the same token form (the helper splits anyway).
     for i, cand in enumerate(candidates):
-        span = _verbatim_span(cand, quote)
+        span = _verbatim_span(cand, norm_quote)
         if span is not None:
             return VerificationResult(VERIFIED, i, span, 1.0)
 
