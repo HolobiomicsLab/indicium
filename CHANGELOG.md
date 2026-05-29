@@ -48,17 +48,6 @@ SHACL shapes, or any enum.
 - **`QualifierPresenceShape`** (supplemental SHACL, `sh:or`) — a Claim must
   carry at least one of `asb:qualifier` (closed Bucur SuperPattern) or
   `asb:domainQualifier` (open domain extension).
-- **`verify_quote()` + `VerificationResult`** (new top-level exports from
-  `indicium.verify`) — a pure-Python, dependency-light kernel that matches an
-  LLM-extracted quote against candidate source passages and returns a
-  `verified` / `repaired` / `unverified` status, the recovered verbatim span,
-  and a score. Pass 1 is whitespace-flexible, case-sensitive containment
-  (score 1.0); Pass 2 repairs via longest-common-substring above a
-  `near_threshold` (default 0.9); anything below is `unverified`. Never raises
-  on empty/`None`/non-`str` input. Additive — it adds a *verifier verb*
-  alongside the existing `Evidence.quote_exact` / `TextQuoteSelector` data
-  model and touches no generated model, SHACL shape, or enum. Shared by
-  Perspicacité / ASB to ground claims, parameters, and failure-modes in source.
 
 ### Changed
 
