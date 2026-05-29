@@ -89,3 +89,22 @@ def test_exact_match_in_second_candidate_returns_index_1():
     assert res.status == VERIFIED
     assert res.matched_index == 1
     assert res.quote_exact == "calcium signaling"
+
+
+def test_none_candidate_does_not_raise():
+    # The kernel is shared and may be called directly with a degenerate list;
+    # a None entry must never raise (never-raises contract).
+    bad: list = [None]
+    res = verify_quote("calcium signaling", bad)
+    assert res.status == UNVERIFIED
+    assert res.matched_index is None
+
+
+def test_none_candidate_skipped_match_in_valid_one():
+    # A None entry is coerced to "" and skipped; index alignment is preserved so
+    # the real match still reports its true position.
+    mixed: list = [None, "calcium signaling cascade"]
+    res = verify_quote("calcium signaling", mixed)
+    assert res.status == VERIFIED
+    assert res.matched_index == 1
+    assert res.quote_exact == "calcium signaling"

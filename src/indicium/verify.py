@@ -74,9 +74,15 @@ def verify_quote(
     if not norm_quote or not candidates:
         return VerificationResult(UNVERIFIED, None, None, 0.0)
 
+    # Coerce candidates defensively: a None/non-str can slip in when the kernel is
+    # called directly by other projects. Map None -> "" so a degenerate entry
+    # simply never matches, honoring the never-raises contract while keeping the
+    # index alignment that matched_index depends on.
+    cands = ["" if c is None else str(c) for c in candidates]
+
     # Pass 1 — exact (whitespace-flexible) containment. Use the normalized quote
     # so both passes operate on the same token form (the helper splits anyway).
-    for i, cand in enumerate(candidates):
+    for i, cand in enumerate(cands):
         span = _verbatim_span(cand, norm_quote)
         if span is not None:
             return VerificationResult(VERIFIED, i, span, 1.0)
@@ -85,7 +91,7 @@ def verify_quote(
     best_idx: int | None = None
     best_ratio = 0.0
     best_span: str | None = None
-    for i, cand in enumerate(candidates):
+    for i, cand in enumerate(cands):
         norm_cand = _normalize(cand)
         if not norm_cand:
             continue
