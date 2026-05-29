@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.8.0] - 2026-05-29
+
+### Added
+
+- **`verify_quote` kernel** (`indicium.verify`, exported from the package root)
+  — a pure-Python, dependency-light, never-raises verifier that matches an
+  LLM-extracted quote against source passage texts. Returns
+  `VerificationResult(status, matched_index, quote_exact, score)` where status
+  is `verified` (whitespace-flexible, case-sensitive containment; recovers the
+  source's verbatim span, `score = 1.0`), `repaired` (no containment, but the
+  longest common substring vs the best candidate clears `near_threshold`,
+  default 0.9), or `unverified`. Structurally guarantees
+  `unverified ⇒ matched_index is None`; degenerate input (empty/whitespace
+  quote, empty candidates, or `None`/non-str entries) degrades safely instead
+  of raising.
+- Exported `verify_quote` and `VerificationResult` from the package root.
+
+### Why
+
+Lets downstream projects (Perspicacité R3, ASB) ground claim / parameter /
+failure-mode quotes against original source text — verifying provenance and
+catching paraphrase or hallucination — without depending on rdflib or the
+generated model. **Additive only**: no changes to `generated/model.py`, the
+SHACL shapes, or any enum.
+
+---
+
 ## [1.7.0] - 2026-05-29
 
 ### Added
@@ -21,6 +48,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`QualifierPresenceShape`** (supplemental SHACL, `sh:or`) — a Claim must
   carry at least one of `asb:qualifier` (closed Bucur SuperPattern) or
   `asb:domainQualifier` (open domain extension).
+- **`verify_quote()` + `VerificationResult`** (new top-level exports from
+  `indicium.verify`) — a pure-Python, dependency-light kernel that matches an
+  LLM-extracted quote against candidate source passages and returns a
+  `verified` / `repaired` / `unverified` status, the recovered verbatim span,
+  and a score. Pass 1 is whitespace-flexible, case-sensitive containment
+  (score 1.0); Pass 2 repairs via longest-common-substring above a
+  `near_threshold` (default 0.9); anything below is `unverified`. Never raises
+  on empty/`None`/non-`str` input. Additive — it adds a *verifier verb*
+  alongside the existing `Evidence.quote_exact` / `TextQuoteSelector` data
+  model and touches no generated model, SHACL shape, or enum. Shared by
+  Perspicacité / ASB to ground claims, parameters, and failure-modes in source.
 
 ### Changed
 
