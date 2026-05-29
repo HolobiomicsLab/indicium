@@ -40,3 +40,12 @@ def test_instantiate_evidence_from_top_level_import():
     from indicium import Evidence, EvidenceType
     ev = Evidence(evidence_type=EvidenceType.data)
     assert ev.evidence_type == EvidenceType.data
+
+
+def test_verify_quote_importable_from_top_level():
+    from indicium import VerificationResult, verify_quote
+
+    res = verify_quote("aerobic glycolysis", ["cells show aerobic glycolysis here"])
+    assert isinstance(res, VerificationResult)
+    assert res.status == "verified"
+    assert res.matched_index == 0
