@@ -125,6 +125,17 @@ enums:
       network:     { meaning: dcat:Dataset }
       model:       { meaning: dcat:Dataset }
       generic:     { meaning: dcat:Dataset }
+  WorkflowCoupling:
+    description: >-
+      Reproducibility-bearing coupling of the workflow that produced an evidence
+      line (Suter et al. 2025, DOI 10.1016/j.future.2025.107974). 'tight' = shared
+      in-memory state, individual tasks not independently reproducible; 'loose' =
+      file/API communication, individually reproducible.
+    permissible_values:
+      tight:   { description: "Shared in-memory state; not independently reproducible." }
+      loose:   { description: "File/API communication; individually reproducible." }
+      ad_hoc:  { description: "No formal coupling structure." }
+      unknown: { description: "Not characterised." }
   EcoCodeAsbSubset:
     description: >-
       ASB-emitted subset of the Evidence Code Ontology (ECO). The full ECO
@@ -322,6 +333,15 @@ slots:
     description: >-
       URI of the Claim that supersedes this one. Must be set when claim_status
       is 'superseded'. Allows external Claim IRIs for cross-document lineage.
+  # Reproducibility qualifier (v1.10)
+  workflow_coupling:
+    required: false
+    range: WorkflowCoupling
+    slot_uri: asb:workflowCoupling
+    description: >-
+      Reproducibility qualifier — coupling of the workflow that produced this
+      evidence (Suter et al. 2025). Optional; set by producers that know the
+      workflow structure.
   # IndiciumDocument collection slots (v1.4)
   claims:
     range: Claim
@@ -431,7 +451,7 @@ classes:
     slots: [evidence_type, eco_code, source_type, quote, quote_exact, quote_location,
             confidence, of_source, for_claim, supports_claim,
             of_figure, of_script, of_dataset, text_selector, fragment_selector,
-            decision_context, asserted_by]
+            decision_context, asserted_by, workflow_coupling]
   Source:
     class_uri: fabio:Expression
     description: A cited source/paper with stable identity.

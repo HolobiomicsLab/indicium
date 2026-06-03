@@ -54,6 +54,14 @@
                 "context": {
                     "type": "string"
                 },
+                "domain_qualifier": {
+                    "description": "Open-vocabulary qualifier contributed by a DomainAdapter (indicium-adapters), e.g. 'aligned_with' or 'differentially_expressed_in'. This is NOT the closed Bucur SuperPattern \u2014 values are snake_case domain terms. A Claim must carry at least one of {qualifier, domain_qualifier} (enforced by the supplemental QualifierPresenceShape, since `qualifier` itself is no longer required at the slot level).",
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "id": {
                     "type": "string"
                 },
@@ -98,7 +106,6 @@
                 "id",
                 "context",
                 "subject",
-                "qualifier",
                 "relation",
                 "object"
             ],
@@ -176,6 +183,14 @@
                 "context": {
                     "type": "string"
                 },
+                "domain_qualifier": {
+                    "description": "Open-vocabulary qualifier contributed by a DomainAdapter (indicium-adapters), e.g. 'aligned_with' or 'differentially_expressed_in'. This is NOT the closed Bucur SuperPattern \u2014 values are snake_case domain terms. A Claim must carry at least one of {qualifier, domain_qualifier} (enforced by the supplemental QualifierPresenceShape, since `qualifier` itself is no longer required at the slot level).",
+                    "pattern": "^[a-z][a-z0-9_]*$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
                 "id": {
                     "type": "string"
                 },
@@ -219,7 +234,6 @@
             "required": [
                 "context",
                 "subject",
-                "qualifier",
                 "relation",
                 "object"
             ],
@@ -450,6 +464,10 @@
                             "type": "null"
                         }
                     ]
+                },
+                "workflow_coupling": {
+                    "$ref": "#/$defs/WorkflowCoupling",
+                    "description": "Reproducibility qualifier \u2014 coupling of the workflow that produced this evidence (Suter et al. 2025). Optional; set by producers that know the workflow structure."
                 }
             },
             "title": "Evidence",
@@ -948,6 +966,17 @@
             },
             "title": "TextQuoteSelector",
             "type": "object"
+        },
+        "WorkflowCoupling": {
+            "description": "Reproducibility-bearing coupling of the workflow that produced an evidence line (Suter et al. 2025, DOI 10.1016/j.future.2025.107974). 'tight' = shared in-memory state, individual tasks not independently reproducible; 'loose' = file/API communication, individually reproducible.",
+            "enum": [
+                "tight",
+                "loose",
+                "ad_hoc",
+                "unknown"
+            ],
+            "title": "WorkflowCoupling",
+            "type": "string"
         }
     },
     "$id": "https://w3id.org/indicium",

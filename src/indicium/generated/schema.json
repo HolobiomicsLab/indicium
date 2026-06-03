@@ -464,6 +464,10 @@
                             "type": "null"
                         }
                     ]
+                },
+                "workflow_coupling": {
+                    "$ref": "#/$defs/WorkflowCoupling",
+                    "description": "Reproducibility qualifier \u2014 coupling of the workflow that produced this evidence (Suter et al. 2025). Optional; set by producers that know the workflow structure."
                 }
             },
             "title": "Evidence",
@@ -962,6 +966,17 @@
             },
             "title": "TextQuoteSelector",
             "type": "object"
+        },
+        "WorkflowCoupling": {
+            "description": "Reproducibility-bearing coupling of the workflow that produced an evidence line (Suter et al. 2025, DOI 10.1016/j.future.2025.107974). 'tight' = shared in-memory state, individual tasks not independently reproducible; 'loose' = file/API communication, individually reproducible.",
+            "enum": [
+                "tight",
+                "loose",
+                "ad_hoc",
+                "unknown"
+            ],
+            "title": "WorkflowCoupling",
+            "type": "string"
         }
     },
     "$id": "https://w3id.org/indicium",

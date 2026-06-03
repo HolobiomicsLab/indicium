@@ -215,6 +215,28 @@ class DatasetType(str, Enum):
     generic = "generic"
 
 
+class WorkflowCoupling(str, Enum):
+    """
+    Reproducibility-bearing coupling of the workflow that produced an evidence line (Suter et al. 2025, DOI 10.1016/j.future.2025.107974). 'tight' = shared in-memory state, individual tasks not independently reproducible; 'loose' = file/API communication, individually reproducible.
+    """
+    tight = "tight"
+    """
+    Shared in-memory state; not independently reproducible.
+    """
+    loose = "loose"
+    """
+    File/API communication; individually reproducible.
+    """
+    ad_hoc = "ad_hoc"
+    """
+    No formal coupling structure.
+    """
+    unknown = "unknown"
+    """
+    Not characterised.
+    """
+
+
 class EcoCodeAsbSubset(str, Enum):
     """
     ASB-emitted subset of the Evidence Code Ontology (ECO). The full ECO is large; ASB only emits these 8 values. Downstream consumers can treat this as a closed enum for ASB-sourced Evidence records.
@@ -332,6 +354,7 @@ class Evidence(ConfiguredBaseModel):
     fragment_selector: Optional[FragmentSelector] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'Figure']} })
     decision_context: Optional[list[str]] = Field(default=None, description="""ASTRA-style 'decision_id.option_id' tags scoping this evidence item to a specific methodological universe. Empty list = universally applicable.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
     asserted_by: Optional[str] = Field(default=None, description="""IRI or identifier of the agent (human ORCID, pipeline run ID, etc.) that asserted this item.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Claim', 'Evidence'], 'slot_uri': 'prov:wasAttributedTo'} })
+    workflow_coupling: Optional[WorkflowCoupling] = Field(default=None, description="""Reproducibility qualifier — coupling of the workflow that produced this evidence (Suter et al. 2025). Optional; set by producers that know the workflow structure.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence'], 'slot_uri': 'asb:workflowCoupling'} })
 
     @field_validator('decision_context')
     def pattern_decision_context(cls, v):
