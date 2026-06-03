@@ -97,8 +97,14 @@ linkml_meta = LinkMLMeta({'default_prefix': 'indicium',
                          'prefix_reference': 'http://www.w3.org/ns/oa#'},
                   'prov': {'prefix_prefix': 'prov',
                            'prefix_reference': 'http://www.w3.org/ns/prov#'},
+                  'semapv': {'prefix_prefix': 'semapv',
+                             'prefix_reference': 'https://w3id.org/semapv/vocab/'},
                   'sepio': {'prefix_prefix': 'sepio',
-                            'prefix_reference': 'http://purl.obolibrary.org/obo/SEPIO_'}},
+                            'prefix_reference': 'http://purl.obolibrary.org/obo/SEPIO_'},
+                  'skos': {'prefix_prefix': 'skos',
+                           'prefix_reference': 'http://www.w3.org/2004/02/skos/core#'},
+                  'sssom': {'prefix_prefix': 'sssom',
+                            'prefix_reference': 'https://w3id.org/sssom/'}},
      'source_file': 'src/indicium/schema/indicium.yaml'} )
 
 class ClaimType(str, Enum):
@@ -291,6 +297,7 @@ class IndiciumDocument(ConfiguredBaseModel):
     software_entities: Optional[list[SoftwareEntity]] = Field(default=None, description="""All SoftwareEntity records in this document.""", json_schema_extra = { "linkml_meta": {'domain_of': ['IndiciumDocument']} })
     claim_links: Optional[list[ClaimLink]] = Field(default=None, description="""All ClaimLink edges in this document.""", json_schema_extra = { "linkml_meta": {'domain_of': ['IndiciumDocument']} })
     citation_links: Optional[list[CitationLink]] = Field(default=None, description="""All CitationLink edges in this document.""", json_schema_extra = { "linkml_meta": {'domain_of': ['IndiciumDocument']} })
+    sssom_mappings: Optional[dict[str, SSSOMMapping]] = Field(default=None, description="""SSSOM term mappings carried by this document.""", json_schema_extra = { "linkml_meta": {'domain_of': ['IndiciumDocument']} })
 
 
 class Claim(ConfiguredBaseModel):
@@ -299,7 +306,7 @@ class Claim(ConfiguredBaseModel):
     """
     linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'asb:Claim', 'from_schema': 'https://w3id.org/indicium'})
 
-    id: str = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Claim'], 'slot_uri': 'dct:identifier'} })
+    id: str = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Claim', 'SSSOMMapping'], 'slot_uri': 'dct:identifier'} })
     context: str = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Claim'], 'slot_uri': 'asb:context'} })
     subject: str = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Claim'], 'slot_uri': 'asb:subject'} })
     qualifier: Optional[SuperPatternQualifier] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Claim'], 'slot_uri': 'asb:qualifier'} })
@@ -341,7 +348,7 @@ class Evidence(ConfiguredBaseModel):
     quote: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
     quote_exact: Optional[str] = Field(default=None, description="""Spec-required name for the verbatim text excerpt supporting a claim. Aliases `quote`; ASB adapter targets this name. SHACL-level constraint that exactly one of {quote, quote_exact} is set is deferred to v1.7.""", json_schema_extra = { "linkml_meta": {'aliases': ['quote'], 'domain_of': ['Evidence']} })
     quote_location: Optional[str] = Field(default=None, description="""Free-form locator for the quote — paragraph id, XPath pointer, page-offset string, or W3C OA fragment IRI. Use when the structured `text_selector` / `fragment_selector` classes are overkill (e.g. the ASB adapter passes a `paragraph_id` string from its source paper).""", json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
-    confidence: Optional[float] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
+    confidence: Optional[float] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'SSSOMMapping']} })
     of_source: Optional[Source] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'CitationLink']} })
     for_claim: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'CitationLink']} })
     supports_claim: Optional[str] = Field(default=None, description="""Spec-required name for the SEPIO `is_evidence_for` relation. Aliases `for_claim`. ASB adapter targets this name. `sepio:0000007` is the SEPIO `is evidence for` predicate.""", json_schema_extra = { "linkml_meta": {'aliases': ['for_claim'],
@@ -516,6 +523,23 @@ class FragmentSelector(ConfiguredBaseModel):
     frag_page: Optional[int] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['FragmentSelector']} })
 
 
+class SSSOMMapping(ConfiguredBaseModel):
+    """
+    A term mapping in SSSOM form (Simple Standard for Sharing Ontological Mappings) carried by an Indicium document.
+    """
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'sssom:Mapping', 'from_schema': 'https://w3id.org/indicium'})
+
+    id: str = Field(default=..., json_schema_extra = { "linkml_meta": {'domain_of': ['Claim', 'SSSOMMapping'], 'slot_uri': 'dct:identifier'} })
+    subject_id: str = Field(default=..., description="""SSSOM subject (CURIE/IRI).""", json_schema_extra = { "linkml_meta": {'domain_of': ['SSSOMMapping']} })
+    subject_label: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['SSSOMMapping']} })
+    predicate_id: str = Field(default=..., description="""SSSOM mapping predicate (e.g. skos:closeMatch).""", json_schema_extra = { "linkml_meta": {'domain_of': ['SSSOMMapping']} })
+    object_id: str = Field(default=..., description="""SSSOM object term (CURIE/IRI).""", json_schema_extra = { "linkml_meta": {'domain_of': ['SSSOMMapping']} })
+    object_label: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['SSSOMMapping']} })
+    mapping_justification: Optional[str] = Field(default=None, description="""SEMAPV justification (e.g. semapv:LexicalMatching).""", json_schema_extra = { "linkml_meta": {'domain_of': ['SSSOMMapping']} })
+    confidence: Optional[float] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'SSSOMMapping']} })
+    derived_from: Optional[list[str]] = Field(default=None, description="""Identifiers of source mapping(s) this was inferred from (cthoyt 2026-05-29). Modelled; not yet populated by direct lexical matches.""", json_schema_extra = { "linkml_meta": {'domain_of': ['SSSOMMapping']} })
+
+
 # Model rebuild
 # see https://pydantic-docs.helpmanual.io/usage/models/#rebuilding-a-model
 IndiciumDocument.model_rebuild()
@@ -530,3 +554,4 @@ CitationLink.model_rebuild()
 ClaimLink.model_rebuild()
 TextQuoteSelector.model_rebuild()
 FragmentSelector.model_rebuild()
+SSSOMMapping.model_rebuild()

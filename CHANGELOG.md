@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## 1.11.0 — 2026-06-03
+- New `SSSOMMapping` class (SSSOM term mapping) + `IndiciumDocument.sssom_mappings` collection, with a `derived_from` lineage slot (cthoyt 2026-05-29). Adds sssom/semapv/skos prefixes. Additive, backward-compatible.
+
+---
+
 ## 1.10.0 — 2026-06-03
 - Evidence gains optional `workflow_coupling` (`WorkflowCoupling` enum: tight/loose/ad_hoc/unknown) — a reproducibility qualifier per Suter et al. 2025 (DOI 10.1016/j.future.2025.107974). Additive, backward-compatible; SHACL non-closed.
 

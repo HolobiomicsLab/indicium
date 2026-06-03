@@ -26,6 +26,8 @@ from indicium.generated.model import (
     TextQuoteSelector, FragmentSelector,
     # v1.4 additions
     IndiciumDocument,
+    # v1.11.0 additions
+    SSSOMMapping,
 )
 from indicium.iri_bindings import (
     FIGURE_TYPE_FABIO,
@@ -79,4 +81,6 @@ __all__ = [
     "parse_decision_context",
     # IndiciumDocument container (v1.4)
     "IndiciumDocument",
+    # SSSOM term mapping (v1.11.0)
+    "SSSOMMapping",
 ]

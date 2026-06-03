@@ -15,6 +15,9 @@ prefixes:
   asb: https://asb.holobiomics.org/ns/asb#
   dcat: http://www.w3.org/ns/dcat#
   oa: http://www.w3.org/ns/oa#
+  sssom: https://w3id.org/sssom/
+  semapv: https://w3id.org/semapv/vocab/
+  skos: http://www.w3.org/2004/02/skos/core#
 default_prefix: indicium
 default_range: string
 imports:
@@ -408,6 +411,35 @@ slots:
   bio_tools_id:
     required: false
     description: bio.tools registry ID for cross-reference / federation.
+  # SSSOMMapping slots (v1.11.0)
+  subject_id:
+    required: true
+    range: string
+    description: "SSSOM subject (CURIE/IRI)."
+  subject_label:
+    range: string
+  predicate_id:
+    required: true
+    range: string
+    description: "SSSOM mapping predicate (e.g. skos:closeMatch)."
+  object_id:
+    required: true
+    range: string
+    description: "SSSOM object term (CURIE/IRI)."
+  object_label:
+    range: string
+  mapping_justification:
+    range: string
+    description: "SEMAPV justification (e.g. semapv:LexicalMatching)."
+  derived_from:
+    range: string
+    multivalued: true
+    description: "Identifiers of source mapping(s) this was inferred from (cthoyt 2026-05-29). Modelled; not yet populated by direct lexical matches."
+  sssom_mappings:
+    range: SSSOMMapping
+    multivalued: true
+    inlined: true
+    description: "SSSOM term mappings carried by this document."
 
 classes:
   IndiciumDocument:
@@ -425,6 +457,7 @@ classes:
       - software_entities
       - claim_links
       - citation_links
+      - sssom_mappings
 
   Claim:
     class_uri: asb:Claim
@@ -560,3 +593,10 @@ classes:
     class_uri: oa:FragmentSelector
     description: W3C FragmentSelector for PDF page location.
     slots: [frag_value, frag_page]
+  SSSOMMapping:
+    class_uri: sssom:Mapping
+    description: >-
+      A term mapping in SSSOM form (Simple Standard for Sharing Ontological
+      Mappings) carried by an Indicium document.
+    slots: [id, subject_id, subject_label, predicate_id, object_id, object_label,
+            mapping_justification, confidence, derived_from]

@@ -688,6 +688,16 @@
                         "array",
                         "null"
                     ]
+                },
+                "sssom_mappings": {
+                    "additionalProperties": {
+                        "$ref": "#/$defs/SSSOMMapping__identifier_optional"
+                    },
+                    "description": "SSSOM term mappings carried by this document.",
+                    "type": [
+                        "object",
+                        "null"
+                    ]
                 }
             },
             "title": "IndiciumDocument",
@@ -712,6 +722,133 @@
             ],
             "title": "LinkType",
             "type": "string"
+        },
+        "SSSOMMapping": {
+            "additionalProperties": false,
+            "description": "A term mapping in SSSOM form (Simple Standard for Sharing Ontological Mappings) carried by an Indicium document.",
+            "properties": {
+                "confidence": {
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
+                "derived_from": {
+                    "description": "Identifiers of source mapping(s) this was inferred from (cthoyt 2026-05-29). Modelled; not yet populated by direct lexical matches.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "id": {
+                    "type": "string"
+                },
+                "mapping_justification": {
+                    "description": "SEMAPV justification (e.g. semapv:LexicalMatching).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "object_id": {
+                    "description": "SSSOM object term (CURIE/IRI).",
+                    "type": "string"
+                },
+                "object_label": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "predicate_id": {
+                    "description": "SSSOM mapping predicate (e.g. skos:closeMatch).",
+                    "type": "string"
+                },
+                "subject_id": {
+                    "description": "SSSOM subject (CURIE/IRI).",
+                    "type": "string"
+                },
+                "subject_label": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "id",
+                "subject_id",
+                "predicate_id",
+                "object_id"
+            ],
+            "title": "SSSOMMapping",
+            "type": "object"
+        },
+        "SSSOMMapping__identifier_optional": {
+            "additionalProperties": false,
+            "description": "A term mapping in SSSOM form (Simple Standard for Sharing Ontological Mappings) carried by an Indicium document.",
+            "properties": {
+                "confidence": {
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
+                "derived_from": {
+                    "description": "Identifiers of source mapping(s) this was inferred from (cthoyt 2026-05-29). Modelled; not yet populated by direct lexical matches.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "id": {
+                    "type": "string"
+                },
+                "mapping_justification": {
+                    "description": "SEMAPV justification (e.g. semapv:LexicalMatching).",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "object_id": {
+                    "description": "SSSOM object term (CURIE/IRI).",
+                    "type": "string"
+                },
+                "object_label": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "predicate_id": {
+                    "description": "SSSOM mapping predicate (e.g. skos:closeMatch).",
+                    "type": "string"
+                },
+                "subject_id": {
+                    "description": "SSSOM subject (CURIE/IRI).",
+                    "type": "string"
+                },
+                "subject_label": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "subject_id",
+                "predicate_id",
+                "object_id"
+            ],
+            "title": "SSSOMMapping",
+            "type": "object"
         },
         "Script": {
             "additionalProperties": false,
@@ -1072,6 +1209,16 @@
             },
             "type": [
                 "array",
+                "null"
+            ]
+        },
+        "sssom_mappings": {
+            "additionalProperties": {
+                "$ref": "#/$defs/SSSOMMapping__identifier_optional"
+            },
+            "description": "SSSOM term mappings carried by this document.",
+            "type": [
+                "object",
                 "null"
             ]
         }
