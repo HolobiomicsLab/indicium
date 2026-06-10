@@ -243,6 +243,28 @@ class WorkflowCoupling(str, Enum):
     """
 
 
+class SourceTaskKind(str, Enum):
+    """
+    Provenance qualifier on a Claim describing how the claim relates to the task carried out in its source paper. Claim-level sibling of WorkflowCoupling (Suter et al. 2025) in the reproducibility-provenance family, at claim↔source-task granularity rather than evidence-line↔workflow. Canonical replacement for the ASB-emitted asbext:source_task_kind extension field.
+    """
+    reproduction = "reproduction"
+    """
+    Claim re-derives the source paper's finding from the same or equivalent data and method.
+    """
+    analysis = "analysis"
+    """
+    Claim arises from a new analysis of the source's data/artefacts, beyond restating the paper.
+    """
+    component_reconstruction = "component_reconstruction"
+    """
+    Claim concerns partial re-implementation of a specific component/step of the source's method.
+    """
+    extension = "extension"
+    """
+    Claim extends the source paper's task — new data, methods, or conclusions beyond original scope.
+    """
+
+
 class EcoCodeAsbSubset(str, Enum):
     """
     ASB-emitted subset of the Evidence Code Ontology (ECO). The full ECO is large; ASB only emits these 8 values. Downstream consumers can treat this as a closed enum for ASB-sourced Evidence records.
@@ -321,6 +343,7 @@ class Claim(ConfiguredBaseModel):
     asserted_by: Optional[str] = Field(default=None, description="""IRI or identifier of the agent (human ORCID, pipeline run ID, etc.) that asserted this item.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Claim', 'Evidence'], 'slot_uri': 'prov:wasAttributedTo'} })
     astra_insight_ref: Optional[str] = Field(default=None, description="""Reference to the originating ASTRA insight in 'analysis_id/insight_id' format.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Claim']} })
     superseded_by: Optional[str] = Field(default=None, description="""URI of the Claim that supersedes this one. Must be set when claim_status is 'superseded'. Allows external Claim IRIs for cross-document lineage.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Claim']} })
+    source_task_kind: Optional[SourceTaskKind] = Field(default=None, description="""Provenance qualifier — how this Claim relates to the task in its source paper (reproduction / analysis / component_reconstruction / extension). Claim-level sibling of Evidence.workflow_coupling. Canonical replacement for the ASB-emitted asbext:source_task_kind extension field. Optional: producers omit it when a claim spans tasks of differing kinds.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Claim'], 'slot_uri': 'asb:sourceTaskKind'} })
 
     @field_validator('domain_qualifier')
     def pattern_domain_qualifier(cls, v):

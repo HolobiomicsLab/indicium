@@ -139,6 +139,23 @@ enums:
       loose:   { description: "File/API communication; individually reproducible." }
       ad_hoc:  { description: "No formal coupling structure." }
       unknown: { description: "Not characterised." }
+  SourceTaskKind:
+    description: >-
+      Provenance qualifier on a Claim describing how the claim relates to the
+      task carried out in its source paper. Claim-level sibling of
+      WorkflowCoupling (Suter et al. 2025) in the reproducibility-provenance
+      family, at claim↔source-task granularity rather than
+      evidence-line↔workflow. Canonical replacement for the ASB-emitted
+      asbext:source_task_kind extension field.
+    permissible_values:
+      reproduction:
+        description: "Claim re-derives the source paper's finding from the same or equivalent data and method."
+      analysis:
+        description: "Claim arises from a new analysis of the source's data/artefacts, beyond restating the paper."
+      component_reconstruction:
+        description: "Claim concerns partial re-implementation of a specific component/step of the source's method."
+      extension:
+        description: "Claim extends the source paper's task — new data, methods, or conclusions beyond original scope."
   EcoCodeAsbSubset:
     description: >-
       ASB-emitted subset of the Evidence Code Ontology (ECO). The full ECO
@@ -345,6 +362,17 @@ slots:
       Reproducibility qualifier — coupling of the workflow that produced this
       evidence (Suter et al. 2025). Optional; set by producers that know the
       workflow structure.
+  # Claim task-relation provenance qualifier (v1.12)
+  source_task_kind:
+    required: false
+    range: SourceTaskKind
+    slot_uri: asb:sourceTaskKind
+    description: >-
+      Provenance qualifier — how this Claim relates to the task in its source
+      paper (reproduction / analysis / component_reconstruction / extension).
+      Claim-level sibling of Evidence.workflow_coupling. Canonical replacement
+      for the ASB-emitted asbext:source_task_kind extension field. Optional:
+      producers omit it when a claim spans tasks of differing kinds.
   # IndiciumDocument collection slots (v1.4)
   claims:
     range: Claim
@@ -478,6 +506,7 @@ classes:
       - asserted_by
       - astra_insight_ref
       - superseded_by
+      - source_task_kind
   Evidence:
     class_uri: sepio:0000002
     description: An evidence line linking a Claim to a Source (SEPIO EvidenceLine).

@@ -35,6 +35,7 @@
     "claim_status": "asb:claim_status",
     "asserted_by": "prov:wasAttributedTo",
     "superseded_by": "asb:superseded_by",
+    "source_task_kind": "asb:sourceTaskKind",
 
     "evidence_type": "asb:evidence_type",
     "eco_code": "asb:eco_code",

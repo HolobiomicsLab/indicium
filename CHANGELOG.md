@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## 1.12.0 — 2026-06-10
+- New `SourceTaskKind` enum {reproduction, analysis, component_reconstruction, extension} + optional `Claim.source_task_kind` slot (`asb:sourceTaskKind`) — a claim-level reproducibility-provenance qualifier, sibling of `Evidence.workflow_coupling` (Suter et al. 2025) at claim↔source-task granularity. Canonical replacement for ASB's out-of-schema `asbext:source_task_kind`. Added to `context.jsonld` for portability. Additive, backward-compatible; SHACL non-closed.
+
+---
+
 ## 1.11.0 — 2026-06-03
 - New `SSSOMMapping` class (SSSOM term mapping) + `IndiciumDocument.sssom_mappings` collection, with a `derived_from` lineage slot (cthoyt 2026-05-29). Adds sssom/semapv/skos prefixes. Additive, backward-compatible.
 

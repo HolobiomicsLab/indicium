@@ -87,6 +87,10 @@
                         "null"
                     ]
                 },
+                "source_task_kind": {
+                    "$ref": "#/$defs/SourceTaskKind",
+                    "description": "Provenance qualifier \u2014 how this Claim relates to the task in its source paper (reproduction / analysis / component_reconstruction / extension). Claim-level sibling of Evidence.workflow_coupling. Canonical replacement for the ASB-emitted asbext:source_task_kind extension field. Optional: producers omit it when a claim spans tasks of differing kinds."
+                },
                 "subject": {
                     "type": "string"
                 },
@@ -215,6 +219,10 @@
                         "string",
                         "null"
                     ]
+                },
+                "source_task_kind": {
+                    "$ref": "#/$defs/SourceTaskKind",
+                    "description": "Provenance qualifier \u2014 how this Claim relates to the task in its source paper (reproduction / analysis / component_reconstruction / extension). Claim-level sibling of Evidence.workflow_coupling. Canonical replacement for the ASB-emitted asbext:source_task_kind extension field. Optional: producers omit it when a claim spans tasks of differing kinds."
                 },
                 "subject": {
                     "type": "string"
@@ -1037,6 +1045,17 @@
             ],
             "title": "Source",
             "type": "object"
+        },
+        "SourceTaskKind": {
+            "description": "Provenance qualifier on a Claim describing how the claim relates to the task carried out in its source paper. Claim-level sibling of WorkflowCoupling (Suter et al. 2025) in the reproducibility-provenance family, at claim\u2194source-task granularity rather than evidence-line\u2194workflow. Canonical replacement for the ASB-emitted asbext:source_task_kind extension field.",
+            "enum": [
+                "reproduction",
+                "analysis",
+                "component_reconstruction",
+                "extension"
+            ],
+            "title": "SourceTaskKind",
+            "type": "string"
         },
         "SourceType": {
             "description": "",
