@@ -25,7 +25,7 @@ def test_public_api_round_trip():
     # SHACL validation of the RDF form
     g = rdflib.Graph()
     g.parse(data="""
-@prefix asb: <https://asb.holobiomics.org/ns/asb#> .
+@prefix asb: <https://holobiomicslab.eu/ns/asb#> .
 <urn:c1> a asb:Claim ; asb:context "in vitro" ; asb:subject "A" ;
     asb:qualifier "inhibits" ; asb:relation "inhibits" ; asb:object "B" .
 """, format="turtle")

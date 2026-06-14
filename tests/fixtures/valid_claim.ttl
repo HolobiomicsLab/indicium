@@ -1,4 +1,4 @@
-@prefix asb: <https://asb.holobiomics.org/ns/asb#> .
+@prefix asb: <https://holobiomicslab.eu/ns/asb#> .
 @prefix indicium: <https://w3id.org/indicium/> .
 @prefix mem: <http://kgmemory.org/ns#> .
 @prefix dct: <http://purl.org/dc/terms/> .

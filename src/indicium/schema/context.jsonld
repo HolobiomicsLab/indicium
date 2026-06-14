@@ -1,7 +1,7 @@
 {
   "@context": {
     "indicium": "https://w3id.org/indicium/",
-    "asb": "https://asb.holobiomics.org/ns/asb#",
+    "asb": "https://holobiomicslab.eu/ns/asb#",
     "sepio": "http://purl.obolibrary.org/obo/SEPIO_",
     "eco": "http://purl.obolibrary.org/obo/ECO_",
     "iao": "http://purl.obolibrary.org/obo/IAO_",

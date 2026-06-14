@@ -56,4 +56,4 @@ def test_context_is_loadable_via_importlib_resources():
     import json
     payload = json.loads(ref.read_text())
     assert "@context" in payload
-    assert payload["@context"]["asb"].startswith("https://asb")
+    assert payload["@context"]["asb"].startswith("https://holobiomicslab.eu")

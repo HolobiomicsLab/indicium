@@ -2,14 +2,14 @@ import rdflib
 from indicium.validate import validate_graph
 
 VALID = """
-@prefix asb: <https://asb.holobiomics.org/ns/asb#> .
+@prefix asb: <https://holobiomicslab.eu/ns/asb#> .
 <urn:claim:1> a asb:Claim ;
     asb:context "c" ; asb:subject "s" ; asb:qualifier "causes" ;
     asb:relation "r" ; asb:object "o" .
 """
 
 INVALID = """
-@prefix asb: <https://asb.holobiomics.org/ns/asb#> .
+@prefix asb: <https://holobiomicslab.eu/ns/asb#> .
 <urn:claim:2> a asb:Claim ;
     asb:context "c" .
 """
@@ -54,7 +54,7 @@ def test_validate_graph_extra_shapes_merged():
 def test_validate_graph_warning_severity_does_not_fail_conformance():
     """sh:Warning violations must not set conforms=False (allow_warnings=True required)."""
     SH = rdflib.Namespace("http://www.w3.org/ns/shacl#")
-    ASB = rdflib.Namespace("https://asb.holobiomics.org/ns/asb#")
+    ASB = rdflib.Namespace("https://holobiomicslab.eu/ns/asb#")
 
     # Build a shape with sh:Warning severity targeting a known predicate
     extra = rdflib.Graph()
@@ -69,7 +69,7 @@ def test_validate_graph_warning_severity_does_not_fail_conformance():
 
     g = rdflib.Graph()
     g.parse(data="""
-        @prefix asb: <https://asb.holobiomics.org/ns/asb#> .
+        @prefix asb: <https://holobiomicslab.eu/ns/asb#> .
         <urn:claim:w1> a asb:Claim ;
             asb:context "c" ; asb:subject "s" ; asb:qualifier "causes" ;
             asb:relation "r" ; asb:object "o" .

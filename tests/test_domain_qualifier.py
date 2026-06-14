@@ -10,7 +10,7 @@ from __future__ import annotations
 import rdflib
 from indicium.validate import validate_graph
 
-ASB = rdflib.Namespace("https://asb.holobiomics.org/ns/asb#")
+ASB = rdflib.Namespace("https://holobiomicslab.eu/ns/asb#")
 
 
 def _claim(qualifier: str | None = None, domain_qualifier: str | None = None) -> rdflib.Graph:

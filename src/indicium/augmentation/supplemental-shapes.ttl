@@ -1,7 +1,7 @@
 # Supplemental SHACL shapes — constraints that LinkML's gen-shacl cannot express.
 # These are merged with the generated shapes.ttl at validation time.
 @prefix sh: <http://www.w3.org/ns/shacl#> .
-@prefix asb: <https://asb.holobiomics.org/ns/asb#> .
+@prefix asb: <https://holobiomicslab.eu/ns/asb#> .
 @prefix indicium: <https://w3id.org/indicium/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 

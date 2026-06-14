@@ -45,7 +45,7 @@ def test_evidence_workflow_coupling_shacl_conforms():
     ev = Evidence(workflow_coupling="loose")
     # Build the minimal valid RDF graph directly (Evidence alone is not a Claim,
     # so we validate just the Evidence node with open SHACL shapes)
-    asb = rdflib.Namespace("https://asb.holobiomics.org/ns/asb#")
+    asb = rdflib.Namespace("https://holobiomicslab.eu/ns/asb#")
     indicium_ns = rdflib.Namespace("https://w3id.org/indicium/")
     g = rdflib.Graph()
     g.bind("asb", asb)
