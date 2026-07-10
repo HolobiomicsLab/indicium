@@ -15,7 +15,7 @@ from linkml_runtime import SchemaView
 from indicium.validate import validate_graph
 
 SCHEMA = Path(__file__).parents[1] / "src/indicium/schema/indicium.yaml"
-ASB = rdflib.Namespace("https://holobiomicslab.eu/ns/asb#")
+ASB = rdflib.Namespace("https://w3id.org/asb#")
 
 EXPECTED_VALUES = {"reproduction", "analysis", "component_reconstruction", "extension"}
 

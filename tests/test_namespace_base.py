@@ -1,9 +1,12 @@
-"""Guard: the ``asb:`` vocabulary base must stay on a domain the lab owns.
+"""Guard: the ``asb:`` vocabulary base must stay on the w3id.org permanent identifier.
 
-Indicium 2.0.0 moved the base off ``asb.holobiomics.org``, which was never
-registered — a third party could have taken it and served arbitrary definitions
-for this standard's term IRIs. A stale reference in any shipped artefact would
-mint IRIs under that unowned domain again, so both facts are asserted here.
+Indicium moved the base onto ``https://w3id.org/asb#`` — an institution-independent
+permanent-identifier redirect that no single lab has to own or keep renewing, so the
+term IRIs survive any change of hosting or organisation. The previous base lived on
+``asb.holobiomics.org``, which was never registered; a third party could have taken it
+and served arbitrary definitions for this standard's term IRIs. A stale reference to
+that unowned host in any shipped artefact would mint IRIs under it again, so both
+facts — the expected base and the absence of the unowned host — are asserted here.
 
 The same release renamed the distribution to ``indicium-standard``, so the
 metadata lookup that populates ``__version__`` is pinned to that name too.
@@ -21,7 +24,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = REPO_ROOT / "src" / "indicium" / "schema" / "indicium.yaml"
 PYPROJECT_PATH = REPO_ROOT / "pyproject.toml"
 INIT_PATH = REPO_ROOT / "src" / "indicium" / "__init__.py"
-EXPECTED_BASE = "https://holobiomicslab.eu/ns/asb#"
+EXPECTED_BASE = "https://w3id.org/asb#"
 UNOWNED_HOST = "asb.holobiomics.org"
 SCANNED_DIRS = ("src/indicium", "docs/schema-assets", "tests/fixtures")
 TEXT_SUFFIXES = {".yaml", ".yml", ".json", ".jsonld", ".ttl", ".py", ".md"}

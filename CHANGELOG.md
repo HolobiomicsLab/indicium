@@ -14,7 +14,7 @@ published, so no released data carries the old identifiers.
 
 ### Breaking
 - **The `asb:` vocabulary base moved off an unowned domain.**
-  `https://asb.holobiomics.org/ns/asb#` → `https://holobiomicslab.eu/ns/asb#`.
+  `https://asb.holobiomics.org/ns/asb#` → `https://w3id.org/asb#`.
   `asb.holobiomics.org` was never registered, so a third party could have taken it
   and served arbitrary definitions for this standard's term IRIs. Every `asb:` term
   IRI therefore changes, and RDF produced by 1.x will not validate against 2.0.0

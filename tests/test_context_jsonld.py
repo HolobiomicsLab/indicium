@@ -54,6 +54,11 @@ def test_context_is_loadable_via_importlib_resources():
         "It must live under src/indicium/schema/ so wheels include it."
     )
     import json
+
+    import indicium
+
     payload = json.loads(ref.read_text())
     assert "@context" in payload
-    assert payload["@context"]["asb"].startswith("https://holobiomicslab.eu")
+    # Compare against the exported base, not a hardcoded host: the packaged
+    # context must bind the same asb: base the shapes target, wherever it moves.
+    assert payload["@context"]["asb"] == indicium.ASB_BASE

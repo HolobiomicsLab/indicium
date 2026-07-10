@@ -6,7 +6,7 @@ import pytest
 from indicium.validate import validate_graph
 
 # Use the same namespace/class as the generated shapes
-ASB = rdflib.Namespace("https://holobiomicslab.eu/ns/asb#")
+ASB = rdflib.Namespace("https://w3id.org/asb#")
 INDICIUM = rdflib.Namespace("https://w3id.org/indicium/")
 DCT = rdflib.Namespace("http://purl.org/dc/terms/")
 

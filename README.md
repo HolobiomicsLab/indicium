@@ -64,11 +64,11 @@ while no constraint is actually checked.
 ```python
 from indicium import ASB_BASE, asb_term, validate_graph
 
-asb_term("Claim")   # 'https://holobiomicslab.eu/ns/asb#Claim'
+asb_term("Claim")   # 'https://w3id.org/asb#Claim'
 ```
 
 ```python
-ASB = "https://holobiomicslab.eu/ns/asb#"   # don't — silently dead after a move
+ASB = "https://w3id.org/asb#"   # don't — silently dead after a move
 ```
 
 ## Development
