@@ -40,6 +40,31 @@ All other terms (data, knowledge) are retained with confirmed labels.
 """
 from __future__ import annotations
 
+from indicium.generated.model import linkml_meta
+
+
+def _prefix_reference(prefix: str) -> str:
+    """Return the IRI a schema prefix expands to.
+
+    Read from the generated model's prefix map rather than restated here, so the
+    exported constants can never drift from the SHACL shapes that bind them.
+    """
+    prefixes = linkml_meta.root["prefixes"]
+    return prefixes[prefix]["prefix_reference"]
+
+
+# The vocabulary bases, exported so consumers never hardcode them. A consumer
+# that copies the literal string keeps validating against a dead namespace after
+# the base moves: SHACL silently matches nothing and every graph "conforms".
+ASB_BASE: str = _prefix_reference("asb")
+INDICIUM_BASE: str = _prefix_reference("indicium")
+
+
+def asb_term(name: str) -> str:
+    """Return the full IRI of a term in the asb: vocabulary, e.g. ``Claim``."""
+    return f"{ASB_BASE}{name}"
+
+
 # ECO — evidence types.  Verified labels recorded inline.
 # Root of the ECO hierarchy: ECO:0000000 "evidence" (is_root=True).
 EVIDENCE_TYPE_ECO: dict[str, str] = {

@@ -30,10 +30,20 @@ published, so no released data carries the old identifiers.
 - `LICENSE` (MIT). 1.x declared MIT in `pyproject.toml` but shipped no licence
   text, so a wheel would have distributed MIT-claimed code without the required
   notice.
+- **`indicium.ASB_BASE`, `indicium.INDICIUM_BASE`, `indicium.asb_term()`** — the
+  vocabulary bases are now part of the public API, read from the generated model's
+  prefix map so they cannot drift from the SHACL shapes. Consumers that hardcoded
+  the IRI kept validating against a dead namespace after the base moved: the shapes
+  matched nothing and every graph reported `conforms=True`. Import these instead.
 - `tests/test_namespace_base.py` — guards against reintroducing an unowned
-  namespace base.
+  namespace base, and pins the metadata lookup to the declared distribution name.
 
 ### Fixed
+- **`__version__` reported the wrong version.** It queried `importlib.metadata`
+  for the distribution `indicium`, which after the rename resolves either to
+  nothing (falling back to `0.0.0+unknown`) or to the unrelated squatting PyPI
+  package, reporting *its* version as ours. It now queries `indicium-standard`.
+  The `wheel-smoke` CI job asserts the installed wheel reports the built version.
 - `docs/changelog.md` is now generated from this file (`make docs-changelog`)
   rather than hand-maintained. It had been frozen at 1.0.0 for twelve releases,
   and `release.yml` extracts its release notes from it.

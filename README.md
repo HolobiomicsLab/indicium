@@ -54,6 +54,23 @@ python -c "import indicium"        # import name
 > package that also ships a top-level `indicium` module. Installing both into the
 > same environment will clobber the import. Always depend on `indicium-standard`.
 
+## Using the vocabulary
+
+Import the namespace bases; never copy the IRI string into your own code. A
+hardcoded base keeps pointing at the old namespace when the standard moves, and
+the SHACL shapes then match nothing — every graph validates as `conforms=True`
+while no constraint is actually checked.
+
+```python
+from indicium import ASB_BASE, asb_term, validate_graph
+
+asb_term("Claim")   # 'https://holobiomicslab.eu/ns/asb#Claim'
+```
+
+```python
+ASB = "https://holobiomicslab.eu/ns/asb#"   # don't — silently dead after a move
+```
+
 ## Development
 
 ```bash

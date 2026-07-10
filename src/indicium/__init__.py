@@ -2,8 +2,11 @@
 
 from importlib.metadata import PackageNotFoundError, version
 
+# The distribution is `indicium-standard`; only the import package is `indicium`.
+# Querying "indicium" here resolves the unrelated squatting PyPI package when it
+# is installed, silently reporting its version as ours.
 try:
-    __version__ = version("indicium")
+    __version__ = version("indicium-standard")
 except PackageNotFoundError:  # not installed (e.g. running from a raw checkout)
     __version__ = "0.0.0+unknown"
 
@@ -30,6 +33,9 @@ from indicium.generated.model import (
     SSSOMMapping,
 )
 from indicium.iri_bindings import (
+    ASB_BASE,
+    INDICIUM_BASE,
+    asb_term,
     FIGURE_TYPE_FABIO,
     SCRIPT_TYPE_IRI,
     DATASET_TYPE_IRI,
@@ -41,6 +47,10 @@ from indicium.iri_bindings import (
 )
 
 __all__ = [
+    # Vocabulary bases — import these, never hardcode the IRI string.
+    "ASB_BASE",
+    "INDICIUM_BASE",
+    "asb_term",
     "validate_graph",
     "verify_quote",
     "VerificationResult",
