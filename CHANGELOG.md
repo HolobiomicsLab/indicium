@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## 2.0.0 — 2026-07-10
+
+First public release. Both breaking changes below landed *before* any artefact was
+published, so no released data carries the old identifiers.
+
+### Breaking
+- **The `asb:` vocabulary base moved off an unowned domain.**
+  `https://asb.holobiomics.org/ns/asb#` → `https://holobiomicslab.eu/ns/asb#`.
+  `asb.holobiomics.org` was never registered, so a third party could have taken it
+  and served arbitrary definitions for this standard's term IRIs. Every `asb:` term
+  IRI therefore changes, and RDF produced by 1.x will not validate against 2.0.0
+  SHACL shapes. Consumers that bind the `asb:` prefix themselves — notably the
+  shape files in `indicium-adapters-metabolomics` — must be updated in lockstep.
+- **The distribution is renamed `indicium` → `indicium-standard`.** The import
+  package is unchanged: `import indicium` still works. The PyPI name `indicium` is
+  held by an unrelated, abandoned key-value-store package that also ships a
+  top-level `indicium` module; installing both into one environment clobbers the
+  import. Depend on `indicium-standard`, never on `indicium`.
+
+### Added
+- `LICENSE` (MIT). 1.x declared MIT in `pyproject.toml` but shipped no licence
+  text, so a wheel would have distributed MIT-claimed code without the required
+  notice.
+- `tests/test_namespace_base.py` — guards against reintroducing an unowned
+  namespace base.
+
+### Fixed
+- `docs/changelog.md` is now generated from this file (`make docs-changelog`)
+  rather than hand-maintained. It had been frozen at 1.0.0 for twelve releases,
+  and `release.yml` extracts its release notes from it.
+
+---
+
 ## 1.12.0 — 2026-06-10
 - New `SourceTaskKind` enum {reproduction, analysis, component_reconstruction, extension} + optional `Claim.source_task_kind` slot (`asb:sourceTaskKind`) — a claim-level reproducibility-provenance qualifier, sibling of `Evidence.workflow_coupling` (Suter et al. 2025) at claim↔source-task granularity. Canonical replacement for ASB's out-of-schema `asbext:source_task_kind`. Added to `context.jsonld` for portability. Additive, backward-compatible; SHACL non-closed.
 

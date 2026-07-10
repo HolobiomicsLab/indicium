@@ -1,8 +1,10 @@
 SCHEMA=src/indicium/schema/indicium.yaml
 GEN=src/indicium/generated
 ASSETS=docs/schema-assets
+CHANGELOG=CHANGELOG.md
+DOCS_CHANGELOG=docs/changelog.md
 
-.PHONY: gen schema-assets
+.PHONY: gen schema-assets docs-changelog
 
 gen:
 	mkdir -p $(GEN)
@@ -13,7 +15,11 @@ gen:
 	uv run gen-owl $(SCHEMA) > $(GEN)/ontology.ttl
 	uv run gen-json-schema $(SCHEMA) > $(GEN)/schema.json
 
-schema-assets: gen
+# The rendered changelog is a copy of the maintained one, never edited by hand.
+docs-changelog:
+	cp $(CHANGELOG) $(DOCS_CHANGELOG)
+
+schema-assets: gen docs-changelog
 	mkdir -p $(ASSETS)
 	cp $(GEN)/schema.json $(ASSETS)/indicium.schema.json
 	cp $(GEN)/ontology.ttl $(ASSETS)/indicium.owl.ttl
