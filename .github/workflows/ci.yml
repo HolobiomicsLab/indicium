@@ -23,3 +23,31 @@ jobs:
 
       - name: Run tests
         run: uv run pytest -v
+
+  wheel-smoke:
+    # The codegen/dev extras pull pydantic in transitively, which hid a missing
+    # runtime dependency. Install the wheel alone, exactly as a user would.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v3
+        with:
+          version: "latest"
+
+      - name: Build the wheel
+        run: uv build --wheel
+
+      - name: Install the wheel into a clean environment
+        run: |
+          uv venv --python 3.11 .wheel-env
+          uv pip install --python .wheel-env/bin/python dist/*.whl
+
+      - name: Import the package with no extras present
+        run: |
+          .wheel-env/bin/python -c "
+          import indicium
+          from indicium.generated.model import Claim
+          from indicium.validate import validate_graph
+          print('wheel imports cleanly')
+          "

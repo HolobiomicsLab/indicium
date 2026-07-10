@@ -42,10 +42,23 @@ Indicium is a *vocabulary/standard*, not a tool and not a store:
 Every tool imports Indicium, so a claim minted by any of them is structurally
 identical and mergeable — and never travels without its evidence trace.
 
-## Quickstart
+## Install
+
+```bash
+pip install indicium-standard      # distribution name
+python -c "import indicium"        # import name
+```
+
+> **The distribution is `indicium-standard`; the import package is `indicium`.**
+> The PyPI name `indicium` belongs to an unrelated, abandoned key-value-store
+> package that also ships a top-level `indicium` module. Installing both into the
+> same environment will clobber the import. Always depend on `indicium-standard`.
+
+## Development
 
 ```bash
 uv sync
 make gen          # regenerate model.py / shapes.ttl / ontology.ttl / schema.json
+make docs-changelog  # refresh docs/changelog.md from CHANGELOG.md
 uv run pytest -v  # includes the conformance suite (parity vs Scriptorium SHACL)
 ```

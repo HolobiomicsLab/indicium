@@ -1,10 +1,13 @@
 [project]
-name = "indicium"
-version = "1.12.0"
+# Distribution name is `indicium-standard`; the import package stays `indicium`.
+# The PyPI name `indicium` belongs to an unrelated, abandoned key-value-store
+# package that also ships a top-level `indicium` module. Never install both.
+name = "indicium-standard"
+version = "2.0.0"
 description = "Shared claim/evidence standard (ECO/CiTO/SEPIO/PROV-O + Bucur SuperPattern)"
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
+license = { file = "LICENSE" }
 keywords = [
     "linkml", "claims", "evidence", "scientific-standard",
     "agentic-science", "eco", "cito", "sepio", "prov-o",
@@ -19,11 +22,12 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
 ]
-# Runtime is intentionally light: validate_graph + the generated pydantic model
-# + adapters import only rdflib/pyshacl. `linkml` (the generator) and
-# `linkml-runtime` (SchemaView) are needed ONLY for `make gen` and the
-# schema-load tests — see the `codegen` extra.
+# Runtime is intentionally light. `indicium/__init__.py` re-exports the generated
+# pydantic model, so pydantic is a hard runtime dependency, not a dev-only one.
+# `linkml` (the generator) and `linkml-runtime` (SchemaView) are needed ONLY for
+# `make gen` and the schema-load tests — see the `codegen` extra.
 dependencies = [
+    "pydantic>=2.0",
     "pyshacl>=0.26",
     "rdflib>=7.0",
 ]
