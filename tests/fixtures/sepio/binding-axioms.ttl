@@ -1,0 +1,108 @@
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+obo:SEPIO_0000007 a owl:ObjectProperty ;
+    rdfs:label "has_supporting_evidence_line"@en ;
+    rdfs:subPropertyOf obo:SEPIO_0000006 .
+
+obo:SEPIO_0000015 a owl:ObjectProperty ;
+    rdfs:label "proposition_asserted_in" ;
+    rdfs:domain obo:SEPIO_0000000 ;
+    rdfs:range obo:SEPIO_0000001 ;
+    owl:inverseOf obo:SEPIO_0000030 .
+
+obo:SEPIO_0000108 a owl:ObjectProperty ;
+    rdfs:label "is_expressed_in"@en ;
+    rdfs:domain [ a owl:Class ;
+            owl:unionOf ( obo:SEPIO_0000000 obo:SEPIO_0000174 ) ] ;
+    rdfs:range obo:IAO_0000310 ;
+    owl:inverseOf obo:SEPIO_0000109 .
+
+obo:SEPIO_0000130 a owl:ObjectProperty ;
+    rdfs:label "authored_by"@en ;
+    rdfs:subPropertyOf obo:SEPIO_0000150 .
+
+obo:SEPIO_0000183 a owl:ObjectProperty ;
+    rdfs:label "evidence_direction"@en ;
+    rdfs:domain obo:SEPIO_0000002 ;
+    rdfs:range obo:SEPIO_0000402 .
+
+obo:SEPIO_0000376 a owl:ObjectProperty ;
+    rdfs:label "evidence_item_for" ;
+    rdfs:domain obo:SEPIO_0000149 ;
+    rdfs:range obo:SEPIO_0000002 .
+
+obo:SEPIO_0000403 a obo:SEPIO_0000402,
+        owl:NamedIndividual ;
+    rdfs:label "supporting"@en .
+
+obo:SEPIO_0000404 a obo:SEPIO_0000402,
+        owl:NamedIndividual ;
+    rdfs:label "disputing"@en .
+
+obo:SEPIO_0000405 a obo:SEPIO_0000402,
+        owl:NamedIndividual ;
+    rdfs:label "inconclusive"@en .
+
+obo:SEPIO_0000440 a owl:ObjectProperty ;
+    rdfs:label "has_supporting_evidence"@en ;
+    rdfs:subPropertyOf obo:SEPIO_0000189 .
+
+obo:SEPIO_0000441 a owl:ObjectProperty ;
+    rdfs:label "has_disputing_evidence"@en ;
+    rdfs:subPropertyOf obo:SEPIO_0000189 .
+
+obo:SEPIO_0000006 a owl:ObjectProperty ;
+    rdfs:label "has_evidence_line"@en ;
+    rdfs:domain [ a owl:Class ;
+            owl:unionOf ( obo:SEPIO_0000000 obo:SEPIO_0000001 ) ] ;
+    rdfs:range obo:SEPIO_0000002 ;
+    owl:inverseOf obo:SEPIO_0000427 .
+
+obo:SEPIO_0000030 a owl:ObjectProperty ;
+    rdfs:label "asserts_proposition" ;
+    rdfs:domain obo:SEPIO_0000001 ;
+    rdfs:range obo:SEPIO_0000000 .
+
+obo:SEPIO_0000109 a owl:ObjectProperty ;
+    rdfs:label "expresses"@en ;
+    rdfs:domain obo:IAO_0000310 ;
+    rdfs:range [ a owl:Class ;
+            owl:unionOf ( obo:SEPIO_0000000 obo:SEPIO_0000001 ) ] .
+
+obo:SEPIO_0000150 a owl:ObjectProperty ;
+    rdfs:label "has_contributor"@en ;
+    rdfs:range prov:Agent ;
+    owl:inverseOf obo:SEPIO_0000188 .
+
+obo:SEPIO_0000174 a owl:Class ;
+    rdfs:label "statement"@en .
+
+obo:SEPIO_0000427 a owl:ObjectProperty ;
+    rdfs:label "is_evidence_line_for"@en .
+
+prov:Agent rdfs:label "Agent" .
+
+obo:IAO_0000310 rdfs:label "document"@en .
+
+obo:SEPIO_0000189 a owl:ObjectProperty ;
+    rdfs:label "has_evidence"@en ;
+    rdfs:domain [ a owl:Class ;
+            owl:unionOf ( obo:SEPIO_0000000 obo:SEPIO_0000001 ) ] ;
+    rdfs:range obo:SEPIO_0000149 .
+
+obo:SEPIO_0000002 a owl:Class ;
+    rdfs:label "evidence line"@en .
+
+obo:SEPIO_0000402 a owl:Class ;
+    rdfs:label "evidence direction"@en .
+
+obo:SEPIO_0000001 a owl:Class ;
+    rdfs:label "assertion"@en .
+
+obo:SEPIO_0000000 a owl:Class ;
+    rdfs:label "proposition"@en .
+

@@ -5,6 +5,7 @@
             "description": "A typed link (CiTO) from a Source to a Claim.",
             "properties": {
                 "for_claim": {
+                    "description": "Indicium-local link from an evidence line to the Claim it evaluates. Semantic alias of supports_claim with a distinct local RDF predicate. When both fields are supplied they should identify the same Claim; neither field is automatically copied to the other.",
                     "type": [
                         "string",
                         "null"
@@ -378,6 +379,7 @@
                     "$ref": "#/$defs/EvidenceType"
                 },
                 "for_claim": {
+                    "description": "Indicium-local link from an evidence line to the Claim it evaluates. Semantic alias of supports_claim with a distinct local RDF predicate. When both fields are supplied they should identify the same Claim; neither field is automatically copied to the other.",
                     "type": [
                         "string",
                         "null"
@@ -457,7 +459,7 @@
                     "$ref": "#/$defs/SourceType"
                 },
                 "supports_claim": {
-                    "description": "Legacy Evidence-to-Claim binding, retained for compatibility. The referenced SEPIO term means has_supporting_evidence_line in the opposite direction (Claim-to-Evidence); this slot is not a semantically correct SEPIO projection. Use for_claim for an Indicium-local link, and emit the forward SEPIO relation from the claim when exporting SEPIO RDF.",
+                    "description": "Claim evaluated by this evidence line. Uses SEPIO is_evidence_line_for, the inverse of has_evidence_line (proposition or assertion to evidence line). The historical JSON name does not encode supporting polarity: express supporting, disputing or inconclusive direction separately with sepio:0000183 on the evidence line. Semantic alias of the local for_claim link; when both are supplied they should identify the same Claim. The two JSON fields remain distinct and are not automatically copied.",
                     "type": [
                         "string",
                         "null"

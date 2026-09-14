@@ -11,6 +11,26 @@ from rdflib import Graph, Literal, Namespace, RDF, URIRef
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def check_evidence_bindings(context, graph):
+    """Verify the installed context keeps evidence targets and reliance distinct."""
+    payload = {**context, "@graph": [
+        {"@id": "urn:smoke:evidence", "@type": "Evidence",
+         "supports_claim": "urn:smoke:claim", "for_claim": "urn:smoke:claim",
+         "sepio:0000183": {"@id": "sepio:0000404"}},
+        {"@id": "urn:smoke:skill", "asserts": "urn:smoke:claim"},
+    ]}
+    graph.parse(data=json.dumps(payload), format="json-ld")
+    obo = Namespace("http://purl.obolibrary.org/obo/")
+    local = Namespace(indicium.INDICIUM_BASE)
+    evidence, claim = URIRef("urn:smoke:evidence"), URIRef("urn:smoke:claim")
+    assert (evidence, obo.SEPIO_0000427, claim) in graph
+    assert (evidence, local.for_claim, claim) in graph
+    assert (evidence, obo.SEPIO_0000183, obo.SEPIO_0000404) in graph
+    assert (URIRef("urn:smoke:skill"), local.asserts, claim) in graph
+    assert not list(graph.triples((None, obo.SEPIO_0000007, None)))
+    assert not list(graph.triples((None, obo.SEPIO_0000130, None)))
+
+
 def check_installed_wheel():
     """Verify version, model round-trip, packaged context and active SHACL shapes."""
     expected = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]["version"]
@@ -23,10 +43,11 @@ def check_installed_wheel():
     graph = Graph().parse(data=json.dumps({**context, "@type": "Claim", **claim.model_dump(mode="json", exclude_none=True)}), format="json-ld")
     asb = Namespace(indicium.ASB_BASE)
     assert (URIRef(claim.id), RDF.type, asb.Claim) in graph
+    check_evidence_bindings(context, graph)
     assert indicium.validate_graph(graph)[0] is True
     graph.remove((URIRef(claim.id), asb.subject, Literal("A")))
     assert indicium.validate_graph(graph)[0] is False
-    print(f"Wheel {expected}: model/context/SHACL passed; negative control rejected")
+    print(f"Wheel {expected}: model/context/SEPIO/reliance/SHACL passed; negative control rejected")
     print(f"Imported from {indicium.__file__}")
 
 

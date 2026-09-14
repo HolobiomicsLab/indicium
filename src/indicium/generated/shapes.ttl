@@ -132,11 +132,6 @@ sepio:0000002 a sh:NodeShape ;
             sh:nodeKind sh:Literal ;
             sh:order 16 ;
             sh:path prov:wasAttributedTo ],
-        [ sh:class asb:Claim ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 8 ;
-            sh:path indicium:for_claim ],
         [ sh:class fabio:ComputerProgram ;
             sh:maxCount 1 ;
             sh:nodeKind sh:BlankNodeOrIRI ;
@@ -159,16 +154,22 @@ sepio:0000002 a sh:NodeShape ;
             sh:order 1 ;
             sh:path indicium:eco_code ],
         [ sh:class asb:Claim ;
-            sh:description "Legacy Evidence-to-Claim binding, retained for compatibility. The referenced SEPIO term means has_supporting_evidence_line in the opposite direction (Claim-to-Evidence); this slot is not a semantically correct SEPIO projection. Use for_claim for an Indicium-local link, and emit the forward SEPIO relation from the claim when exporting SEPIO RDF." ;
+            sh:description "Claim evaluated by this evidence line. Uses SEPIO is_evidence_line_for, the inverse of has_evidence_line (proposition or assertion to evidence line). The historical JSON name does not encode supporting polarity: express supporting, disputing or inconclusive direction separately with sepio:0000183 on the evidence line. Semantic alias of the local for_claim link; when both are supplied they should identify the same Claim. The two JSON fields remain distinct and are not automatically copied." ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 9 ;
-            sh:path sepio:0000007 ],
+            sh:path sepio:0000427 ],
         [ sh:class oa:TextQuoteSelector ;
             sh:maxCount 1 ;
             sh:nodeKind sh:BlankNodeOrIRI ;
             sh:order 13 ;
-            sh:path indicium:text_selector ] ;
+            sh:path indicium:text_selector ],
+        [ sh:class asb:Claim ;
+            sh:description "Indicium-local link from an evidence line to the Claim it evaluates. Semantic alias of supports_claim with a distinct local RDF predicate. When both fields are supplied they should identify the same Claim; neither field is automatically copied to the other." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 8 ;
+            sh:path indicium:for_claim ] ;
     sh:targetClass sepio:0000002 .
 
 oa:TextQuoteSelector a sh:NodeShape ;
@@ -206,6 +207,7 @@ indicium:CitationLink a sh:NodeShape ;
             sh:order 0 ;
             sh:path indicium:of_source ],
         [ sh:class asb:Claim ;
+            sh:description "Indicium-local link from an evidence line to the Claim it evaluates. Semantic alias of supports_claim with a distinct local RDF predicate. When both fields are supplied they should identify the same Claim; neither field is automatically copied to the other." ;
             sh:maxCount 1 ;
             sh:nodeKind sh:IRI ;
             sh:order 1 ;

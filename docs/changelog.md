@@ -9,8 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2.0.0 — YYYY-MM-DD
 
-First public release. Both breaking changes below landed *before* any artefact was
-published, so no released data carries the old identifiers.
+First public release. These breaking changes landed *before* any Indicium package
+release. Existing downstream records may still embed the earlier context.
 
 ### Breaking
 - **The `asb:` vocabulary base moved off an unowned domain.**
@@ -25,6 +25,15 @@ published, so no released data carries the old identifiers.
   held by an unrelated, abandoned key-value-store package that also ships a
   top-level `indicium` module; installing both into one environment clobbers the
   import. Depend on `indicium-standard`, never on `indicium`.
+- **Two SEPIO bindings are corrected before the namespace deposit.**
+  `supports_claim` now expands to `sepio:0000427` (`is_evidence_line_for`),
+  an evidence-line-to-claim relation, instead of the oppositely directed
+  `sepio:0000007`. Skill reliance `asserts` now expands to `indicium:asserts`,
+  declared in the LinkML schema, instead of `sepio:0000130` (`authored_by`).
+  JSON keys and the local `for_claim` predicate are unchanged. Refresh embedded
+  contexts and regenerate previously expanded RDF. Supporting, disputing or
+  inconclusive direction is a separate `sepio:0000183` annotation; the
+  historical `supports_claim` key alone does not establish that direction.
 
 ### Added
 - `LICENSE` (MIT). 1.x declared MIT in `pyproject.toml` but shipped no licence
@@ -58,11 +67,18 @@ published, so no released data carries the old identifiers.
   IRI; RDF serialization is deterministic for release verification.
 - The sdist includes only package source, schema assets and release metadata;
   internal development plans are excluded.
+- SEPIO binding regression tests use an attributed excerpt of the ontology's
+  inverse, domain and range axioms. The documentation explains the target link,
+  separate evidence direction and the local reliance predicate.
 
 ### Namespace registration
 - Canonical bases remain `https://w3id.org/indicium/` and
   `https://w3id.org/asb#`. The vocabulary deposit and redirects are prepared
   separately; registration does not create a hosted store of claim instances.
+- Prepared term redirects send HTML clients to
+  `https://holobiomicslab.eu/indicium/reference/<Name>/` and RDF clients to the
+  vocabulary representation under `/ns/indicium/`. The reference pages must be
+  live before the w3id registration is submitted.
 - ASB validation assertions use `SEPIO_0000183` with `SEPIO_0000403`,
   `SEPIO_0000404` or `SEPIO_0000405`, and `RO_0002558` with `ECO_0000501`.
   These are external assertion annotations, not Indicium claim-status values.

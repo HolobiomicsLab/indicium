@@ -48,8 +48,6 @@ def generate_context(view):
     context.update({name: view.get_uri(cls) for name, cls in view.all_classes().items()})
     context.update({name: slot_context(view, slot) for name, slot in view.all_slots().items()})
     context["id"] = "@id"
-    # Preserve this legacy adapter term pending a separate semantic migration.
-    context["asserts"] = {"@id": "sepio:0000130", "@type": "@id"}
     return {"@context": context}
 
 

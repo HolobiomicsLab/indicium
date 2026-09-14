@@ -8,8 +8,13 @@ namespace prefix does not imply that its HTTP redirect is already registered.
 ## Vocabulary and RDF bindings
 
 The deposit describes the LinkML schema at `https://holobiomicslab.eu/ns/indicium/`,
-with HTML, Turtle, JSON-LD and the packaged context. The prepared `/indicium`
-w3id entry will redirect to those files after owner submission and approval.
+with HTML, Turtle, JSON-LD, RDF/XML and the packaged context. The prepared
+`/indicium` w3id entry retains this namespace-level negotiation. A known term
+path such as `/indicium/Claim` sends browsers to
+`https://holobiomicslab.eu/indicium/reference/Claim/` and RDF clients directly
+to the matching vocabulary file under `/ns/indicium/`. An enum-value fragment
+uses the containing enum's page. Unknown terms and deeper instance paths
+remain 404. Reference pages must be live before the w3id entry is submitted.
 
 Generated OWL describes local LinkML schema elements, including
 `indicium:Claim`. Instance RDF follows each element's `class_uri` or `slot_uri`

@@ -1,7 +1,7 @@
 # Claim
 
 A scientific claim expressed using the
-[Bucur et al. (K-CAP 2021)](https://dl.acm.org/doi/10.1145/3460210.3493560)
+[Bucur et al. (K-CAP 2021)](https://dl.acm.org/doi/10.1145/3460210.3493561)
 5-slot SuperPattern.
 
 ## Slots

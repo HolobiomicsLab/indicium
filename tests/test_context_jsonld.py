@@ -33,14 +33,13 @@ def test_context_maps_wave1_slots_by_name():
         assert slot in ctx, f"@context missing slot mapping: {slot}"
 
 
-def test_context_maps_asserts_to_sepio_predicate():
-    """The SEPIO `is asserted by` predicate (sepio:0000130) must be reachable
-    via the short term `asserts`."""
+def test_context_maps_asserts_to_local_reliance_predicate():
+    """Skill reliance has its own predicate; SEPIO authored_by is unrelated."""
     ctx = json.loads(CONTEXT.read_text())["@context"]
     assert "asserts" in ctx
     entry = ctx["asserts"]
     target = entry["@id"] if isinstance(entry, dict) else entry
-    assert target == "sepio:0000130", f"asserts must map to sepio:0000130 (got {target})"
+    assert target == "indicium:asserts", f"asserts must map to indicium:asserts (got {target})"
 
 
 def test_context_is_loadable_via_importlib_resources():

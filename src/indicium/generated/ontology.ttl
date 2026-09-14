@@ -81,6 +81,12 @@ indicium:IndiciumDocument a owl:Class ;
     skos:definition "Top-level container for a serialisable Indicium document. Holds all entity collections; enables full round-trip JSON/YAML/RDF I/O." ;
     skos:inScheme <https://w3id.org/indicium> .
 
+indicium:asserts a owl:ObjectProperty ;
+    rdfs:label "asserts" ;
+    rdfs:range indicium:Claim ;
+    skos:definition "A claim relied on by a downstream skill or other consuming resource. This local predicate describes reliance, not authorship or a SEPIO assertion that puts a proposition forth as true. It is available to downstream JSON-LD extensions without introducing a core Skill class." ;
+    skos:inScheme <https://w3id.org/indicium> .
+
 ECO:0000034 a owl:Class ;
     rdfs:label "speculation" ;
     rdfs:subClassOf indicium:EvidenceType .
@@ -1165,7 +1171,7 @@ indicium:supports_claim a owl:ObjectProperty ;
     rdfs:label "supports_claim" ;
     rdfs:range indicium:Claim ;
     skos:altLabel "for_claim" ;
-    skos:definition "Legacy Evidence-to-Claim binding, retained for compatibility. The referenced SEPIO term means has_supporting_evidence_line in the opposite direction (Claim-to-Evidence); this slot is not a semantically correct SEPIO projection. Use for_claim for an Indicium-local link, and emit the forward SEPIO relation from the claim when exporting SEPIO RDF." ;
+    skos:definition "Claim evaluated by this evidence line. Uses SEPIO is_evidence_line_for, the inverse of has_evidence_line (proposition or assertion to evidence line). The historical JSON name does not encode supporting polarity: express supporting, disputing or inconclusive direction separately with sepio:0000183 on the evidence line. Semantic alias of the local for_claim link; when both are supplied they should identify the same Claim. The two JSON fields remain distinct and are not automatically copied." ;
     skos:inScheme <https://w3id.org/indicium> .
 
 indicium:text_selector a owl:ObjectProperty ;
@@ -1636,6 +1642,7 @@ indicium:confidence a owl:DatatypeProperty ;
 indicium:for_claim a owl:ObjectProperty ;
     rdfs:label "for_claim" ;
     rdfs:range indicium:Claim ;
+    skos:definition "Indicium-local link from an evidence line to the Claim it evaluates. Semantic alias of supports_claim with a distinct local RDF predicate. When both fields are supplied they should identify the same Claim; neither field is automatically copied to the other." ;
     skos:inScheme <https://w3id.org/indicium> .
 
 indicium:fragment_selector a owl:ObjectProperty ;

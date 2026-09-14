@@ -117,7 +117,11 @@
       "@id": "indicium:quote_location"
     },
     "supports_claim": {
-      "@id": "sepio:0000007",
+      "@id": "sepio:0000427",
+      "@type": "@id"
+    },
+    "asserts": {
+      "@id": "indicium:asserts",
       "@type": "@id"
     },
     "eco_code": {
@@ -436,10 +440,6 @@
       "@id": "indicium:sssom_mappings",
       "@type": "@id",
       "@container": "@set"
-    },
-    "asserts": {
-      "@id": "sepio:0000130",
-      "@type": "@id"
     }
   }
 }

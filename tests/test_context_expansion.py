@@ -47,7 +47,7 @@ def test_evidence_context_reaches_shacl_and_preserves_distinct_slots():
     assert (evidence, INDICIUM.eco_code, OBO.ECO_0000033) in graph
     assert (evidence, INDICIUM.quote_exact, Literal("A inhibits B")) in graph
     assert (evidence, INDICIUM.for_claim, URIRef("urn:test:claim")) in graph
-    assert (evidence, OBO.SEPIO_0000007, URIRef("urn:test:claim")) in graph
+    assert (evidence, OBO.SEPIO_0000427, URIRef("urn:test:claim")) in graph
     assert validate_graph(graph)[0] is True
     graph.add((evidence, INDICIUM.eco_code, OBO.ECO_9999999))
     assert validate_graph(graph)[0] is False

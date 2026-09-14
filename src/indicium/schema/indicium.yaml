@@ -248,13 +248,24 @@ slots:
     required: false
     range: Claim
     aliases: [for_claim]
-    slot_uri: sepio:0000007
+    slot_uri: sepio:0000427
     description: >-
-      Legacy Evidence-to-Claim binding, retained for compatibility. The
-      referenced SEPIO term means has_supporting_evidence_line in the opposite
-      direction (Claim-to-Evidence); this slot is not a semantically correct
-      SEPIO projection. Use for_claim for an Indicium-local link, and emit the
-      forward SEPIO relation from the claim when exporting SEPIO RDF.
+      Claim evaluated by this evidence line. Uses SEPIO is_evidence_line_for,
+      the inverse of has_evidence_line (proposition or assertion to evidence
+      line). The historical JSON name does not encode supporting polarity:
+      express supporting, disputing or inconclusive direction separately with
+      sepio:0000183 on the evidence line. Semantic alias of the local for_claim
+      link; when both are supplied they should identify the same Claim.
+      The two JSON fields remain distinct and are not automatically copied.
+  asserts:
+    required: false
+    range: Claim
+    slot_uri: indicium:asserts
+    description: >-
+      A claim relied on by a downstream skill or other consuming resource.
+      This local predicate describes reliance, not authorship or a SEPIO
+      assertion that puts a proposition forth as true. It is available to
+      downstream JSON-LD extensions without introducing a core Skill class.
   eco_code:
     required: false
     range: EcoCodeAsbSubset
@@ -265,7 +276,13 @@ slots:
       ASB-emitted vocabulary, `evidence_type` remains for back-compat.
   confidence: { range: float }
   of_source:  { range: Source }
-  for_claim:  { range: Claim }
+  for_claim:
+    range: Claim
+    description: >-
+      Indicium-local link from an evidence line to the Claim it evaluates.
+      Semantic alias of supports_claim with a distinct local RDF predicate.
+      When both fields are supplied they should identify the same Claim;
+      neither field is automatically copied to the other.
   identifier: { required: true, slot_uri: dct:identifier }
   title:      { slot_uri: dct:title }
   authors:    { multivalued: true }
