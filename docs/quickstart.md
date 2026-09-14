@@ -3,15 +3,15 @@
 ## Install
 
 ```bash
-pip install indicium
+pip install indicium-standard
 # or with uv:
-uv add indicium
+uv add indicium-standard
 ```
 
 For codegen (regenerating pydantic model / SHACL / OWL from the LinkML source):
 
 ```bash
-pip install indicium[codegen]
+pip install 'indicium-standard[codegen]'
 ```
 
 ## The claim dict format

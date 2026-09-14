@@ -1,71 +1,77 @@
-# SEPIO assertion pattern: how a skill asserts reliance on a claim
+# SEPIO assertions and Indicium compatibility
 
-**Status:** Reference. Stable as of indicium v1.6.0.
-**Scope:** Defines the standard pattern for `<external entity> --[relies-on]--> <indicium:Claim>` links, used by ASB-Skills, Scriptorium manuscripts, and any other consumer that needs to assert "X depends on claim Y" inside the indicium graph.
+The ASB validation bridge uses the following external annotations. They are
+separate from Indicium's claim lifecycle (`claim_status`) and its ECO evidence
+classification (`eco_code`). The ASB namespace is
+`https://w3id.org/asb/validation#`.
 
-## Vocabulary
-
-SEPIO (Scientific Evidence and Provenance Information Ontology) provides:
-
-| Term | IRI | Used for |
+| Annotation | Predicate | Values |
 |---|---|---|
-| `sepio:0000002` | `EvidenceLine` | The `indicium:Evidence` class itself |
-| `sepio:0000007` | `is evidence for` | `Evidence.supports_claim` slot — links Evidence to the Claim it backs |
-| `sepio:0000130` | `is asserted by` | Skill / agent / pipeline → Claim |
-| `sepio:0000174` | `qualified by` | Confidence / context qualifier on an assertion |
+| Evidence direction | `sepio:0000183` | `sepio:0000403` supporting, `sepio:0000404` disputing, `sepio:0000405` inconclusive |
+| Automatic assertion evidence | `ro:0002558` | `eco:0000501` |
 
-## The "skill asserts reliance on a claim" pattern
-
-When an ASB-Skill (or any external artefact) declares it relies on a claim:
+Here `sepio:`, `ro:` and `eco:` expand to
+`http://purl.obolibrary.org/obo/SEPIO_`, `http://purl.obolibrary.org/obo/RO_`
+and `http://purl.obolibrary.org/obo/ECO_`. The packaged JSON-LD context marks
+these underscore-ending bases with `@prefix: true` so compact IRIs expand.
 
 ```turtle
-# Subject IRI = the skill (external; not stored in indicium)
-<https://w3id.org/holobiomicslab/asb-skill/feature-detection-lcms@sha256:abc>
-    sepio:0000130 <https://w3id.org/indicium/claim/<uuid>> .
+@prefix asbval: <https://w3id.org/asb/validation#> .
+@prefix sepio: <http://purl.obolibrary.org/obo/SEPIO_> .
+@prefix ro: <http://purl.obolibrary.org/obo/RO_> .
+@prefix eco: <http://purl.obolibrary.org/obo/ECO_> .
 
-# The claim itself lives in indicium and follows the standard pattern
-<https://w3id.org/indicium/claim/<uuid>> a asb:Claim ;
-    asb:subject "MZmine 4 feature detector" ;
-    asb:relation "produces" ;        # also exposed as `predicate`
-    asb:qualifier "produces" ;        # SuperPattern qualifier (also: `super_pattern`)
-    asb:object "feature table from LC-MS raw data" .
-
-# Evidence backs the claim
-_:ev1 a sepio:0000002 ;
-    sepio:0000007 <https://w3id.org/indicium/claim/<uuid>> ;   # supports_claim
-    indicium:eco_code "textual_quotation" ;                       # ECO:0000033
-    indicium:quote_exact "...verbatim from §2.1..." ;
-    indicium:quote_location "p-23" ;
-    indicium:of_source <https://doi.org/10.1234/paper-1> .
+<urn:example:assessment> a asbval:ClaimAssessment ;
+    sepio:0000183 sepio:0000403 ;
+    ro:0002558 eco:0000501 .
 ```
 
-## JSON-LD form (the form ASB and Scriptorium actually emit)
+The core LinkML model has no dedicated ASB assessment class or direction slot.
+Its non-closed SHACL shapes permit these additional annotations, but do not
+validate their values on ASB assessment nodes. Passing Indicium SHACL therefore
+does not certify an ASB validation record. ASB owns that validation contract.
+SEPIO defines evidence direction on an evidence line; ASB's assessment class
+must supply its own alignment to that model.
 
-```json
-{
-  "@context": "https://w3id.org/indicium/context.jsonld",
-  "@id": "https://w3id.org/holobiomicslab/asb-skill/feature-detection-lcms@sha256:abc",
-  "asserts": [
-    "https://w3id.org/indicium/claim/<uuid>"
-  ]
-}
+## Legacy bindings requiring a release decision
+
+The [SEPIO ontology, release 2023-06-13](https://raw.githubusercontent.com/monarch-initiative/SEPIO-ontology/master/sepio.owl)
+confirms three conflicts in the earlier reference page:
+
+| Existing Indicium use | Actual SEPIO meaning | Smallest migration |
+|---|---|---|
+| `Evidence.supports_claim` uses `sepio:0000007` from evidence to claim | `has_supporting_evidence_line` runs from a proposition to evidence | Use the existing local `for_claim` slot for evidence-to-claim links; export the SEPIO triple in the other direction. A removal or rebinding of the legacy slot needs a consumer migration. |
+| Context alias `asserts` uses `sepio:0000130` from skill to claim | `authored_by` runs from information content to its author | Deprecate the alias for reliance. Authorship should be claim-to-agent; reliance needs a separately chosen predicate, because relying on a claim does not make a skill its author. |
+| The old page calls `sepio:0000174` a qualifier property | It is the `statement` class | Remove that property recommendation. |
+
+The first two legacy URI bindings remain available for compatibility. They are
+not recommended SEPIO export patterns. The third error was documentation only
+and has been removed. The current ASB direction/ECO/RO annotations above do not
+use any of these conflicting terms.
+
+## Evidence links
+
+The schema's `Evidence` class binds to the SEPIO evidence-line class
+`sepio:0000002`. Its distinct local slots include `indicium:quote`,
+`indicium:quote_exact`, `indicium:of_source` and `indicium:for_claim`. They must
+not be silently moved into `asb:` or collapsed into one property.
+
+A correctly directed SEPIO support triple is:
+
+```turtle
+@prefix asb: <https://w3id.org/asb#> .
+@prefix indicium: <https://w3id.org/indicium/> .
+@prefix sepio: <http://purl.obolibrary.org/obo/SEPIO_> .
+
+<urn:example:claim> a asb:Claim ;
+    asb:context "in vitro" ; asb:subject "A" ;
+    asb:qualifier "inhibits" ; asb:relation "inhibits" ; asb:object "B" ;
+    sepio:0000007 <urn:example:evidence> .
+<urn:example:evidence> a sepio:0000002 ;
+    indicium:for_claim <urn:example:claim> ;
+    indicium:quote_exact "A inhibits B" .
 ```
 
-The `asserts` JSON-LD term in `context.jsonld` is bound to `sepio:0000130`. Downstream consumers reading the JSON-LD see only `asserts`; the OWL reasoner sees `sepio:0000130`.
-
-## Why this pattern (and not just CiTO)
-
-`cito:usesMethodIn` / `cito:citesAsAuthority` are paper-to-paper. SEPIO is asserter-to-claim — the asserter can be a non-paper artefact (skill, pipeline, agent, dataset, manuscript). That matches ASB's "skill X relies on claim Y from paper Z" exactly.
-
-## Constraints
-
-1. **Asserter IRI is opaque to indicium.** A skill IRI is not registered in indicium; indicium only stores the Claim/Evidence/Source side.
-2. **`asserts` is non-multivalued per skill ↔ claim pair.** A skill that relies on multiple claims emits multiple statements.
-3. **The Claim being asserted MUST resolve in the indicium graph.** The round-trip CI test in `indicium-adapters` (Plan 1c) enforces this at release time.
-4. **Cardinality of Evidence is unbounded:** one Claim can have N Evidence lines from M Sources. ASB typically emits 1–2 Evidence per Claim.
-
-## Cross-reference
-
-- `Evidence.supports_claim` (added Wave 1) — the SEPIO `is evidence for` slot, mapped explicitly so adapters don't have to guess the slot name.
-- `Evidence.eco_code` (added Wave 1) — the ECO classification of the evidence line; ASB-subset enum lives in `EcoCodeAsbSubset`.
-- See [`uri-scheme.md`](uri-scheme.md) for the `indicium:claim/<uuid>` form and the content-hash citation variant.
+The packaged context is available without an HTTP request through
+`importlib.resources.files('indicium.schema').joinpath('context.jsonld')`.
+See [URI scheme](uri-scheme.md) for the namespace deposit and instance identifiers.

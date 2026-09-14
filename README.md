@@ -44,6 +44,9 @@ identical and mergeable — and never travels without its evidence trace.
 
 ## Install
 
+Requires Python 3.11 or newer. The command below is for the public release;
+until 2.0.0 is published, install a wheel supplied by the maintainers.
+
 ```bash
 pip install indicium-standard      # distribution name
 python -c "import indicium"        # import name
@@ -76,6 +79,14 @@ ASB = "https://w3id.org/asb#"   # don't — silently dead after a move
 ```bash
 uv sync
 make gen          # regenerate model.py / shapes.ttl / ontology.ttl / schema.json
+make context      # regenerate the packaged JSON-LD context (also linked by docs)
 make docs-changelog  # refresh docs/changelog.md from CHANGELOG.md
-uv run pytest -v  # includes the conformance suite (parity vs Scriptorium SHACL)
+uv run pytest -v  # includes claim-conformance tests
+make lint
+uv run mkdocs build --strict
 ```
+
+Namespace bases are stable identifiers. Their registration and the vocabulary
+site are prepared separately from the Python release; they do not provide an
+instance store. See [URI scheme](docs/uri-scheme.md) and the
+[SEPIO compatibility notes](docs/sepio-assertion.md) before exporting RDF.

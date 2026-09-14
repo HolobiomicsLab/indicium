@@ -35,7 +35,7 @@ structurally identical and mergeable.
 ## Install
 
 ```bash
-pip install indicium
+pip install indicium-standard
 ```
 
 ## Quickstart

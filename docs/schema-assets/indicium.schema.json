@@ -457,7 +457,7 @@
                     "$ref": "#/$defs/SourceType"
                 },
                 "supports_claim": {
-                    "description": "Spec-required name for the SEPIO `is_evidence_for` relation. Aliases `for_claim`. ASB adapter targets this name. `sepio:0000007` is the SEPIO `is evidence for` predicate.",
+                    "description": "Legacy Evidence-to-Claim binding, retained for compatibility. The referenced SEPIO term means has_supporting_evidence_line in the opposite direction (Claim-to-Evidence); this slot is not a semantically correct SEPIO projection. Use for_claim for an Indicium-local link, and emit the forward SEPIO relation from the claim when exporting SEPIO RDF.",
                     "type": [
                         "string",
                         "null"

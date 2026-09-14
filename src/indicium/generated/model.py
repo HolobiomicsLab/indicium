@@ -374,7 +374,7 @@ class Evidence(ConfiguredBaseModel):
     confidence: Optional[float] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'SSSOMMapping']} })
     of_source: Optional[Source] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'CitationLink']} })
     for_claim: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'CitationLink']} })
-    supports_claim: Optional[str] = Field(default=None, description="""Spec-required name for the SEPIO `is_evidence_for` relation. Aliases `for_claim`. ASB adapter targets this name. `sepio:0000007` is the SEPIO `is evidence for` predicate.""", json_schema_extra = { "linkml_meta": {'aliases': ['for_claim'],
+    supports_claim: Optional[str] = Field(default=None, description="""Legacy Evidence-to-Claim binding, retained for compatibility. The referenced SEPIO term means has_supporting_evidence_line in the opposite direction (Claim-to-Evidence); this slot is not a semantically correct SEPIO projection. Use for_claim for an Indicium-local link, and emit the forward SEPIO relation from the claim when exporting SEPIO RDF.""", json_schema_extra = { "linkml_meta": {'aliases': ['for_claim'],
          'domain_of': ['Evidence'],
          'slot_uri': 'sepio:0000007'} })
     of_figure: Optional[Figure] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })

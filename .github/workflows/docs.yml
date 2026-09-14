@@ -15,12 +15,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v6
         with:
-          version: "latest"
+          python-version: "3.12"
 
       - name: Install dependencies
-        run: uv sync --extra codegen --extra docs
+        run: uv sync --frozen --extra codegen --extra docs
 
       - name: Build schema artefacts and copy to docs
         run: make schema-assets

@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## 2.0.0 — 2026-07-10
+## 2.0.0 — YYYY-MM-DD
 
 First public release. Both breaking changes below landed *before* any artefact was
 published, so no released data carries the old identifiers.
@@ -37,6 +37,11 @@ published, so no released data carries the old identifiers.
   matched nothing and every graph reported `conforms=True`. Import these instead.
 - `tests/test_namespace_base.py` — guards against reintroducing an unowned
   namespace base, and pins the metadata lookup to the declared distribution name.
+- A reproducible JSON-LD context generated from the schema, shipped in the
+  package and copied into the documentation site. OBO prefixes expand in JSON-LD
+  1.1; property IRIs and enum meanings now agree with the SHACL shapes.
+- Local release checks and a Trusted Publishing workflow with matching tag,
+  package version and dated changelog checks before publication.
 
 ### Fixed
 - **`__version__` reported the wrong version.** It queried `importlib.metadata`
@@ -47,6 +52,20 @@ published, so no released data carries the old identifiers.
 - `docs/changelog.md` is now generated from this file (`make docs-changelog`)
   rather than hand-maintained. It had been frozen at 1.0.0 for twelve releases,
   and `release.yml` extracts its release notes from it.
+- Installation examples now consistently name `indicium-standard`, including
+  its optional extras. Schema generation works on Linux and macOS.
+- The generated OWL ontology uses the registered namespace root as its document
+  IRI; RDF serialization is deterministic for release verification.
+- The sdist includes only package source, schema assets and release metadata;
+  internal development plans are excluded.
+
+### Namespace registration
+- Canonical bases remain `https://w3id.org/indicium/` and
+  `https://w3id.org/asb#`. The vocabulary deposit and redirects are prepared
+  separately; registration does not create a hosted store of claim instances.
+- ASB validation assertions use `SEPIO_0000183` with `SEPIO_0000403`,
+  `SEPIO_0000404` or `SEPIO_0000405`, and `RO_0002558` with `ECO_0000501`.
+  These are external assertion annotations, not Indicium claim-status values.
 
 ---
 

@@ -6,53 +6,99 @@ on:
       - "v*"
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v6
         with:
-          version: "latest"
+          python-version: "3.12"
 
       - name: Install dependencies
-        run: uv sync --extra codegen --extra docs
+        run: uv sync --frozen --extra codegen --extra docs
 
-      - name: Build schema artefacts and copy to docs
-        run: make schema-assets
+      - name: Check tag, version and release date
+        run: uv run --frozen python scripts/check_release.py --tag "$GITHUB_REF_NAME" --notes-output release-notes.md
 
-      - name: Build wheel and sdist
-        run: uv build
-
-      - name: Extract changelog for this release
-        id: changelog
+      - name: Check schema generation
         run: |
-          TAG="${GITHUB_REF_NAME#v}"
-          BODY=$(awk "/^## ${TAG} /{found=1; next} found && /^## /{exit} found{print}" docs/changelog.md)
-          if [ -z "$BODY" ]; then
-            echo "::error::No changelog section '## ${TAG}' found in docs/changelog.md" && exit 1
-          fi
-          echo "body<<EOF" >> $GITHUB_OUTPUT
-          echo "$BODY" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          make schema-assets
+          git diff --exit-code -- src/indicium/generated src/indicium/schema/context.jsonld docs/schema-assets docs/changelog.md
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+      - name: Run tests and lint
+        run: |
+          uv run --frozen pytest -v
+          make lint
+
+      - name: Build documentation
+        run: uv run --frozen mkdocs build --strict
+
+      - name: Build and check distributions
+        run: |
+          uv pip install --python .venv/bin/python -r requirements-release.txt
+          uv run --no-sync python -m build
+          uv run --no-sync python -m twine check --strict dist/*
+
+      - name: Check installed wheel
+        run: |
+          uv venv --python 3.12 .wheel-env
+          uv pip install --python .wheel-env/bin/python dist/*.whl
+          .wheel-env/bin/python scripts/check_wheel.py
+
+      - uses: actions/upload-artifact@v4
         with:
-          body: ${{ steps.changelog.outputs.body }}
+          name: release-distributions
+          path: dist/*
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-documents
+          path: |
+            release-notes.md
+            docs/schema-assets/*
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/indicium-standard
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-distributions
+          path: dist
+
+      - name: Publish to PyPI with Trusted Publishing
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+  github-release:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-distributions
+          path: dist
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-documents
+          path: release-documents
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          body_path: release-documents/release-notes.md
           files: |
             dist/*
-            docs/schema-assets/indicium.schema.json
-            docs/schema-assets/indicium.owl.ttl
-            docs/schema-assets/indicium.shapes.ttl
-
-      # PyPI publish — uncomment when PYPI_TOKEN secret is configured:
-      # - name: Publish to PyPI
-      #   run: uv publish
-      #   env:
-      #     UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}
+            release-documents/docs/schema-assets/*

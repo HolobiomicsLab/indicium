@@ -58,6 +58,9 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/indicium"]
 
+[tool.hatch.build.targets.sdist]
+include = ["/src", "/README.md", "/LICENSE", "/CHANGELOG.md", "/pyproject.toml"]
+
 [dependency-groups]
 dev = [
     "pytest>=8.0",
@@ -66,7 +69,14 @@ dev = [
     "pyyaml>=6.0",
     "mkdocs-material>=9.5",
     "mkdocstrings[python]>=0.25",
+    "ruff>=0.12",
 ]
+
+[tool.ruff]
+extend-exclude = ["src/indicium/generated"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
