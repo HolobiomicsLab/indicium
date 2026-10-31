@@ -2,17 +2,18 @@
 
 The checklist for the first public release, 2.0.0, and the steps that follow it. Run
 the steps in order; each one says what to type and what you should see. The state
-recorded here was measured on 2026-10-30.
+recorded here was measured on 2026-11-01.
 
-| | State on 2026-10-30 |
+| | State on 2026-11-01 |
 |---|---|
-| Repository `HolobiomicsLab/indicium` | private; branches `main`, `gh-pages`, `feat/domain-qualifier`, the wip-* branch and the release-readiness branch of 2026-10-30 (superseded) |
-| GitHub Pages | not enabled (Pages API 404); `gh-pages` last deployed 2026-05-23 |
-| `docs.yml` | every run since 2026-05-24 failed: `sed -i ''` in the Makefile is BSD-only (the 2.0.0 preparation patches `model.py` with Python instead) |
+| Repository `HolobiomicsLab/indicium` | private; branches `main`, `gh-pages`, four merged or superseded work branches and the wip-* branch (deleted before the flip, step 1) |
+| GitHub Pages | not enabled (Pages API 404); `gh-pages` redeployed from `main` on 2026-10-31 by `docs.yml` |
+| `docs.yml` | green since the 2.0.0 preparation merged (#6, #7) |
 | Tags and GitHub releases | none |
 | PyPI and TestPyPI, `indicium-standard` | 404 (name free) |
-| GitHub environments | none |
-| `https://w3id.org/asb`, `https://w3id.org/asb/validation` | resolve (303, Turtle 200) |
+| GitHub environments | `pypi` exists with a tag-only deployment policy (`v*`); the required-reviewer rule is added after the flip (step 5), the plan does not allow it on a private repository |
+| History scan (step 1) | secret formats: 0 over all refs; private names: 0 on `main`, 1 on the superseded branch of 2026-10-30 and on `refs/pull/5/head` (the same commit) |
+| `https://w3id.org/asb`, `https://w3id.org/asb/validation`, `https://w3id.org/asb/indicium-ext` | the first two resolve (303, Turtle 200); the third is perma-id pull request 7042 |
 | `https://w3id.org/indicium/` | 404, never requested |
 
 Two steps cannot be undone: pushing the tag (step 7), which starts the PyPI upload,
@@ -156,13 +157,21 @@ trusted publisher at the first upload. No API token is created or stored.
 
 ## 5. Create the GitHub environment `pypi`
 
+The environment exists since 2026-11-01, with deployments limited to `v*` tags:
+
 ```bash
-gh api -X PUT repos/HolobiomicsLab/indicium/environments/pypi
 gh api repos/HolobiomicsLab/indicium/environments --jq '.environments[].name'
+gh api repos/HolobiomicsLab/indicium/environments/pypi/deployment-branch-policies --jq '.branch_policies[].name'
 ```
 
-Expected: `pypi`. To make every upload wait for your approval, add yourself as a
-required reviewer: Settings > Environments > pypi > Required reviewers.
+Expected: `pypi` and `v*`. Once the repository is public (step 1), make every upload
+wait for your approval; the plan refuses this rule on a private repository:
+
+```bash
+echo '{"reviewers":[{"type":"User","id":22830047}],"deployment_branch_policy":{"protected_branches":false,"custom_branch_policies":true}}' | gh api -X PUT repos/HolobiomicsLab/indicium/environments/pypi --input -
+```
+
+Expected: the response lists one required reviewer.
 
 ## 6. Optional: archive the release on Zenodo
 
