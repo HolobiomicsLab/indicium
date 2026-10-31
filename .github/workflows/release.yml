@@ -96,7 +96,7 @@ jobs:
           name: release-documents
           path: release-documents
 
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v3
         with:
           body_path: release-documents/release-notes.md
           files: |
