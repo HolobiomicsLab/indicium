@@ -53,7 +53,7 @@ one minted by another, merges with it, and never travels without its evidence tr
 |------|-------|
 | LinkML schema, the source of truth | `src/indicium/schema/indicium.yaml` |
 | Pydantic models (`Claim`, `Evidence`, `Source`, `CitationLink`, `ClaimLink`, `IndiciumDocument`, ...) | `indicium.generated.model`, re-exported from `indicium` |
-| SHACL shapes, OWL ontology, JSON Schema | `src/indicium/generated/`, copied to `docs/schema-assets/` |
+| SHACL shapes, OWL ontology, JSON Schema | `src/indicium/generated/`, copied to `docs/schema-assets/`; the published SHACL file adds the supplemental shapes of `src/indicium/augmentation/` |
 | JSON-LD context | `src/indicium/schema/context.jsonld` |
 | SHACL validation | `indicium.validate_graph` |
 | Quote verification kernel | `indicium.verify_quote` |

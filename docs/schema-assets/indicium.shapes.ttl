@@ -16,6 +16,26 @@
 @prefix sssom: <https://w3id.org/sssom/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+indicium:QualifierPresenceShape a sh:NodeShape ;
+    sh:message "A Claim must carry at least one of asb:qualifier (closed Bucur SuperPattern) or asb:domainQualifier (open domain-adapter extension)." ;
+    sh:or ( [ sh:minCount 1 ;
+                sh:path asb:qualifier ] [ sh:minCount 1 ;
+                sh:path asb:domainQualifier ] ) ;
+    sh:targetClass asb:Claim .
+
+indicium:SupersededByRequiredShape a sh:NodeShape ;
+    sh:sparql [ a sh:SPARQLConstraint ;
+            sh:message "When claim_status is 'superseded', superseded_by must be set to the URI of the replacement Claim." ;
+            sh:select """
+            PREFIX indicium: <https://w3id.org/indicium/>
+            SELECT $this
+            WHERE {
+                $this indicium:claim_status "superseded" .
+                FILTER NOT EXISTS { $this indicium:superseded_by ?_ }
+            }
+        """ ] ;
+    sh:targetClass asb:Claim .
+
 indicium:IndiciumDocument a sh:NodeShape ;
     rdfs:comment "Top-level container for a serialisable Indicium document. Holds all entity collections; enables full round-trip JSON/YAML/RDF I/O." ;
     sh:closed false ;

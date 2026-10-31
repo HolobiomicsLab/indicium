@@ -67,6 +67,10 @@ release. Existing downstream records may still embed the earlier context.
   IRI and carries the version and the licence (`pav:version`, `dct:license`), which
   the LinkML source now declares; the model and the JSON Schema carry the version
   too. RDF serialization is deterministic for release verification.
+- The published SHACL file, `docs/schema-assets/indicium.shapes.ttl` (a release
+  asset), now holds the supplemental shapes as well as the generated ones, so a
+  SHACL processor run on it agrees with `validate_graph`: before, it accepted a
+  claim with neither `qualifier` nor `domain_qualifier`.
 - The sdist includes only package source, schema assets and release metadata;
   internal development plans are excluded.
 - SEPIO binding regression tests use an attributed excerpt of the ontology's

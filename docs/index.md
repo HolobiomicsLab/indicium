@@ -115,6 +115,9 @@ Generated from the LinkML source, `src/indicium/schema/indicium.yaml`:
 | SHACL shapes | [`indicium.shapes.ttl`](schema-assets/indicium.shapes.ttl) |
 | JSON-LD context | [`context.jsonld`](context.jsonld) |
 
+The SHACL file holds the generated shapes and the supplemental ones, so running a
+SHACL processor on it gives the verdict of `validate_graph`.
+
 ## The name
 
 *Indicium* (Latin) is "a sign or mark that points to the truth"; in law, the

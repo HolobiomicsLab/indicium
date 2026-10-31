@@ -3,6 +3,7 @@ GEN=src/indicium/generated
 ASSETS=docs/schema-assets
 CHANGELOG=CHANGELOG.md
 DOCS_CHANGELOG=docs/changelog.md
+SUPPLEMENTAL=src/indicium/augmentation/supplemental-shapes.ttl
 
 .PHONY: gen context schema-assets docs-changelog lint
 
@@ -30,4 +31,5 @@ schema-assets: gen context docs-changelog
 	mkdir -p $(ASSETS)
 	cp $(GEN)/schema.json $(ASSETS)/indicium.schema.json
 	cp $(GEN)/ontology.ttl $(ASSETS)/indicium.owl.ttl
-	cp $(GEN)/shapes.ttl $(ASSETS)/indicium.shapes.ttl
+	# The published shapes are the ones validate_graph applies: generated plus supplemental.
+	uv run --frozen python scripts/merge_shapes.py $(ASSETS)/indicium.shapes.ttl $(GEN)/shapes.ttl $(SUPPLEMENTAL)
