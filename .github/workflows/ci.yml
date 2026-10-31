@@ -12,7 +12,7 @@ jobs:
       matrix:
         python-version: ["3.11", "3.12", "3.13"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: astral-sh/setup-uv@v6
         with:
@@ -32,7 +32,7 @@ jobs:
     # runtime dependency. Install the wheel alone, exactly as a user would.
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: astral-sh/setup-uv@v6
         with:
@@ -75,7 +75,7 @@ jobs:
     # broken link or a Makefile that fails on Linux is caught before the merge.
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: astral-sh/setup-uv@v6
         with:
