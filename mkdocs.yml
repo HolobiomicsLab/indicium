@@ -36,9 +36,9 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
-  font:
-    text: IBM Plex Sans
-    code: IBM Plex Mono
+  # No Google Fonts: a font served by Google sends every visitor's IP address
+  # there. The stylesheet names IBM Plex first and falls back to system fonts.
+  font: false
   features:
     - navigation.tabs
     - navigation.sections
