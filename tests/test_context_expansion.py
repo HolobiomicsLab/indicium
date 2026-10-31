@@ -63,3 +63,55 @@ def test_asb_validation_annotations_expand_to_real_obo_iris():
     subject = URIRef("urn:test:assessment")
     assert (subject, OBO.SEPIO_0000183, OBO.SEPIO_0000403) in graph
     assert (subject, OBO.RO_0002558, OBO.ECO_0000501) in graph
+
+
+# JSON-LD 1.1 uses a term as the prefix of a compact IRI only when its IRI ends with a
+# gen-delim character or the term definition says "@prefix": true.
+GEN_DELIMS = tuple(":/?#[]@")
+
+
+def term_iri(definition):
+    """Return the IRI of a context entry, either a string or an expanded definition."""
+    return definition if isinstance(definition, str) else definition.get("@id")
+
+
+def expand_curie(context, value):
+    """Expand a compact IRI against the context prefixes; leave absolute IRIs alone."""
+    prefix, _, local = value.partition(":")
+    if prefix in context and not local.startswith("//"):
+        return term_iri(context[prefix]) + local
+    return value
+
+
+def test_every_schema_name_maps_to_its_schema_iri():
+    """Each class and slot term expands to the IRI the shapes and the OWL use."""
+    view = SchemaView(str(files("indicium.schema").joinpath("indicium.yaml")))
+    context = packaged_context()
+    elements = {**view.all_classes(), **view.all_slots()}
+    mismatched = {}
+    for name, element in elements.items():
+        if name == "id":
+            assert context[name] == "@id"
+            continue
+        assert name in context, f"{name} is missing from the context"
+        actual = expand_curie(context, term_iri(context[name]))
+        expected = view.get_uri(element, expand=True)
+        if actual != expected:
+            mismatched[name] = (actual, expected)
+    assert not mismatched, mismatched
+
+
+def test_every_prefix_ending_mid_iri_is_declared_a_prefix():
+    """OBO-style prefixes such as SEPIO_ must carry "@prefix": true for JSON-LD 1.1."""
+    context = packaged_context()
+    undeclared = [
+        name
+        for name, definition in context.items()
+        if not name.startswith("@")
+        and isinstance(term_iri(definition), str)
+        and term_iri(definition).startswith(("http://", "https://"))
+        and not term_iri(definition).endswith(GEN_DELIMS)
+        and term_iri(definition).endswith("_")
+        and not (isinstance(definition, dict) and definition.get("@prefix") is True)
+    ]
+    assert not undeclared, undeclared
