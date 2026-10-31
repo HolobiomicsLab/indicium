@@ -1,43 +1,123 @@
 # Quickstart
 
+Every Python block on this page runs, in order, in the test suite
+(`tests/test_docs_examples.py`).
+
 ## Install
 
 ```bash
-pip install indicium
-# or with uv:
-uv add indicium
+pip install indicium-standard
+# or, in a uv project:
+uv add indicium-standard
 ```
 
-For codegen (regenerating pydantic model / SHACL / OWL from the LinkML source):
+Optional extras:
 
 ```bash
-pip install indicium[codegen]
+pip install "indicium-standard[astra]"     # ASTRA bridge (PyYAML)
+pip install "indicium-standard[codegen]"   # regenerate the artefacts from the LinkML source
 ```
 
-## The claim dict format
+The 2.0.0 upload to PyPI is pending. Until `pip install indicium-standard` finds it,
+install from the repository:
 
-Indicium adapters consume a **claim dict** — a plain Python dictionary with the following keys:
+```bash
+pip install "git+https://github.com/HolobiomicsLab/indicium"
+```
+
+The import package is `indicium`. Never install the unrelated PyPI package named
+`indicium` next to it: both ship a top-level `indicium` module.
+
+## Validate a claim
+
+A claim is an RDF node of type `asb:Claim` with the five SuperPattern slots. Build
+the prefix from `ASB_BASE` rather than typing the IRI:
+
+```python
+import rdflib
+from indicium import ASB_BASE, validate_graph
+
+claim_ttl = f"""
+@prefix asb: <{ASB_BASE}> .
+<urn:claim:c001> a asb:Claim ;
+    asb:context "in vitro" ;
+    asb:subject "compound A" ;
+    asb:qualifier "inhibits" ;
+    asb:relation "inhibits growth of" ;
+    asb:object "cell line B" .
+"""
+
+conforms, report = validate_graph(rdflib.Graph().parse(data=claim_ttl, format="turtle"))
+print(conforms)  # True
+```
+
+A claim without its subject, relation and object does not conform, and the report
+names each missing slot:
+
+```python
+incomplete_ttl = f"""
+@prefix asb: <{ASB_BASE}> .
+<urn:claim:c002> a asb:Claim ; asb:context "in vitro" ; asb:qualifier "inhibits" .
+"""
+
+conforms, report = validate_graph(rdflib.Graph().parse(data=incomplete_ttl, format="turtle"))
+print(conforms)  # False
+print("asb:subject" in report, "asb:relation" in report, "asb:object" in report)  # True True True
+```
+
+`validate_graph(data, extra_shapes=...)` merges additional SHACL shapes, for example
+those of a domain adapter, into the base shapes before validating.
+
+## The typed model
+
+The pydantic classes are generated from the same LinkML source and re-exported from
+`indicium`:
+
+```python
+from indicium import Claim, SuperPatternQualifier
+
+claim = Claim(
+    id="c001",
+    context="in vitro",
+    subject="compound A",
+    qualifier="inhibits",
+    relation="inhibits growth of",
+    object="cell line B",
+)
+print(claim.qualifier is SuperPatternQualifier.inhibits)  # True
+```
+
+`qualifier` takes one of the 20 Bucur SuperPattern terms. A domain package may use
+`domain_qualifier` instead; the SHACL shapes require at least one of the two.
+
+## The claim dict
+
+The adapters take a plain dictionary:
 
 | Key | Required | Type | Notes |
 |-----|----------|------|-------|
 | `id` | yes | `str` | Stable identifier (e.g. `"c001"`, a UUID, or a URN) |
 | `context` | yes | `str` | Experimental or conceptual setting |
 | `subject` | yes | `str` | Entity the claim is about |
-| `qualifier` | yes | `str` | One of the 20 Bucur SuperPattern terms |
+| `qualifier` | yes, for the adapters below | `str` | One of the 20 Bucur SuperPattern terms |
 | `relation` | yes | `str` | Free-text elaboration of the relation |
 | `object` | yes | `str` | Target entity |
 | `claim_type` | no | `str` | `"explicit"` or `"implicit"` |
 | `source_excerpt` | no | `str` | Verbatim text from the source |
 | `evidence` | no | `list[dict]` | Each item may carry `doi`, `artifact`, `quote`, `evidence_type` |
 
-The formal `Claim` Pydantic model (`indicium.generated.model.Claim`) validates the same required slots and the `qualifier` enum, and produces a compatible dict via `.model_dump()`. The `evidence` list is an adapter-layer convenience; in the RDF/SHACL model, evidence is a separate `Evidence` class linked to a claim via `for_claim`.
+`Claim(**{k: v for k, v in claim_dict.items() if k != "evidence"})` validates the same
+slots and the qualifier enum (the model rejects the `evidence` key, which belongs to the
+adapter layer), and `claim.model_dump(mode="json", exclude_none=True)` returns a dict
+the adapters accept. In the RDF model, evidence is a separate `Evidence` node linked
+to its claim.
 
-## Round-trip example
+## Project a claim onto other formats
 
 ```python
-from indicium import validate_graph, claim_to_insight, claim_to_evidence_snippet
+from indicium import claim_to_evidence_snippet, claim_jsonld
 
-claim = {
+claim_dict = {
     "id": "c001",
     "context": "in vitro",
     "subject": "compound A",
@@ -45,49 +125,58 @@ claim = {
     "relation": "inhibits growth of",
     "object": "cell line B",
     "source_excerpt": "Compound A inhibited cell line B by 80%.",
-    "evidence": [
-        {
-            "doi": "10.1234/test",
-            "quote": "Compound A inhibited cell line B by 80%.",
-            "evidence_type": "data",
-        }
-    ],
+    "evidence": [{"doi": "10.1234/test", "quote": "Compound A inhibited cell line B by 80%."}],
 }
 
-# Project to ASTRA Insight (for astra validate)
-insight = claim_to_insight(claim)
-print(insight)
-# {'id': 'c001', 'claim': 'compound A inhibits growth of cell line B (in vitro)',
-#  'evidence': [{'doi': '10.1234/test', 'quote': {'exact': 'Compound A ...'}}]}
+# EvidenceSnippet, as embedded in ASB task cards
+snippet = claim_to_evidence_snippet(claim_dict)
+print(snippet["source_path"])  # doi:10.1234/test
+print(snippet["reason"])       # compound A [inhibits] inhibits growth of cell line B (context: in vitro)
 
-# Project to SciTask EvidenceSnippet (for ASB SciTask Cards)
-snip = claim_to_evidence_snippet(claim)
-print(snip)
-# {'snippet_id': 'c001', 'source_path': 'doi:10.1234/test',
-#  'reason': 'compound A [inhibits] inhibits growth of cell line B (context: in vitro)',
-#  'text': 'Compound A inhibited cell line B by 80%.'}
+# JSON-LD node for KGmemory
+node = claim_jsonld(claim_dict)
+print(node["@id"])  # urn:indicium:claim:c001
 ```
 
-## SHACL validation
+The ASTRA bridge works on the typed model and needs the `astra` extra:
 
 ```python
-import rdflib
-from indicium import validate_graph
+from indicium.astra_bridge import claim_to_insight
 
-g = rdflib.Graph()
-g.parse("my_claims.ttl", format="turtle")
-
-conforms, report = validate_graph(g)
-if not conforms:
-    print(report)
+insight = claim_to_insight(claim, evidence_doi="10.1234/test")
+print(insight["claim"])     # compound A inhibits inhibits growth of cell line B
+print(insight["evidence"])  # [{'id': 'e1', 'doi': '10.1234/test'}]
 ```
 
-## Regenerate schema artefacts
+`indicium.claim_to_insight`, the dict-based version, is deprecated and emits a
+`DeprecationWarning`.
+
+## Validate a file
+
+```python
+import tempfile
+from pathlib import Path
+
+with tempfile.TemporaryDirectory() as tmp:
+    path = Path(tmp) / "my_claims.ttl"
+    path.write_text(claim_ttl)
+
+    g = rdflib.Graph()
+    g.parse(path, format="turtle")
+    conforms, report = validate_graph(g)
+    if not conforms:
+        print(report)
+```
+
+## Regenerate the schema artefacts
+
+From a checkout of the repository:
 
 ```bash
-cd path/to/indicium
-uv sync --extra codegen
-make gen
+uv sync --frozen --extra codegen
+make gen             # src/indicium/generated/: model.py, shapes.ttl, ontology.ttl, schema.json
+make context         # src/indicium/schema/context.jsonld, from the LinkML URI bindings
+make schema-assets   # make gen and make context, then copy the artefacts and the changelog into docs/
 ```
 
-This regenerates `src/indicium/generated/model.py`, `shapes.ttl`, `ontology.ttl`, `schema.json` from the LinkML source at `src/indicium/schema/indicium.yaml`.
+The Turtle output is canonicalised, so a second run is byte-identical to the first.

@@ -30,7 +30,7 @@ from pydantic import (
 
 
 metamodel_version = "1.11.0"
-version = "None"
+version = "2.0.0"
 
 
 class ConfiguredBaseModel(BaseModel):
@@ -72,6 +72,7 @@ linkml_meta = LinkMLMeta({'default_prefix': 'indicium',
                     'ECO/CiTO/DoCO/FaBiO/SEPIO/PROV-O + Bucur SuperPattern.',
      'id': 'https://w3id.org/indicium',
      'imports': ['linkml:types'],
+     'license': 'MIT',
      'name': 'indicium',
      'prefixes': {'ECO': {'prefix_prefix': 'ECO',
                           'prefix_reference': 'http://purl.obolibrary.org/obo/ECO_'},
@@ -373,10 +374,10 @@ class Evidence(ConfiguredBaseModel):
     quote_location: Optional[str] = Field(default=None, description="""Free-form locator for the quote — paragraph id, XPath pointer, page-offset string, or W3C OA fragment IRI. Use when the structured `text_selector` / `fragment_selector` classes are overkill (e.g. the ASB adapter passes a `paragraph_id` string from its source paper).""", json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
     confidence: Optional[float] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'SSSOMMapping']} })
     of_source: Optional[Source] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'CitationLink']} })
-    for_claim: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'CitationLink']} })
-    supports_claim: Optional[str] = Field(default=None, description="""Spec-required name for the SEPIO `is_evidence_for` relation. Aliases `for_claim`. ASB adapter targets this name. `sepio:0000007` is the SEPIO `is evidence for` predicate.""", json_schema_extra = { "linkml_meta": {'aliases': ['for_claim'],
+    for_claim: Optional[str] = Field(default=None, description="""Indicium-local link from an evidence line to the Claim it evaluates. Semantic alias of supports_claim with a distinct local RDF predicate. When both fields are supplied they should identify the same Claim; neither field is automatically copied to the other.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'CitationLink']} })
+    supports_claim: Optional[str] = Field(default=None, description="""Claim evaluated by this evidence line. Uses SEPIO is_evidence_line_for, the inverse of has_evidence_line (proposition or assertion to evidence line). The historical JSON name does not encode supporting polarity: express supporting, disputing or inconclusive direction separately with sepio:0000183 on the evidence line. Semantic alias of the local for_claim link; when both are supplied they should identify the same Claim. The two JSON fields remain distinct and are not automatically copied.""", json_schema_extra = { "linkml_meta": {'aliases': ['for_claim'],
          'domain_of': ['Evidence'],
-         'slot_uri': 'sepio:0000007'} })
+         'slot_uri': 'sepio:0000427'} })
     of_figure: Optional[Figure] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
     of_script: Optional[Script] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
     of_dataset: Optional[DataAsset] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence']} })
@@ -509,7 +510,7 @@ class CitationLink(ConfiguredBaseModel):
     linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'from_schema': 'https://w3id.org/indicium'})
 
     of_source: Optional[Source] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'CitationLink']} })
-    for_claim: Optional[str] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'CitationLink']} })
+    for_claim: Optional[str] = Field(default=None, description="""Indicium-local link from an evidence line to the Claim it evaluates. Semantic alias of supports_claim with a distinct local RDF predicate. When both fields are supplied they should identify the same Claim; neither field is automatically copied to the other.""", json_schema_extra = { "linkml_meta": {'domain_of': ['Evidence', 'CitationLink']} })
     link_type: Optional[LinkType] = Field(default=None, json_schema_extra = { "linkml_meta": {'domain_of': ['CitationLink', 'ClaimLink']} })
 
 

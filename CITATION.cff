@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use Indicium, please cite it as below."
+type: software
+title: "Indicium: a standard for typed scientific claims bound to their evidence"
+version: 2.0.0
+authors:
+  - family-names: Nothias
+    given-names: Louis-Félix
+    orcid: "https://orcid.org/0000-0001-6711-6719"
+    affiliation: "Holobiomics Lab, CNRS / Université Côte d'Azur"
+repository-code: "https://github.com/HolobiomicsLab/indicium"
+license: MIT
+abstract: >-
+  Indicium is a versioned standard for a typed scientific claim bound to the
+  evidence that grounds it. One LinkML schema generates pydantic models, JSON
+  Schema, SHACL shapes and an OWL ontology. The claim structure follows the
+  Bucur et al. SuperPattern; evidence, citation, document and provenance types
+  reuse ECO, CiTO, DoCO, IAO, FaBiO, SEPIO and PROV-O. What Indicium defines is
+  the binding: a claim, its typed evidence, and the source that evidence points
+  to.
+keywords:
+  - scientific claims
+  - evidence
+  - provenance
+  - LinkML
+  - SHACL
+  - ECO
+  - CiTO
+  - SEPIO
+  - PROV-O

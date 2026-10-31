@@ -1,0 +1,11 @@
+{
+  "source_url": "https://raw.githubusercontent.com/monarch-initiative/SEPIO-ontology/master/sepio.owl",
+  "version_iri": "http://purl.obolibrary.org/obo/sepio/releases/2023-06-13/sepio.owl",
+  "retrieved_utc": "2026-09-14",
+  "source_sha256": "ae9161620d677fe16857e0704006b7d07086e2ac75688261be901b0f9c3db488",
+  "fixture_sha256": "8a03ec69093bd681c882d2f4ba67ba159030d4e033c7cd8cdb7d658b8c98279e",
+  "license": "https://creativecommons.org/licenses/by/3.0/",
+  "attribution": "SEPIO ontology contributors, Monarch Initiative",
+  "selection": "Types, labels, domain, range, subproperty and inverse axioms for the M6 candidate terms, with blank-node list closure; no axioms inferred or changed.",
+  "triple_count": 98
+}

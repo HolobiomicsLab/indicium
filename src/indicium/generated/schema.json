@@ -5,6 +5,7 @@
             "description": "A typed link (CiTO) from a Source to a Claim.",
             "properties": {
                 "for_claim": {
+                    "description": "Indicium-local link from an evidence line to the Claim it evaluates. Semantic alias of supports_claim with a distinct local RDF predicate. When both fields are supplied they should identify the same Claim; neither field is automatically copied to the other.",
                     "type": [
                         "string",
                         "null"
@@ -378,6 +379,7 @@
                     "$ref": "#/$defs/EvidenceType"
                 },
                 "for_claim": {
+                    "description": "Indicium-local link from an evidence line to the Claim it evaluates. Semantic alias of supports_claim with a distinct local RDF predicate. When both fields are supplied they should identify the same Claim; neither field is automatically copied to the other.",
                     "type": [
                         "string",
                         "null"
@@ -457,7 +459,7 @@
                     "$ref": "#/$defs/SourceType"
                 },
                 "supports_claim": {
-                    "description": "Spec-required name for the SEPIO `is_evidence_for` relation. Aliases `for_claim`. ASB adapter targets this name. `sepio:0000007` is the SEPIO `is evidence for` predicate.",
+                    "description": "Claim evaluated by this evidence line. Uses SEPIO is_evidence_line_for, the inverse of has_evidence_line (proposition or assertion to evidence line). The historical JSON name does not encode supporting polarity: express supporting, disputing or inconclusive direction separately with sepio:0000183 on the evidence line. Semantic alias of the local for_claim link; when both are supplied they should identify the same Claim. The two JSON fields remain distinct and are not automatically copied.",
                     "type": [
                         "string",
                         "null"
@@ -1244,6 +1246,6 @@
     },
     "title": "indicium",
     "type": "object",
-    "version": null
+    "version": "2.0.0"
 }
 

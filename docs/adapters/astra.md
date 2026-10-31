@@ -1,7 +1,14 @@
 # ASTRA Adapter
 
-Projects an Indicium `Claim` dict onto an
-[ASTRA](https://astra-spec.org) `Insight` dict.
+Projects an Indicium claim onto an [ASTRA](https://astra-spec.org) `Insight` dict.
+
+!!! note "Use the typed bridge"
+    `indicium.astra_bridge.claim_to_insight(claim, evidence_doi=...)` takes a typed
+    `Claim` and needs the `astra` extra (`pip install "indicium-standard[astra]"`).
+    The dict-based `indicium.adapters.astra.claim_to_insight` described below is
+    deprecated and emits a `DeprecationWarning`. The bridge also reads ASTRA files
+    back into claims: `insight_to_claim`, `load_astra_findings`,
+    `load_astra_prior_insights`.
 
 ## Function
 

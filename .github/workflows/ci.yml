@@ -10,30 +10,33 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.11", "3.12"]
+        python-version: ["3.11", "3.12", "3.13"]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v6
         with:
-          version: "latest"
+          python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
-        run: uv sync --extra codegen
+        run: uv sync --frozen --extra codegen
 
       - name: Run tests
-        run: uv run pytest -v
+        run: uv run --frozen pytest -v
+
+      - name: Lint
+        run: make lint
 
   wheel-smoke:
     # The codegen/dev extras pull pydantic in transitively, which hid a missing
     # runtime dependency. Install the wheel alone, exactly as a user would.
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v6
         with:
-          version: "latest"
+          python-version: "3.11"
 
       - name: Build the wheel
         run: uv build --wheel
@@ -63,3 +66,26 @@ jobs:
           assert indicium.ASB_BASE.startswith('https://'), indicium.ASB_BASE
           print(f'wheel reports {indicium.__version__} @ {indicium.ASB_BASE}')
           "
+
+      - name: Validate a wheel sample and negative control
+        run: .wheel-env/bin/python scripts/check_wheel.py
+
+  docs:
+    # The deploy runs only on main; build the site on every pull request too, so a
+    # broken link or a Makefile that fails on Linux is caught before the merge.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv sync --frozen --extra codegen --extra docs
+
+      - name: Build schema artefacts and copy to docs
+        run: make schema-assets
+
+      - name: Build the site in strict mode
+        run: uv run --frozen mkdocs build --strict

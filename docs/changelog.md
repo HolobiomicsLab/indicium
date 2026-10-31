@@ -7,24 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## 2.0.0 — 2026-07-10
+## 2.0.0 — YYYY-MM-DD
 
-First public release. Both breaking changes below landed *before* any artefact was
-published, so no released data carries the old identifiers.
+First public release. These breaking changes landed *before* any Indicium package
+release. Existing downstream records may still embed the earlier context.
 
 ### Breaking
-- **The `asb:` vocabulary base moved off an unowned domain.**
-  `https://asb.holobiomics.org/ns/asb#` → `https://w3id.org/asb#`.
-  `asb.holobiomics.org` was never registered, so a third party could have taken it
-  and served arbitrary definitions for this standard's term IRIs. Every `asb:` term
-  IRI therefore changes, and RDF produced by 1.x will not validate against 2.0.0
-  SHACL shapes. Consumers that bind the `asb:` prefix themselves — notably the
-  shape files in `indicium-adapters-metabolomics` — must be updated in lockstep.
+- **The `asb:` vocabulary base moved to `https://w3id.org/asb#`.** It had two
+  earlier bases. 1.x used `https://asb.holobiomics.org/ns/asb#`, a domain that was
+  never registered, so a third party could have taken it and served arbitrary
+  definitions for this standard's term IRIs. Indicium PR #4 (2026-06-14) then moved
+  it to `https://holobiomicslab.eu/ns/asb#`, and 2.0.0 settles on the permanent
+  w3id identifier. Every `asb:` term IRI therefore changes. The 2.0.0 SHACL shapes
+  target the w3id IRIs, so they do not recognise a claim typed with either earlier
+  base: such a claim goes unchecked instead of failing.
+  Released data carries the intermediate base: the 106 `indicium/*.jsonld` files of
+  the asb-skill-collections pre-release `metabolomics-v0.1.0` (2026-06-22) bind
+  `https://holobiomicslab.eu/ns/asb#` and do not validate against the 2.0.0 shapes.
+  To migrate such data, bind the `asb:` prefix of its JSON-LD context (or rewrite
+  its IRIs) to `https://w3id.org/asb#`; the local names are unchanged. Then validate
+  it with `indicium.validate_graph`. Consumers that bind the `asb:` prefix
+  themselves, notably the shape files in `indicium-adapters-metabolomics`, must be
+  updated in lockstep.
 - **The distribution is renamed `indicium` → `indicium-standard`.** The import
   package is unchanged: `import indicium` still works. The PyPI name `indicium` is
   held by an unrelated, abandoned key-value-store package that also ships a
   top-level `indicium` module; installing both into one environment clobbers the
   import. Depend on `indicium-standard`, never on `indicium`.
+- **Two SEPIO bindings are corrected before the namespace deposit.**
+  `supports_claim` now expands to `sepio:0000427` (`is_evidence_line_for`),
+  an evidence-line-to-claim relation, instead of the oppositely directed
+  `sepio:0000007`. Skill reliance `asserts` now expands to `indicium:asserts`,
+  declared in the LinkML schema, instead of `sepio:0000130` (`authored_by`).
+  JSON keys and the local `for_claim` predicate are unchanged. Refresh embedded
+  contexts and regenerate previously expanded RDF. Supporting, disputing or
+  inconclusive direction is a separate `sepio:0000183` annotation; the
+  historical `supports_claim` key alone does not establish that direction.
 
 ### Added
 - `LICENSE` (MIT). 1.x declared MIT in `pyproject.toml` but shipped no licence
@@ -37,6 +55,11 @@ published, so no released data carries the old identifiers.
   matched nothing and every graph reported `conforms=True`. Import these instead.
 - `tests/test_namespace_base.py` — guards against reintroducing an unowned
   namespace base, and pins the metadata lookup to the declared distribution name.
+- A reproducible JSON-LD context generated from the schema, shipped in the
+  package and copied into the documentation site. OBO prefixes expand in JSON-LD
+  1.1; property IRIs and enum meanings now agree with the SHACL shapes.
+- Local release checks and a Trusted Publishing workflow with matching tag,
+  package version and dated changelog checks before publication.
 
 ### Fixed
 - **`__version__` reported the wrong version.** It queried `importlib.metadata`
@@ -47,6 +70,36 @@ published, so no released data carries the old identifiers.
 - `docs/changelog.md` is now generated from this file (`make docs-changelog`)
   rather than hand-maintained. It had been frozen at 1.0.0 for twelve releases,
   and `release.yml` extracts its release notes from it.
+- Installation examples now consistently name `indicium-standard`, including
+  its optional extras. Schema generation works on Linux and macOS.
+- The generated OWL ontology uses the namespace root `https://w3id.org/indicium` as
+  its document IRI and carries the version and the licence (`pav:version`,
+  `dct:license`), which the LinkML source now declares; the model and the JSON
+  Schema carry the version too. RDF serialization is deterministic for release verification.
+- The published SHACL file, `docs/schema-assets/indicium.shapes.ttl` (a release
+  asset), now holds the supplemental shapes as well as the generated ones, so a
+  SHACL processor run on it agrees with `validate_graph`: before, it accepted a
+  claim with neither `qualifier` nor `domain_qualifier`.
+- The sdist includes only package source, schema assets and release metadata;
+  internal development plans are excluded.
+- The package metadata names its author, states the licence as the SPDX
+  expression `MIT` with `LICENSE` as its licence file (instead of the full text in
+  the License field), and lists Documentation and Issues URLs.
+- SEPIO binding regression tests use an attributed excerpt of the ontology's
+  inverse, domain and range axioms. The documentation explains the target link,
+  separate evidence direction and the local reliance predicate.
+
+### Namespace registration
+- Canonical bases remain `https://w3id.org/indicium/` and
+  `https://w3id.org/asb#`. The vocabulary deposit and redirects are prepared
+  separately; registration does not create a hosted store of claim instances.
+- Prepared term redirects send HTML clients to
+  `https://holobiomicslab.eu/indicium/reference/<Name>/` and RDF clients to the
+  vocabulary representation under `/ns/indicium/`. The reference pages must be
+  live before the w3id registration is submitted.
+- ASB validation assertions use `SEPIO_0000183` with `SEPIO_0000403`,
+  `SEPIO_0000404` or `SEPIO_0000405`, and `RO_0002558` with `ECO_0000501`.
+  These are external assertion annotations, not Indicium claim-status values.
 
 ---
 
