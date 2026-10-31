@@ -30,7 +30,7 @@ from pydantic import (
 
 
 metamodel_version = "1.11.0"
-version = "None"
+version = "2.0.0"
 
 
 class ConfiguredBaseModel(BaseModel):
@@ -72,6 +72,7 @@ linkml_meta = LinkMLMeta({'default_prefix': 'indicium',
                     'ECO/CiTO/DoCO/FaBiO/SEPIO/PROV-O + Bucur SuperPattern.',
      'id': 'https://w3id.org/indicium',
      'imports': ['linkml:types'],
+     'license': 'MIT',
      'name': 'indicium',
      'prefixes': {'ECO': {'prefix_prefix': 'ECO',
                           'prefix_reference': 'http://purl.obolibrary.org/obo/ECO_'},

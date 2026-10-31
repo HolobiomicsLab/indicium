@@ -3,12 +3,14 @@
 @prefix asb: <https://w3id.org/asb#> .
 @prefix cito: <http://purl.org/spar/cito/> .
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
 @prefix doco: <http://purl.org/spar/doco/> .
 @prefix fabio: <http://purl.org/spar/fabio/> .
 @prefix indicium: <https://w3id.org/indicium/> .
 @prefix linkml: <https://w3id.org/linkml/> .
 @prefix oa: <http://www.w3.org/ns/oa#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix pav: <http://purl.org/pav/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix sepio: <http://purl.obolibrary.org/obo/SEPIO_> .
@@ -1962,5 +1964,7 @@ indicium:SuperPatternQualifier a owl:Class ;
 
 <https://w3id.org/indicium> a owl:Ontology ;
     rdfs:label "indicium" ;
+    dct:license "MIT" ;
+    pav:version "2.0.0" ;
     skos:definition "Shared claim/evidence standard — ECO/CiTO/DoCO/FaBiO/SEPIO/PROV-O + Bucur SuperPattern." .
 

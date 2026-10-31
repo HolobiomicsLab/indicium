@@ -1,5 +1,7 @@
 id: https://w3id.org/indicium
 name: indicium
+version: 2.0.0
+license: MIT
 description: Shared claim/evidence standard — ECO/CiTO/DoCO/FaBiO/SEPIO/PROV-O + Bucur SuperPattern.
 prefixes:
   indicium: https://w3id.org/indicium/
