@@ -73,6 +73,9 @@ release. Existing downstream records may still embed the earlier context.
   claim with neither `qualifier` nor `domain_qualifier`.
 - The sdist includes only package source, schema assets and release metadata;
   internal development plans are excluded.
+- The package metadata names its author, states the licence as the SPDX
+  expression `MIT` with `LICENSE` as its licence file (instead of the full text in
+  the License field), and lists Documentation and Issues URLs.
 - SEPIO binding regression tests use an attributed excerpt of the ontology's
   inverse, domain and range axioms. The documentation explains the target link,
   separate evidence direction and the local reliance predicate.

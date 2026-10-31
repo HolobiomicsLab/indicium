@@ -7,7 +7,9 @@ version = "2.0.0"
 description = "Shared claim/evidence standard (ECO/CiTO/SEPIO/PROV-O + Bucur SuperPattern)"
 readme = "README.md"
 requires-python = ">=3.11"
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Louis-Félix Nothias", email = "louis-felix.nothias@cnrs.fr" }]
 keywords = [
     "linkml", "claims", "evidence", "scientific-standard",
     "agentic-science", "eco", "cito", "sepio", "prov-o",
@@ -16,7 +18,6 @@ classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering :: Information Analysis",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -34,7 +35,9 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://holobiomicslab.github.io/indicium"
+Documentation = "https://holobiomicslab.github.io/indicium/"
 Repository = "https://github.com/HolobiomicsLab/indicium"
+Issues = "https://github.com/HolobiomicsLab/indicium/issues"
 Changelog = "https://holobiomicslab.github.io/indicium/changelog/"
 
 [project.optional-dependencies]
@@ -52,7 +55,7 @@ docs = [
 ]
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
