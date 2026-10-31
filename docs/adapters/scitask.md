@@ -1,9 +1,8 @@
 # SciTask Adapter
 
-Projects an Indicium `Claim` dict onto a
-[SciTask Standard](https://holobiomicslab.github.io/AgenticScienceBuilder)
-`EvidenceSnippet` dict — the structure embedded in SciTask Cards by
-[AgenticScienceBuilder (ASB)](https://github.com/HolobiomicsLab/AgenticScienceBuilder).
+Projects an Indicium `Claim` dict onto a SciTask `EvidenceSnippet` dict, the
+structure embedded in the SciTask cards that AgenticScienceBuilder (ASB) produces.
+ASB and its SciTask schema are not public yet.
 
 ## Function
 

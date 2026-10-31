@@ -166,3 +166,48 @@ code, pre, .md-typeset code, .md-typeset pre {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ── Home page: hero and feature cards ── */
+.md-typeset .hero {
+  text-align: center;
+  padding: 1.5rem 0 0.5rem;
+}
+
+.md-typeset .hero h1 {
+  margin-bottom: 0.4rem;
+}
+
+.md-typeset .hero .tagline {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  font-size: 1.15rem;
+  color: var(--md-default-fg-color--light);
+  margin-bottom: 1.2rem;
+}
+
+.md-typeset .feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.md-typeset .feature-card {
+  border-top: 3px solid var(--indicium-yellow);
+  background: var(--indicium-paper-2);
+  border-radius: 4px;
+  padding: 0.2rem 1rem 0.6rem;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .feature-card {
+  background: #00203c;
+}
+
+.md-typeset .feature-card h3 {
+  margin-top: 0.8rem;
+}
+
+/* Primary button on slate: the fill is yellow, so the label needs the dark ink. */
+[data-md-color-scheme="slate"] .md-typeset .md-button--primary,
+[data-md-color-scheme="slate"] .md-typeset .md-button--primary:hover {
+  color: var(--indicium-blue-ink);
+}

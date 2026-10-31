@@ -110,6 +110,9 @@ assessment-class alignment to SEPIO's evidence-line domain. Passing Indicium
 SHACL does not certify an ASB validation record. `sepio:0000174` denotes the
 statement class, not a qualifier property.
 
+`https://w3id.org/indicium/context.jsonld` does not resolve yet; the
+[URI scheme](uri-scheme.md) page says where to load the context from until it does.
+
 ## Updating consumers
 
 Keep JSON keys `supports_claim`, `for_claim` and `asserts`. Refresh embedded

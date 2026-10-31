@@ -1,28 +1,37 @@
 site_name: Indicium
 site_url: https://holobiomicslab.github.io/indicium
 site_description: >-
-  Indicium — the shared standard for typed scientific claims bound to their
-  evidence. ECO / CiTO / SEPIO / PROV-O + Bucur SuperPattern.
-site_author: HolobiomicsLab
+  Indicium, a standard for typed scientific claims bound to their evidence.
+  ECO, CiTO, SEPIO and PROV-O with the Bucur SuperPattern.
+site_author: Holobiomics Lab
 
 repo_name: HolobiomicsLab/indicium
 repo_url: https://github.com/HolobiomicsLab/indicium
 
 docs_dir: docs
 site_dir: site
+# superpowers/ holds historical design notes; release/ holds files meant for
+# other repositories (the w3id request). Neither belongs on the site.
 exclude_docs: |
   superpowers/
+  release/
 
 theme:
   name: material
+  # Brand files: docs/assets/brand/. The header is CNRS blue in both schemes,
+  # so it takes the light-on-dark variant of the mark.
+  logo: assets/brand/indicium-mark-dark.svg
+  favicon: assets/brand/indicium-mark-512.png
   palette:
-    - scheme: default
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
       primary: custom
       accent: custom
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
-    - scheme: slate
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
       primary: custom
       accent: custom
       toggle:
@@ -34,8 +43,13 @@ theme:
   features:
     - navigation.tabs
     - navigation.sections
+    - navigation.top
+    - navigation.footer
     - toc.integrate
+    - search.highlight
     - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
 
 extra_css:
   - stylesheets/extra.css
@@ -66,13 +80,16 @@ nav:
     - SciTask: adapters/scitask.md
     - KGmemory: adapters/kgmemory.md
   - Reference:
-    - SEPIO Assertion Pattern: sepio-assertion.md
-    - URI Scheme: uri-scheme.md
+    - URI scheme: uri-scheme.md
+    - SEPIO assertion pattern: sepio-assertion.md
+    - Kernel contract: kernel-contract.md
   - API Reference: api-reference.md
   - Changelog: changelog.md
 
 markdown_extensions:
   - admonition
+  - attr_list
+  - md_in_html
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite

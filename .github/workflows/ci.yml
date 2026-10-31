@@ -69,3 +69,23 @@ jobs:
 
       - name: Validate a wheel sample and negative control
         run: .wheel-env/bin/python scripts/check_wheel.py
+
+  docs:
+    # The deploy runs only on main; build the site on every pull request too, so a
+    # broken link or a Makefile that fails on Linux is caught before the merge.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: uv sync --frozen --extra codegen --extra docs
+
+      - name: Build schema artefacts and copy to docs
+        run: make schema-assets
+
+      - name: Build the site in strict mode
+        run: uv run --frozen mkdocs build --strict

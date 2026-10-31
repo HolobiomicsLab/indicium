@@ -34,7 +34,7 @@ An `Evidence` record grounds a `Claim` in a typed source.
 
 ## CitationLink
 
-A CiTO-typed directed relation between a claim and another claim or source.
+A CiTO-typed link from a source to a claim.
 
 | Slot | Ontology | Description |
 |------|----------|-------------|

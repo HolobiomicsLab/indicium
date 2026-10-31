@@ -1,6 +1,6 @@
 """ASTRA ↔ Indicium bridge — convert between ASTRA Insight dicts and Indicium Claims.
 
-Optional-extra-gated: pyyaml must be installed (``pip install indicium-standard[astra]``
+Optional-extra-gated: pyyaml must be installed (``pip install "indicium-standard[astra]"``
 or ``pip install pyyaml``). The pyyaml extra is already in the ``codegen``
 extra and ``dev`` dependency-group, so it is always available during development.
 
@@ -22,7 +22,7 @@ def _require_pyyaml() -> None:
     except ImportError as exc:
         raise ImportError(
             "pyyaml is required for the astra_bridge module. "
-            "Install it with: pip install indicium-standard[astra]"
+            "Install it with: pip install \"indicium-standard[astra]\""
         ) from exc
 
 
