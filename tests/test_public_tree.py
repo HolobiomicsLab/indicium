@@ -1,8 +1,8 @@
 """Files that ship or are published carry no local machine path.
 
-The sdist holds ``src/``; the documentation site is built from ``docs/``; the tests
-are read by every contributor. None of them should point at one maintainer's home
-directory.
+The sdist holds ``src/``; the documentation site is built from ``docs/``; the tests,
+the scripts and the top-level Markdown files are read by every contributor. None of
+them should point at one maintainer's home directory.
 """
 
 from pathlib import Path
@@ -15,10 +15,11 @@ TEXT_SUFFIXES = {".py", ".md", ".yaml", ".yml", ".ttl", ".json", ".jsonld", ".cf
 
 
 def public_text_files():
-    for top in ("src", "tests", "docs"):
+    for top in ("src", "tests", "docs", "scripts"):
         for path in sorted((ROOT / top).rglob("*")):
             if path.is_file() and path.suffix in TEXT_SUFFIXES:
                 yield path
+    yield from sorted(ROOT.glob("*.md"))
 
 
 @pytest.mark.parametrize("marker", LOCAL_PATHS)
