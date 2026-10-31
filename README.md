@@ -71,8 +71,7 @@ carries its **indicia**, the traces that justify believing it.
 
 ## Install
 
-Requires Python 3.11 or newer. The command below is for the public release;
-until 2.0.0 is published, install a wheel supplied by the maintainers.
+Requires Python 3.11 or newer.
 
 ```bash
 pip install indicium-standard      # distribution name

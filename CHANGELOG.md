@@ -72,10 +72,10 @@ release. Existing downstream records may still embed the earlier context.
   and `release.yml` extracts its release notes from it.
 - Installation examples now consistently name `indicium-standard`, including
   its optional extras. Schema generation works on Linux and macOS.
-- The generated OWL ontology uses the registered namespace root as its document
-  IRI and carries the version and the licence (`pav:version`, `dct:license`), which
-  the LinkML source now declares; the model and the JSON Schema carry the version
-  too. RDF serialization is deterministic for release verification.
+- The generated OWL ontology uses the namespace root `https://w3id.org/indicium` as
+  its document IRI and carries the version and the licence (`pav:version`,
+  `dct:license`), which the LinkML source now declares; the model and the JSON
+  Schema carry the version too. RDF serialization is deterministic for release verification.
 - The published SHACL file, `docs/schema-assets/indicium.shapes.ttl` (a release
   asset), now holds the supplemental shapes as well as the generated ones, so a
   SHACL processor run on it agrees with `validate_graph`: before, it accepted a
