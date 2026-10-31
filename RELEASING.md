@@ -6,7 +6,7 @@ recorded here was measured on 2026-10-30.
 
 | | State on 2026-10-30 |
 |---|---|
-| Repository `HolobiomicsLab/indicium` | private; branches `main`, `gh-pages`, `feat/domain-qualifier` and the wip-* branch |
+| Repository `HolobiomicsLab/indicium` | private; branches `main`, `gh-pages`, `feat/domain-qualifier`, the wip-* branch and the release-readiness branch of 2026-10-30 (superseded) |
 | GitHub Pages | not enabled (Pages API 404); `gh-pages` last deployed 2026-05-23 |
 | `docs.yml` | every run since 2026-05-24 failed: `sed -i ''` in the Makefile is BSD-only (the 2.0.0 preparation patches `model.py` with Python instead) |
 | Tags and GitHub releases | none |
@@ -43,26 +43,54 @@ committed artefacts byte for byte; mkdocs ends with `Documentation built`;
 
 ## 1. Make the repository public
 
-Every branch becomes public, not only `main`. Delete the branches you do not want
-published first (the wip-* branch is a machine-local work branch).
+Every branch becomes public, not only `main`, and so does every pull-request ref
+(`refs/pull/<n>/head`). A pull-request ref stays readable after its branch is deleted
+and after the pull request is closed; only GitHub Support can purge it.
 
-Optional check of the full history for private project names and common secret
-formats. Run it in a fresh mirror clone (`git clone --mirror`), which also fetches the
-pull-request refs that stay readable after a branch is deleted. The private names are
-not written in this repository: they are kept, one extended regular expression per
-line, in the maintainers' private hub, `agenticsciencebuilder_dev/secrets/redaction-patterns.txt`.
-Both commands should print `0`:
+Before the flip, delete the branches you do not want published: the wip-* branch (a
+machine-local work branch) and the superseded release-readiness branch of
+2026-10-30. Then check the full history for private project names and common secret
+formats. This check is required: do not change the visibility until it passes.
+
+Run it in a fresh mirror clone, which fetches every branch, tag and pull-request ref.
+The private names are not written in this repository: they are kept, one extended
+regular expression per line, in the maintainers' private hub, in
+`secrets/redaction-patterns.txt` of `agenticsciencebuilder_dev`. Set `PATTERNS` to
+that file's path on your machine:
 
 ```bash
-PATTERNS=~/git/agenticsciencebuilder_dev/secrets/redaction-patterns.txt
-test -s "$PATTERNS" && git log --all -p --format= | grep -c -i -E -f "$PATTERNS"
-git log --all -p --format= | grep -c -E "sk-ant-[A-Za-z0-9_-]{20}|gh[pousr]_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{22}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----"
+gh repo clone HolobiomicsLab/indicium indicium-audit.git -- --mirror
+cd indicium-audit.git
+PATTERNS=/path/to/agenticsciencebuilder_dev/secrets/redaction-patterns.txt
+SECRETS='sk-ant-[A-Za-z0-9_-]{20}|gh[pousr]_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{22}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----'
+scan_text() {
+  git log --all -p --format='%an %ae %cn %ce%n%B'
+  git for-each-ref --format='%(refname) %(taggername) %(contents)'
+}
+test -s "$PATTERNS" && scan_text | grep -c -i -E -f "$PATTERNS"
+scan_text | grep -c -E "$SECRETS"
 ```
 
-The secret pattern is written so that it does not match its own text: each bracket
-expression stands where a literal key character would. `test -s` stops the first
-command when the pattern file is missing or empty, so an empty result there is not
-a pass.
+Expected: both counts print `0`. The log format keeps the author and committer lines
+and the full commit messages next to the diffs, and `for-each-ref` adds the tag
+messages. The secret pattern is written so that it does not match its own text: each
+bracket expression stands where a literal key character would. `test -s` stops the
+first count when the pattern file is missing or empty, so an empty result there is
+not a pass.
+
+If a count is not `0`, list the refs whose history matches, without printing the
+matches (for the secret count, use `-E "$SECRETS"` in place of `-i -E -f "$PATTERNS"`):
+
+```bash
+for ref in $(git for-each-ref --format='%(refname)'); do
+  n=$(git log -p --format='%an %ae %cn %ce%n%B' "$ref" | grep -c -i -E -f "$PATTERNS")
+  [ "$n" -gt 0 ] && echo "$ref $n"
+done
+```
+
+Every branch and tag listed must be deleted, and every `refs/pull/<n>` listed purged
+through GitHub Support, before the flip. Then clone a fresh mirror and run the check
+again.
 
 Then:
 
@@ -206,11 +234,11 @@ shows 2.0.0.
 
 ## Later versions
 
-A version lives in two files: `version` in `pyproject.toml` and `version:` in
-`src/indicium/schema/indicium.yaml`. Bump both, add a `CHANGELOG.md` section whose
+A version lives in three files: `version` in `pyproject.toml`, `version:` in
+`src/indicium/schema/indicium.yaml` and `version:` in `CITATION.cff`. Bump all three, add a `CHANGELOG.md` section whose
 date is the `YYYY-MM-DD` placeholder, and run `make schema-assets`, which writes the
 version into the model, the JSON Schema and the OWL ontology (`pav:version`).
-`tests/test_schema_version.py` fails while the two files disagree. Then run the
+`tests/test_schema_version.py` fails while the three files disagree. Then run the
 checks of "Before you start" and steps 7 and 8 with the new tag.
 
 ## 9. Follow-ups
