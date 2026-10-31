@@ -10,10 +10,9 @@ repo_url: https://github.com/HolobiomicsLab/indicium
 
 docs_dir: docs
 site_dir: site
-# superpowers/ holds historical design notes; release/ holds files meant for
-# other repositories (the w3id request). Neither belongs on the site.
+# release/ holds files meant for other repositories (the w3id request); it does
+# not belong on the site.
 exclude_docs: |
-  superpowers/
   release/
 
 theme:

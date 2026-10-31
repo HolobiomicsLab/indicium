@@ -1,7 +1,7 @@
 """Tests for Indicium v1.3: ClaimLink, ClaimStatus, OA selectors,
 decision_context, asserted_by, astra_insight_ref, and astra_bridge.
 
-Run with: cd ~/git/indicium && uv run pytest tests/test_claim_link.py -v
+Run with: uv run pytest tests/test_claim_link.py -v
 """
 from __future__ import annotations
 

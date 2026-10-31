@@ -1,7 +1,7 @@
 """Tests for Indicium v1.4: IndiciumDocument container, superseded_by,
 ClaimLink URI fix, _split_claim_text fallback.
 
-Run with: cd ~/git/indicium && uv run pytest tests/test_indicium_v14.py -v
+Run with: uv run pytest tests/test_indicium_v14.py -v
 """
 from __future__ import annotations
 
