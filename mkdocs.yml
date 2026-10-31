@@ -76,7 +76,7 @@ nav:
     - Source: schema/source.md
   - Adapters:
     - ASTRA: adapters/astra.md
-    - SciTask: adapters/scitask.md
+    - ASB task cards: adapters/scitask.md
     - KGmemory: adapters/kgmemory.md
   - Reference:
     - URI scheme: uri-scheme.md

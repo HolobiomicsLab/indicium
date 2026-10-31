@@ -51,7 +51,7 @@ Typed conversion between `Claim` objects and ASTRA insights. Needs the `astra` e
       members:
         - claim_to_insight
 
-### SciTask (`indicium.adapters.scitask`)
+### ASB task card adapter (`indicium.adapters.scitask`)
 
 ::: indicium.adapters.scitask
     options:

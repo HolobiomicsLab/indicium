@@ -128,7 +128,7 @@ claim_dict = {
     "evidence": [{"doi": "10.1234/test", "quote": "Compound A inhibited cell line B by 80%."}],
 }
 
-# SciTask EvidenceSnippet, as embedded in ASB SciTask cards
+# EvidenceSnippet, as embedded in ASB task cards
 snippet = claim_to_evidence_snippet(claim_dict)
 print(snippet["source_path"])  # doi:10.1234/test
 print(snippet["reason"])       # compound A [inhibits] inhibits growth of cell line B (context: in vitro)

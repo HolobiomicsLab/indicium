@@ -57,7 +57,7 @@ one minted by another, merges with it, and never travels without its evidence tr
 | JSON-LD context | `src/indicium/schema/context.jsonld` |
 | SHACL validation | `indicium.validate_graph` |
 | Quote verification kernel | `indicium.verify_quote` |
-| Projections to SciTask, ASTRA and KGmemory | `indicium.adapters`, `indicium.astra_bridge` |
+| Projections to ASB task cards, ASTRA and KGmemory | `indicium.adapters`, `indicium.astra_bridge` |
 
 ### The name
 
@@ -164,8 +164,8 @@ Indicium is the shared layer; the projects below mint, store or consume its clai
 | Project | What it is | Relation to Indicium |
 |---------|------------|----------------------|
 | [ASTRA](https://astra-spec.org) | A declarative YAML format for scientific analyses: inputs, outputs, decisions and evidence ([astra-spec](https://github.com/LightconeResearch/astra-spec)) | `indicium.astra_bridge` turns claims into ASTRA insights and reads ASTRA findings back as claims |
-| AgenticScienceBuilder (ASB) | Turns research articles into SciTask cards, capsules and skills | Depends on `indicium-standard>=2.0.0,<3`; its claims use the `asb:` vocabulary |
-| [asb-skill-collections](https://github.com/HolobiomicsLab/asb-skill-collections) | Registry and release tooling of the ASB skill collections | Released collections carry Indicium claim documents (`collections/<domain>/v<N>/indicium/`) |
+| AgenticScienceBuilder (ASB) | Distils research articles into agent skills, task cards and capsules | Depends on `indicium-standard>=2.0.0,<3`; its claims use the `asb:` vocabulary |
+| [asb-skill-collections](https://github.com/HolobiomicsLab/asb-skill-collections) | Registry and release tooling of the ASB skill collections | The v1 trees carry Indicium documents written before 2.0.0 (earlier `asb:` base, not 2.0.0-conformant); later versions will carry 2.0.0 documents |
 | `asb-skills-<domain>` | The skill collections, one repository per domain | Built by ASB; same vocabulary |
 | [Perspicacité](https://github.com/HolobiomicsLab/Perspicacite-AI) | Local-first retrieval-augmented system for searching and organizing the scientific literature | Uses the Indicium stack, when installed, for claim validation, the claim graph and the ASTRA export |
 | Scriptorium | Manuscript authoring | Depends on `indicium-standard>=2.0.0,<3` and the adapters |

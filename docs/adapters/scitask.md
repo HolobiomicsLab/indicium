@@ -1,8 +1,11 @@
-# SciTask Adapter
+# ASB task card adapter
 
-Projects an Indicium `Claim` dict onto a SciTask `EvidenceSnippet` dict, the
-structure embedded in the SciTask cards that AgenticScienceBuilder (ASB) produces.
-ASB and its SciTask schema are not public yet.
+Projects an Indicium `Claim` dict onto an `EvidenceSnippet` dict, the evidence
+structure embedded in the task cards that AgenticScienceBuilder (ASB) produces.
+The target structure is the `EvidenceSnippet` class of the ASB task card schema,
+`asb_schema/asb_card.yaml` in the [asb-schema](https://pypi.org/project/asb-schema/)
+package (`asb-schema>=0.4.0`). The module keeps its earlier name,
+`indicium.adapters.scitask`, so that existing imports keep working.
 
 ## Function
 
@@ -16,8 +19,8 @@ snip = claim_to_evidence_snippet(claim, source_path="results/fig1.png")
 
 ## Mapping
 
-| SciTask field | Indicium source |
-|---------------|----------------|
+| `EvidenceSnippet` field | Indicium source |
+|-------------------------|-----------------|
 | `snippet_id` | `claim["id"]` |
 | `source_path` | First `evidence[].artifact`, then `"doi:<doi>"`, then `""` |
 | `reason` | `"{subject} [{qualifier}] {relation} {object} (context: {context})"` |
