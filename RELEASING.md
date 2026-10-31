@@ -204,6 +204,15 @@ uv pip install --python /tmp/indicium-check/bin/python "indicium-standard==2.0.0
 Expected: `2.0.0 https://w3id.org/asb#`. The page `https://pypi.org/project/indicium-standard/`
 shows 2.0.0.
 
+## Later versions
+
+A version lives in two files: `version` in `pyproject.toml` and `version:` in
+`src/indicium/schema/indicium.yaml`. Bump both, add a `CHANGELOG.md` section whose
+date is the `YYYY-MM-DD` placeholder, and run `make schema-assets`, which writes the
+version into the model, the JSON Schema and the OWL ontology (`pav:version`).
+`tests/test_schema_version.py` fails while the two files disagree. Then run the
+checks of "Before you start" and steps 7 and 8 with the new tag.
+
 ## 9. Follow-ups
 
 1. **README and docs.** Uncomment the CI and PyPI badges at the top of `README.md`.

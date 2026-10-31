@@ -64,7 +64,9 @@ release. Existing downstream records may still embed the earlier context.
 - Installation examples now consistently name `indicium-standard`, including
   its optional extras. Schema generation works on Linux and macOS.
 - The generated OWL ontology uses the registered namespace root as its document
-  IRI; RDF serialization is deterministic for release verification.
+  IRI and carries the version and the licence (`pav:version`, `dct:license`), which
+  the LinkML source now declares; the model and the JSON Schema carry the version
+  too. RDF serialization is deterministic for release verification.
 - The sdist includes only package source, schema assets and release metadata;
   internal development plans are excluded.
 - SEPIO binding regression tests use an attributed excerpt of the ontology's
