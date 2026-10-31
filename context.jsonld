@@ -1,0 +1,445 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "indicium": "https://w3id.org/indicium/",
+    "linkml": "https://w3id.org/linkml/",
+    "ECO": {
+      "@id": "http://purl.obolibrary.org/obo/ECO_",
+      "@prefix": true
+    },
+    "IAO": {
+      "@id": "http://purl.obolibrary.org/obo/IAO_",
+      "@prefix": true
+    },
+    "doco": "http://purl.org/spar/doco/",
+    "cito": "http://purl.org/spar/cito/",
+    "fabio": "http://purl.org/spar/fabio/",
+    "sepio": {
+      "@id": "http://purl.obolibrary.org/obo/SEPIO_",
+      "@prefix": true
+    },
+    "prov": "http://www.w3.org/ns/prov#",
+    "dct": "http://purl.org/dc/terms/",
+    "asb": "https://w3id.org/asb#",
+    "dcat": "http://www.w3.org/ns/dcat#",
+    "oa": "http://www.w3.org/ns/oa#",
+    "sssom": "https://w3id.org/sssom/",
+    "semapv": "https://w3id.org/semapv/vocab/",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "eco": {
+      "@id": "http://purl.obolibrary.org/obo/ECO_",
+      "@prefix": true
+    },
+    "iao": {
+      "@id": "http://purl.obolibrary.org/obo/IAO_",
+      "@prefix": true
+    },
+    "ro": {
+      "@id": "http://purl.obolibrary.org/obo/RO_",
+      "@prefix": true
+    },
+    "asbval": "https://w3id.org/asb/validation#",
+    "edam": "http://edamontology.org/",
+    "IndiciumDocument": "indicium:IndiciumDocument",
+    "Claim": "asb:Claim",
+    "Evidence": "sepio:0000002",
+    "Source": "fabio:Expression",
+    "Figure": "doco:Figure",
+    "Script": "fabio:ComputerProgram",
+    "DataAsset": "dcat:Dataset",
+    "SoftwareEntity": "fabio:ComputerProgram",
+    "CitationLink": "indicium:CitationLink",
+    "ClaimLink": "indicium:ClaimLink",
+    "TextQuoteSelector": "oa:TextQuoteSelector",
+    "FragmentSelector": "oa:FragmentSelector",
+    "SSSOMMapping": "sssom:Mapping",
+    "id": "@id",
+    "context": {
+      "@id": "asb:context"
+    },
+    "subject": {
+      "@id": "asb:subject"
+    },
+    "qualifier": {
+      "@id": "asb:qualifier"
+    },
+    "super_pattern": {
+      "@id": "asb:qualifier"
+    },
+    "domain_qualifier": {
+      "@id": "asb:domainQualifier"
+    },
+    "relation": {
+      "@id": "asb:relation"
+    },
+    "predicate": {
+      "@id": "asb:relation"
+    },
+    "object": {
+      "@id": "asb:object"
+    },
+    "claim_type": {
+      "@id": "indicium:claim_type"
+    },
+    "source_excerpt": {
+      "@id": "indicium:source_excerpt"
+    },
+    "evidence_type": {
+      "@id": "indicium:evidence_type",
+      "@type": "@vocab",
+      "@context": {
+        "data": "ECO:0000006",
+        "citation": "ECO:0000033",
+        "knowledge": "ECO:0000302",
+        "inference": "ECO:0000361",
+        "speculation": "ECO:0000034"
+      }
+    },
+    "source_type": {
+      "@id": "indicium:source_type",
+      "@type": "@vocab",
+      "@context": {
+        "text": "IAO:0000311",
+        "figure": "doco:Figure",
+        "table": "doco:Table",
+        "image": "IAO:0000536",
+        "code": "fabio:ComputerProgram",
+        "data": "dcat:Dataset"
+      }
+    },
+    "quote": {
+      "@id": "indicium:quote"
+    },
+    "quote_exact": {
+      "@id": "indicium:quote_exact"
+    },
+    "quote_location": {
+      "@id": "indicium:quote_location"
+    },
+    "supports_claim": {
+      "@id": "sepio:0000427",
+      "@type": "@id"
+    },
+    "asserts": {
+      "@id": "indicium:asserts",
+      "@type": "@id"
+    },
+    "eco_code": {
+      "@id": "indicium:eco_code",
+      "@type": "@vocab",
+      "@context": {
+        "textual_quotation": "ECO:0000033",
+        "computational_evidence": "ECO:0000251",
+        "expert_curation": "ECO:0000305",
+        "inference_from_background_knowledge": "ECO:0000302",
+        "author_statement": "ECO:0000204",
+        "experimental_evidence": "ECO:0000006",
+        "combinatorial_evidence": "ECO:0000213",
+        "traceable_author_statement": "ECO:0000033"
+      }
+    },
+    "confidence": {
+      "@id": "indicium:confidence",
+      "@type": "http://www.w3.org/2001/XMLSchema#float"
+    },
+    "of_source": {
+      "@id": "indicium:of_source",
+      "@type": "@id"
+    },
+    "for_claim": {
+      "@id": "indicium:for_claim",
+      "@type": "@id"
+    },
+    "identifier": {
+      "@id": "dct:identifier"
+    },
+    "title": {
+      "@id": "dct:title"
+    },
+    "authors": {
+      "@id": "indicium:authors",
+      "@container": "@set"
+    },
+    "license_id": {
+      "@id": "indicium:license_id"
+    },
+    "doi": {
+      "@id": "dct:identifier"
+    },
+    "paragraph_id": {
+      "@id": "indicium:paragraph_id"
+    },
+    "xpath_pointer": {
+      "@id": "indicium:xpath_pointer"
+    },
+    "link_type": {
+      "@id": "indicium:link_type",
+      "@type": "@vocab",
+      "@context": {
+        "supports": "cito:supports",
+        "disputes": "cito:disputes",
+        "qualifies": "cito:qualifies",
+        "citesForInformation": "cito:citesForInformation",
+        "contradicts": "cito:contradicts",
+        "refines": "cito:refines",
+        "extends": "cito:extends",
+        "agreesWith": "cito:agreesWith",
+        "disagreesWith": "cito:disagreesWith",
+        "updates": "cito:updates",
+        "corrects": "cito:corrects",
+        "usesDataFrom": "cito:usesDataFrom",
+        "usesMethodIn": "cito:usesMethodIn"
+      }
+    },
+    "figure_id": {
+      "@id": "indicium:figure_id"
+    },
+    "caption": {
+      "@id": "indicium:caption"
+    },
+    "figure_type": {
+      "@id": "indicium:figure_type",
+      "@type": "@vocab",
+      "@context": {
+        "data_plot": "fabio:DataPlot",
+        "graph": "fabio:Graph",
+        "photograph": "fabio:Photograph",
+        "plate": "fabio:Plate",
+        "diagram": "fabio:Diagram",
+        "flowchart": "fabio:Flowchart",
+        "table": "fabio:Table",
+        "generic": "fabio:Figure"
+      }
+    },
+    "panel_label": {
+      "@id": "indicium:panel_label"
+    },
+    "page": {
+      "@id": "indicium:page"
+    },
+    "media_type": {
+      "@id": "indicium:media_type"
+    },
+    "content_url": {
+      "@id": "indicium:content_url"
+    },
+    "source_doi": {
+      "@id": "indicium:source_doi"
+    },
+    "is_supplementary": {
+      "@id": "indicium:is_supplementary"
+    },
+    "of_figure": {
+      "@id": "indicium:of_figure",
+      "@type": "@id"
+    },
+    "script_id": {
+      "@id": "indicium:script_id"
+    },
+    "script_type": {
+      "@id": "indicium:script_type",
+      "@type": "@vocab",
+      "@context": {
+        "analysis": "fabio:ComputerProgram",
+        "visualization": "fabio:ComputerProgram",
+        "workflow": "fabio:ComputerProgram",
+        "notebook": "fabio:ComputerProgram",
+        "utility": "fabio:ComputerProgram",
+        "generic": "fabio:ComputerProgram"
+      }
+    },
+    "language": {
+      "@id": "indicium:language"
+    },
+    "purpose": {
+      "@id": "indicium:purpose"
+    },
+    "repository_url": {
+      "@id": "indicium:repository_url"
+    },
+    "commit_sha": {
+      "@id": "indicium:commit_sha"
+    },
+    "of_script": {
+      "@id": "indicium:of_script",
+      "@type": "@id"
+    },
+    "asset_id": {
+      "@id": "indicium:asset_id"
+    },
+    "dataset_type": {
+      "@id": "indicium:dataset_type",
+      "@type": "@vocab",
+      "@context": {
+        "tabular": "dcat:Dataset",
+        "sequence": "dcat:Dataset",
+        "spectral": "dcat:Dataset",
+        "image_stack": "dcat:Dataset",
+        "network": "dcat:Dataset",
+        "model": "dcat:Dataset",
+        "generic": "dcat:Dataset"
+      }
+    },
+    "data_format": {
+      "@id": "indicium:data_format"
+    },
+    "accession": {
+      "@id": "indicium:accession"
+    },
+    "repository": {
+      "@id": "indicium:repository"
+    },
+    "n_samples": {
+      "@id": "indicium:n_samples"
+    },
+    "of_dataset": {
+      "@id": "indicium:of_dataset",
+      "@type": "@id"
+    },
+    "from_claim": {
+      "@id": "indicium:from_claim",
+      "@type": "@id"
+    },
+    "to_claim": {
+      "@id": "indicium:to_claim",
+      "@type": "@id"
+    },
+    "claim_status": {
+      "@id": "indicium:claim_status"
+    },
+    "tqs_exact": {
+      "@id": "indicium:tqs_exact"
+    },
+    "tqs_prefix": {
+      "@id": "indicium:tqs_prefix"
+    },
+    "tqs_suffix": {
+      "@id": "indicium:tqs_suffix"
+    },
+    "frag_value": {
+      "@id": "indicium:frag_value"
+    },
+    "frag_page": {
+      "@id": "indicium:frag_page"
+    },
+    "text_selector": {
+      "@id": "indicium:text_selector",
+      "@type": "@id"
+    },
+    "fragment_selector": {
+      "@id": "indicium:fragment_selector",
+      "@type": "@id"
+    },
+    "decision_context": {
+      "@id": "indicium:decision_context",
+      "@container": "@set"
+    },
+    "asserted_by": {
+      "@id": "prov:wasAttributedTo"
+    },
+    "astra_insight_ref": {
+      "@id": "indicium:astra_insight_ref"
+    },
+    "superseded_by": {
+      "@id": "indicium:superseded_by",
+      "@type": "@id"
+    },
+    "workflow_coupling": {
+      "@id": "asb:workflowCoupling"
+    },
+    "source_task_kind": {
+      "@id": "asb:sourceTaskKind"
+    },
+    "claims": {
+      "@id": "indicium:claims",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "evidences": {
+      "@id": "indicium:evidences",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "sources": {
+      "@id": "indicium:sources",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "figures": {
+      "@id": "indicium:figures",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "scripts": {
+      "@id": "indicium:scripts",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "datasets": {
+      "@id": "indicium:datasets",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "claim_links": {
+      "@id": "indicium:claim_links",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "citation_links": {
+      "@id": "indicium:citation_links",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "software_entities": {
+      "@id": "indicium:software_entities",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "canonical_url": {
+      "@id": "indicium:canonical_url",
+      "@type": "@id"
+    },
+    "version": {
+      "@id": "indicium:version"
+    },
+    "edam_operation": {
+      "@id": "indicium:edam_operation",
+      "@type": "@id"
+    },
+    "edam_topics": {
+      "@id": "indicium:edam_topics",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "bio_tools_id": {
+      "@id": "indicium:bio_tools_id"
+    },
+    "subject_id": {
+      "@id": "indicium:subject_id"
+    },
+    "subject_label": {
+      "@id": "indicium:subject_label"
+    },
+    "predicate_id": {
+      "@id": "indicium:predicate_id"
+    },
+    "object_id": {
+      "@id": "indicium:object_id"
+    },
+    "object_label": {
+      "@id": "indicium:object_label"
+    },
+    "mapping_justification": {
+      "@id": "indicium:mapping_justification"
+    },
+    "derived_from": {
+      "@id": "indicium:derived_from",
+      "@container": "@set"
+    },
+    "sssom_mappings": {
+      "@id": "indicium:sssom_mappings",
+      "@type": "@id",
+      "@container": "@set"
+    }
+  }
+}
