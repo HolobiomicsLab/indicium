@@ -13,9 +13,7 @@
 <p align="center">
   <a href="https://github.com/HolobiomicsLab/indicium/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-00284b" alt="License: MIT"></a>
   <a href="https://github.com/HolobiomicsLab/indicium/blob/main/pyproject.toml"><img src="https://img.shields.io/badge/python-3.11%2B-00284b" alt="Python 3.11+"></a>
-  <!-- Uncomment once the repository is public (RELEASING.md, follow-ups):
   <a href="https://github.com/HolobiomicsLab/indicium/actions/workflows/ci.yml"><img src="https://github.com/HolobiomicsLab/indicium/actions/workflows/ci.yml/badge.svg" alt="Tests"></a>
-  -->
   <!-- Uncomment once indicium-standard is on PyPI (RELEASING.md, follow-ups):
   <a href="https://pypi.org/project/indicium-standard/"><img src="https://img.shields.io/pypi/v/indicium-standard?color=00284b" alt="PyPI"></a>
   -->
