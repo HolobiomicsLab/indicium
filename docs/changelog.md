@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## 2.0.0 — YYYY-MM-DD
+## 2.0.0 — 2026-11-01
 
 First public release. These breaking changes landed *before* any Indicium package
 release. Existing downstream records may still embed the earlier context.
