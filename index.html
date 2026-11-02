@@ -1237,10 +1237,6 @@ Domain packages add their own shapes through the same call.</p>
 <h2 id="install">Install<a class="headerlink" href="#install" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>indicium-standard
 </code></pre></div>
-<p>The 2.0.0 upload to PyPI is pending. Until <code>pip install indicium-standard</code> finds it,
-install from the repository:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;git+https://github.com/HolobiomicsLab/indicium&quot;</span>
-</code></pre></div>
 <div class="admonition warning">
 <p class="admonition-title">The distribution is <code>indicium-standard</code>; the import package is <code>indicium</code></p>
 <p>The PyPI name <code>indicium</code> belongs to an unrelated, abandoned key-value-store package
@@ -1248,21 +1244,21 @@ that also ships a top-level <code>indicium</code> module. Installing both into o
 clobbers the import. Always depend on <code>indicium-standard</code>.</p>
 </div>
 <h2 id="quickstart">Quickstart<a class="headerlink" href="#quickstart" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">rdflib</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">indicium</span><span class="w"> </span><span class="kn">import</span> <span class="n">ASB_BASE</span><span class="p">,</span> <span class="n">validate_graph</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">claim</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="s2">@prefix asb: &lt;</span><span class="si">{</span><span class="n">ASB_BASE</span><span class="si">}</span><span class="s2">&gt; .</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="s2">&lt;urn:claim:1&gt; a asb:Claim ;</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="s2">    asb:context &quot;in vitro&quot; ;</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="s2">    asb:subject &quot;compound A&quot; ;</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="s2">    asb:qualifier &quot;inhibits&quot; ;</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="s2">    asb:relation &quot;inhibits growth of&quot; ;</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="s2">    asb:object &quot;cell line B&quot; .</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="s2">&quot;&quot;&quot;</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="n">conforms</span><span class="p">,</span> <span class="n">report</span> <span class="o">=</span> <span class="n">validate_graph</span><span class="p">(</span><span class="n">rdflib</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">claim</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;turtle&quot;</span><span class="p">))</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="nb">print</span><span class="p">(</span><span class="n">conforms</span><span class="p">)</span>  <span class="c1"># True</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">rdflib</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">indicium</span><span class="w"> </span><span class="kn">import</span> <span class="n">ASB_BASE</span><span class="p">,</span> <span class="n">validate_graph</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">claim</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="s2">@prefix asb: &lt;</span><span class="si">{</span><span class="n">ASB_BASE</span><span class="si">}</span><span class="s2">&gt; .</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s2">&lt;urn:claim:1&gt; a asb:Claim ;</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s2">    asb:context &quot;in vitro&quot; ;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="s2">    asb:subject &quot;compound A&quot; ;</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="s2">    asb:qualifier &quot;inhibits&quot; ;</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s2">    asb:relation &quot;inhibits growth of&quot; ;</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="s2">    asb:object &quot;cell line B&quot; .</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="s2">&quot;&quot;&quot;</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="n">conforms</span><span class="p">,</span> <span class="n">report</span> <span class="o">=</span> <span class="n">validate_graph</span><span class="p">(</span><span class="n">rdflib</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">claim</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;turtle&quot;</span><span class="p">))</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="nb">print</span><span class="p">(</span><span class="n">conforms</span><span class="p">)</span>  <span class="c1"># True</span>
 </code></pre></div>
 <p>The <a href="quickstart/">Quickstart</a> page continues with the typed model and the adapters.</p>
 <h2 id="schema-artefacts">Schema artefacts<a class="headerlink" href="#schema-artefacts" title="Permanent link">&para;</a></h2>
