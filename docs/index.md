@@ -70,13 +70,6 @@ Domain packages add their own shapes through the same call.
 pip install indicium-standard
 ```
 
-The 2.0.0 upload to PyPI is pending. Until `pip install indicium-standard` finds it,
-install from the repository:
-
-```bash
-pip install "git+https://github.com/HolobiomicsLab/indicium"
-```
-
 !!! warning "The distribution is `indicium-standard`; the import package is `indicium`"
     The PyPI name `indicium` belongs to an unrelated, abandoned key-value-store package
     that also ships a top-level `indicium` module. Installing both into one environment

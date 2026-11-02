@@ -18,13 +18,6 @@ pip install "indicium-standard[astra]"     # ASTRA bridge (PyYAML)
 pip install "indicium-standard[codegen]"   # regenerate the artefacts from the LinkML source
 ```
 
-The 2.0.0 upload to PyPI is pending. Until `pip install indicium-standard` finds it,
-install from the repository:
-
-```bash
-pip install "git+https://github.com/HolobiomicsLab/indicium"
-```
-
 The import package is `indicium`. Never install the unrelated PyPI package named
 `indicium` next to it: both ship a top-level `indicium` module.
 
