@@ -1160,7 +1160,7 @@ pending registration will add. Every status below was measured on 2026-10-30.</p
 <tr>
 <td><code>indicium:</code></td>
 <td><code>https://w3id.org/indicium/</code></td>
-<td>The LinkML schema <code>id</code>, the <code>indicium</code> prefix of the JSON-LD context, and every class and slot without its own <code>class_uri</code> or <code>slot_uri</code>: claim metadata (<code>claim_status</code>, <code>claim_type</code>, <code>source_excerpt</code>), the evidence and source slots (<code>eco_code</code>, <code>quote_exact</code>, <code>for_claim</code>, <code>of_source</code>, ...), <code>ClaimLink</code>, <code>CitationLink</code> and <code>IndiciumDocument</code>. The SHACL shapes check 75 property paths under this namespace, and the OWL artefact names every class and slot under it</td>
+<td>The LinkML schema <code>id</code>, the <code>indicium</code> prefix of the JSON-LD context, and every class and slot without its own <code>class_uri</code> or <code>slot_uri</code>: claim metadata (<code>claim_status</code>, <code>claim_type</code>, <code>source_excerpt</code>), the evidence and source slots (<code>eco_code</code>, <code>quote_exact</code>, <code>for_claim</code>, <code>of_source</code>, ...), <code>ClaimLink</code>, <code>CitationLink</code> and <code>IndiciumDocument</code>. Of the 87 distinct IRIs used as SHACL paths, 75 are under this namespace, and the OWL artefact names every class and slot under it</td>
 <td>No (404)</td>
 </tr>
 </tbody>
@@ -1271,12 +1271,55 @@ registration is merged, and they can change until then:</p>
 </table>
 <h3 id="two-names-for-one-class-in-the-generated-artefacts">Two names for one class in the generated artefacts<a class="headerlink" href="#two-names-for-one-class-in-the-generated-artefacts" title="Permanent link">&para;</a></h3>
 <p>The SHACL shapes and the pydantic model use the <code>class_uri</code> and <code>slot_uri</code> of the
-LinkML source. They bind <code>Claim</code> and eight of its slots to <code>asb:</code> IRIs; <code>Evidence</code>,
-<code>Source</code>, <code>Figure</code>, <code>Script</code>, <code>SoftwareEntity</code> and <code>DataAsset</code> to SEPIO, FaBiO, DoCO
-and DCAT classes; the two selectors to Web Annotation (<code>oa:</code>) and <code>SSSOMMapping</code> to
-<code>sssom:Mapping</code>; a few slots to Dublin Core, PROV and SEPIO properties; and every other
-class and slot to its <code>indicium:</code> IRI. Of the 87 property paths in the shapes, 75 are
-under <code>indicium:</code> and 8 under <code>asb:</code>.</p>
+LinkML source. They bind <code>Claim</code> and seven of its distinct slots to <code>asb:</code> IRIs,
+and <code>Evidence.workflow_coupling</code> adds the eighth <code>asb:</code> path. <code>Evidence</code>, <code>Source</code>,
+<code>Figure</code>, <code>Script</code> and <code>DataAsset</code> use SEPIO, FaBiO, DoCO and DCAT classes;
+<code>SoftwareEntity</code> keeps its <code>indicium:</code> class. The two selectors use Web Annotation
+(<code>oa:</code>) and <code>SSSOMMapping</code> uses <code>sssom:Mapping</code>. A few slots use Dublin Core, PROV
+and SEPIO properties; every other class and slot uses its <code>indicium:</code> IRI.</p>
+<p>Repeated constraints can use the same path, so the number of <code>sh:path</code> statements
+is larger than the distinct vocabulary footprint:</p>
+<table>
+<thead>
+<tr>
+<th>Shapes graph</th>
+<th style="text-align: right;">Statements</th>
+<th style="text-align: right;"><code>indicium:</code></th>
+<th style="text-align: right;"><code>asb:</code></th>
+<th style="text-align: right;">Other</th>
+<th style="text-align: right;">Distinct total</th>
+<th style="text-align: right;">Distinct <code>indicium:</code></th>
+<th style="text-align: right;">Distinct <code>asb:</code></th>
+<th style="text-align: right;">Distinct other</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/indicium/generated/shapes.ttl</code></td>
+<td style="text-align: right;">108</td>
+<td style="text-align: right;">86</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">87</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td><code>docs/schema-assets/indicium.shapes.ttl</code></td>
+<td style="text-align: right;">110</td>
+<td style="text-align: right;">86</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">87</td>
+<td style="text-align: right;">75</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">4</td>
+</tr>
+</tbody>
+</table>
+<p>The published asset adds the supplemental qualifier-presence constraint, whose two
+paths are under <code>asb:</code>.</p>
 <p>The OWL artefact, <code>indicium.owl.ttl</code>, is generated with the LinkML default that names
 each class and slot by its schema-native IRI under <code>indicium:</code>, including those bound
 elsewhere: it declares 60 IRIs typed <code>owl:Class</code> (classes, enums and enum values), 58
