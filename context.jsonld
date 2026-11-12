@@ -47,7 +47,7 @@
     "Figure": "doco:Figure",
     "Script": "fabio:ComputerProgram",
     "DataAsset": "dcat:Dataset",
-    "SoftwareEntity": "fabio:ComputerProgram",
+    "SoftwareEntity": "indicium:SoftwareEntity",
     "CitationLink": "indicium:CitationLink",
     "ClaimLink": "indicium:ClaimLink",
     "TextQuoteSelector": "oa:TextQuoteSelector",

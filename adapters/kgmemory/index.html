@@ -1009,8 +1009,11 @@ KGmemory standard is publicly released.</p>
 <p>A <code>claim_jsonld()</code> adapter for KGmemory is implemented in
 <code>src/indicium/adapters/kgmemory.py</code> and ships with this package.
 It emits a JSON-LD node referencing the KGmemory namespace
-(<code>http://kgmemory.org/ns#SemanticMemory</code>) so an Indicium claim is
-ingestible when KGmemory adopts the vocabulary.</p>
+(<code>http://kgmemory.org/ns#SemanticMemory</code>) while typing the same node as
+<code>https://w3id.org/asb#Claim</code> and expressing its five SuperPattern fields in
+the canonical <code>https://w3id.org/asb#</code> vocabulary. The result can therefore be
+validated with Indicium's Claim shape and remains ingestible when KGmemory
+adopts the vocabulary.</p>
 
 
 

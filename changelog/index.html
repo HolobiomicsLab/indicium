@@ -1003,6 +1003,34 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#unreleased" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Unreleased
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Unreleased">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fixed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fixed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#200-2026-11-01" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1037,7 +1065,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#fixed" class="md-nav__link">
+  <a href="#fixed_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         Fixed
@@ -1248,7 +1276,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#fixed_1" class="md-nav__link">
+  <a href="#fixed_2" class="md-nav__link">
     <span class="md-ellipsis">
       
         Fixed
@@ -1326,7 +1354,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#fixed_2" class="md-nav__link">
+  <a href="#fixed_3" class="md-nav__link">
     <span class="md-ellipsis">
       
         Fixed
@@ -1497,6 +1525,20 @@
 <p>The format is based on <a href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
 <hr />
+<h2 id="unreleased">Unreleased<a class="headerlink" href="#unreleased" title="Permanent link">&para;</a></h2>
+<h3 id="fixed">Fixed<a class="headerlink" href="#fixed" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The KGmemory projection now emits <code>asb:Claim</code> and canonical <code>asb:</code>
+  SuperPattern predicates while retaining the <code>mem:SemanticMemory</code> type. This
+  is visible to consumers of <code>claim_jsonld()</code>, whose incorrect <code>indicium:</code> class
+  and predicate IRIs are replaced by <code>https://w3id.org/asb#</code> IRIs.</li>
+<li><code>Script</code> and <code>SoftwareEntity</code> now have separate SHACL targets, so a Script may
+  omit <code>dct:identifier</code> while a SoftwareEntity must provide it. The
+  SoftwareEntity RDF type changes from <code>fabio:ComputerProgram</code> to
+  <code>indicium:SoftwareEntity</code>; existing expanded SoftwareEntity RDF must add the
+  new type to receive the required-identifier constraint and may retain the
+  FaBiO type for interoperability.</li>
+</ul>
 <h2 id="200-2026-11-01">2.0.0 — 2026-11-01<a class="headerlink" href="#200-2026-11-01" title="Permanent link">&para;</a></h2>
 <p>First public release. These breaking changes landed <em>before</em> any Indicium package
 release. Existing downstream records may still embed the earlier context.</p>
@@ -1551,7 +1593,7 @@ release. Existing downstream records may still embed the earlier context.</p>
 <li>Local release checks and a Trusted Publishing workflow with matching tag,
   package version and dated changelog checks before publication.</li>
 </ul>
-<h3 id="fixed">Fixed<a class="headerlink" href="#fixed" title="Permanent link">&para;</a></h3>
+<h3 id="fixed_1">Fixed<a class="headerlink" href="#fixed_1" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong><code>__version__</code> reported the wrong version.</strong> It queried <code>importlib.metadata</code>
   for the distribution <code>indicium</code>, which after the rename resolves either to
@@ -1697,7 +1739,7 @@ still satisfy <code>QualifierPresenceShape</code> and remain valid. Consumers ga
 <code>domain_qualifier</code> slot; no existing slot changed its <code>slot_uri</code> or range.</p>
 <hr />
 <h2 id="161-2026-05-26">[1.6.1] - 2026-05-26<a class="headerlink" href="#161-2026-05-26" title="Permanent link">&para;</a></h2>
-<h3 id="fixed_1">Fixed<a class="headerlink" href="#fixed_1" title="Permanent link">&para;</a></h3>
+<h3 id="fixed_2">Fixed<a class="headerlink" href="#fixed_2" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Package <code>context.jsonld</code> for downstream consumers.</strong> Move
   <code>docs/context.jsonld</code> into <code>src/indicium/schema/context.jsonld</code> (canonical
@@ -1748,7 +1790,7 @@ names.</p>
   <code>SHACLProvider</code>) can now inject additional SHACL shapes that are merged with the built-in
   schema shapes before validation.</li>
 </ul>
-<h3 id="fixed_2">Fixed<a class="headerlink" href="#fixed_2" title="Permanent link">&para;</a></h3>
+<h3 id="fixed_3">Fixed<a class="headerlink" href="#fixed_3" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>allow_warnings=True</code> now passed to pyshacl in <code>validate_graph()</code> so that <code>sh:Warning</code>-severity
   shapes no longer set <code>conforms=False</code>; warnings are reported in the validation report text only.</li>
