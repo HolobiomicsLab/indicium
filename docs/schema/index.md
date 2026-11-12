@@ -15,12 +15,32 @@ From it, four artefacts are generated:
 ## Core classes
 
 ```
-Claim
- └── evidence: list[Evidence]
-      └── of_source: Source
-
-CitationLink   (connects two Claims or a Claim to a Source)
+IndiciumDocument
+ ├── claims: dict[str, Claim]
+ ├── evidences: list[Evidence]
+ │    ├── supports_claim / for_claim → Claim
+ │    ├── of_source → Source
+ │    ├── of_figure → Figure
+ │    ├── of_script → Script
+ │    ├── of_dataset → DataAsset
+ │    ├── text_selector → TextQuoteSelector
+ │    └── fragment_selector → FragmentSelector
+ ├── sources: list[Source]
+ ├── figures: list[Figure]
+ ├── scripts: list[Script]
+ ├── datasets: list[DataAsset]
+ ├── software_entities: list[SoftwareEntity]
+ ├── claim_links: list[ClaimLink]
+ │    └── from_claim / to_claim → Claim
+ ├── citation_links: list[CitationLink]
+ │    ├── of_source → Source
+ │    └── for_claim → Claim
+ └── sssom_mappings: dict[str, SSSOMMapping]
 ```
+
+The arrows are references between otherwise separate records. In particular,
+`Claim` has no nested evidence field: `Evidence` names its claim through the
+optional `supports_claim` or `for_claim` link.
 
 ## The binding
 

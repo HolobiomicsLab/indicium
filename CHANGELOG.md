@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Changed
+- Schema, API and URI documentation now reflects the released model, with a test
+  that detects drift in public types, evidence enums and SHACL path counts.
 - Public documentation no longer states that every claim always carries evidence.
   The README, the documentation index and the schema overview now say what
   validation enforces (the claim slots) and that evidence is a separate,
