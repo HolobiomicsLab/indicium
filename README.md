@@ -43,7 +43,9 @@ standardizes is the *typed grounding of claims in evidence.*
 
 Indicium is a vocabulary and a standard, not a tool and not a store. Every tool that
 mints claims imports it, so a claim minted by any of them is structurally identical to
-one minted by another, merges with it, and never travels without its evidence trace.
+one minted by another, merges with it, and has a defined place for its evidence trace.
+Whether a given claim carries evidence is up to the producer: see
+[What validation enforces](#what-validation-enforces).
 
 | Part | Where |
 |------|-------|
@@ -55,11 +57,21 @@ one minted by another, merges with it, and never travels without its evidence tr
 | Quote verification kernel | `indicium.verify_quote` |
 | Projections to ASB task cards, ASTRA and KGmemory | `indicium.adapters`, `indicium.astra_bridge` |
 
+### What validation enforces
+
+`validate_graph` and the SHACL shapes require the claim slots `context`, `subject`,
+`relation` and `object`, and at least one of `qualifier` or `domain_qualifier`. They
+also apply the required properties of the other classes, for example a
+`SoftwareEntity` needs an identifier. Evidence is a separate record that points to
+its claim through `supports_claim` or `for_claim`. In the model every document
+collection and both of those links are optional, so a claim without evidence is
+valid. A producer that promises evidence for every claim has to check it itself.
+
 ### The name
 
 *Indicium* (Latin) is "a sign or mark that points to the truth"; in law, the
 evidentiary indication. The package is named for what it standardizes: every claim
-carries its **indicia**, the traces that justify believing it.
+is meant to carry its **indicia**, the traces that justify believing it.
 
 - **`indicium`** (singular) is the standard and this package.
 - **indicia** (plural) is the body of evidence attached to a claim, and the term
