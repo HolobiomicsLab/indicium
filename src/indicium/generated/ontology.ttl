@@ -556,63 +556,6 @@ indicium:SSSOMMapping a owl:Class ;
     skos:exactMatch sssom:Mapping ;
     skos:inScheme <https://w3id.org/indicium> .
 
-indicium:SoftwareEntity a owl:Class ;
-    rdfs:label "SoftwareEntity" ;
-    rdfs:subClassOf [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty indicium:bio_tools_id ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty indicium:edam_topics ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom xsd:string ;
-            owl:onProperty indicium:bio_tools_id ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:bio_tools_id ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom xsd:string ;
-            owl:onProperty indicium:identifier ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:identifier ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty indicium:edam_operation ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty indicium:version ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom xsd:anyURI ;
-            owl:onProperty indicium:edam_topics ],
-        [ a owl:Restriction ;
-            owl:minCardinality 0 ;
-            owl:onProperty indicium:canonical_url ],
-        [ a owl:Restriction ;
-            owl:minCardinality 1 ;
-            owl:onProperty indicium:identifier ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:edam_operation ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom xsd:string ;
-            owl:onProperty indicium:version ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:version ],
-        [ a owl:Restriction ;
-            owl:maxCardinality 1 ;
-            owl:onProperty indicium:canonical_url ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom xsd:anyURI ;
-            owl:onProperty indicium:edam_operation ],
-        [ a owl:Restriction ;
-            owl:allValuesFrom xsd:anyURI ;
-            owl:onProperty indicium:canonical_url ] ;
-    skos:definition "A software tool / package with stable identity, EDAM annotations, and optional bio.tools cross-reference. Distinct from `Script` (in-paper code artefact): SoftwareEntity is a globally identified tool (e.g. MZmine, OpenMS) that multiple papers may cite." ;
-    skos:exactMatch fabio:ComputerProgram ;
-    skos:inScheme <https://w3id.org/indicium> .
-
 <https://w3id.org/indicium/SourceTaskKind#analysis> a owl:Class ;
     rdfs:label "analysis" ;
     rdfs:subClassOf indicium:SourceTaskKind ;
@@ -891,6 +834,63 @@ indicium:ScriptType a owl:Class ;
     skos:definition "Role-based classification of code artefacts in scholarly publications. All values map to fabio:ComputerProgram; the enum value itself conveys the functional role within the paper's methodology." ;
     skos:inScheme <https://w3id.org/indicium> ;
     linkml:permissible_values fabio:ComputerProgram .
+
+indicium:SoftwareEntity a owl:Class ;
+    rdfs:label "SoftwareEntity" ;
+    rdfs:subClassOf [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:bio_tools_id ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:edam_topics ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:bio_tools_id ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:bio_tools_id ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:identifier ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:identifier ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:edam_operation ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:version ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty indicium:edam_topics ],
+        [ a owl:Restriction ;
+            owl:minCardinality 0 ;
+            owl:onProperty indicium:canonical_url ],
+        [ a owl:Restriction ;
+            owl:minCardinality 1 ;
+            owl:onProperty indicium:identifier ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:edam_operation ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:string ;
+            owl:onProperty indicium:version ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:version ],
+        [ a owl:Restriction ;
+            owl:maxCardinality 1 ;
+            owl:onProperty indicium:canonical_url ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty indicium:edam_operation ],
+        [ a owl:Restriction ;
+            owl:allValuesFrom xsd:anyURI ;
+            owl:onProperty indicium:canonical_url ] ;
+    skos:definition "A software tool / package with stable identity, EDAM annotations, and optional bio.tools cross-reference. Distinct from `Script` (in-paper code artefact): SoftwareEntity is a globally identified tool (e.g. MZmine, OpenMS) that multiple papers may cite." ;
+    skos:exactMatch indicium:SoftwareEntity ;
+    skos:inScheme <https://w3id.org/indicium> .
 
 indicium:accession a owl:DatatypeProperty ;
     rdfs:label "accession" ;
@@ -1724,6 +1724,17 @@ indicium:source_doi a owl:DatatypeProperty ;
     rdfs:label "source_doi" ;
     skos:inScheme <https://w3id.org/indicium> .
 
+fabio:ComputerProgram a owl:Class ;
+    rdfs:label "analysis",
+        "code",
+        "generic",
+        "notebook",
+        "utility",
+        "visualization",
+        "workflow" ;
+    rdfs:subClassOf indicium:ScriptType,
+        indicium:SourceType .
+
 indicium:FigureType a owl:Class ;
     rdfs:label "FigureType" ;
     owl:unionOf ( fabio:DataPlot fabio:Graph fabio:Photograph fabio:Plate fabio:Diagram fabio:Flowchart fabio:Table fabio:Figure ) ;
@@ -1737,17 +1748,6 @@ indicium:FigureType a owl:Class ;
         fabio:Photograph,
         fabio:Plate,
         fabio:Table .
-
-fabio:ComputerProgram a owl:Class ;
-    rdfs:label "analysis",
-        "code",
-        "generic",
-        "notebook",
-        "utility",
-        "visualization",
-        "workflow" ;
-    rdfs:subClassOf indicium:ScriptType,
-        indicium:SourceType .
 
 dcat:Dataset a owl:Class ;
     rdfs:label "data",

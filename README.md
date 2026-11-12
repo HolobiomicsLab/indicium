@@ -158,7 +158,7 @@ Indicium is the shared layer; the projects below mint, store or consume its clai
 | `asb-skills-<domain>` | The skill collections, one repository per domain | Built by ASB; same vocabulary |
 | [Perspicacité](https://github.com/HolobiomicsLab/Perspicacite-AI) | Local-first retrieval-augmented system for searching and organizing the scientific literature | Uses the Indicium stack, when installed, for claim validation, the claim graph and the ASTRA export |
 | Scriptorium | Manuscript authoring | Depends on `indicium-standard>=2.0.0,<3` and the adapters |
-| KGmemory | Where claims are stored and reasoned over | `indicium.adapters.kgmemory` emits a JSON-LD node typed `mem:SemanticMemory` |
+| KGmemory | Where claims are stored and reasoned over | `indicium.adapters.kgmemory` projects an `asb:Claim` with canonical ASB predicates and adds the `mem:SemanticMemory` type |
 | `indicium-adapters` | The `DomainAdapter` and `SHACLProvider` protocols and entry-point discovery | Domain shapes reach `validate_graph(..., extra_shapes=...)` |
 | `indicium-adapters-<domain>` | Domain bundles: agentic-ai, astronomy, epigenomics, genomics, metabarcoding, metabolomics, metagenomics, multi-omics, proteomics, transcriptomics | Ontology terms and SHACL shapes per domain |
 

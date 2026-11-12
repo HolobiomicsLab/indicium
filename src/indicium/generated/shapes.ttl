@@ -65,7 +65,7 @@ indicium:IndiciumDocument a sh:NodeShape ;
             sh:nodeKind sh:BlankNodeOrIRI ;
             sh:order 5 ;
             sh:path indicium:datasets ],
-        [ sh:class fabio:ComputerProgram ;
+        [ sh:class indicium:SoftwareEntity ;
             sh:description "All SoftwareEntity records in this document." ;
             sh:nodeKind sh:BlankNodeOrIRI ;
             sh:order 6 ;
@@ -233,6 +233,45 @@ indicium:ClaimLink a sh:NodeShape ;
             sh:order 1 ;
             sh:path indicium:to_claim ] ;
     sh:targetClass indicium:ClaimLink .
+
+indicium:SoftwareEntity a sh:NodeShape ;
+    rdfs:comment "A software tool / package with stable identity, EDAM annotations, and optional bio.tools cross-reference. Distinct from `Script` (in-paper code artefact): SoftwareEntity is a globally identified tool (e.g. MZmine, OpenMS) that multiple papers may cite." ;
+    sh:closed false ;
+    sh:ignoredProperties ( rdf:type ) ;
+    sh:property [ sh:description "EDAM topic IRIs (multivalued)." ;
+            sh:nodeKind sh:IRI ;
+            sh:order 4 ;
+            sh:path indicium:edam_topics ],
+        [ sh:description "Canonical homepage / source URL of the software entity." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 1 ;
+            sh:path indicium:canonical_url ],
+        [ sh:datatype xsd:string ;
+            sh:description "Version string (e.g. SemVer, git tag, release name)." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 2 ;
+            sh:path indicium:version ],
+        [ sh:datatype xsd:string ;
+            sh:description "bio.tools registry ID for cross-reference / federation." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 5 ;
+            sh:path indicium:bio_tools_id ],
+        [ sh:description "EDAM operation IRI (e.g. http://edamontology.org/operation_3215)." ;
+            sh:maxCount 1 ;
+            sh:nodeKind sh:IRI ;
+            sh:order 3 ;
+            sh:path indicium:edam_operation ],
+        [ sh:datatype xsd:string ;
+            sh:description "Stable IRI (e.g. w3id.org/holobiomicslab/asb-tool/<slug>) or URN identifying the software entity." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:nodeKind sh:Literal ;
+            sh:order 0 ;
+            sh:path dct:identifier ] ;
+    sh:targetClass indicium:SoftwareEntity .
 
 sssom:Mapping a sh:NodeShape ;
     rdfs:comment "A term mapping in SSSOM form (Simple Standard for Sharing Ontological Mappings) carried by an Indicium document." ;
@@ -505,11 +544,9 @@ asb:Claim a sh:NodeShape ;
     sh:targetClass asb:Claim .
 
 fabio:ComputerProgram a sh:NodeShape ;
-    rdfs:comment "A code artefact (script, notebook, or pipeline) from a scholarly publication. Carries role classification (script_type), programming language, repository URL, and optional pinned commit. Linked from Evidence.of_script when the evidence is grounded in code rather than a text passage or figure.",
-        "A software tool / package with stable identity, EDAM annotations, and optional bio.tools cross-reference. Distinct from `Script` (in-paper code artefact): SoftwareEntity is a globally identified tool (e.g. MZmine, OpenMS) that multiple papers may cite." ;
+    rdfs:comment "A code artefact (script, notebook, or pipeline) from a scholarly publication. Carries role classification (script_type), programming language, repository URL, and optional pinned commit. Linked from Evidence.of_script when the evidence is grounded in code rather than a text passage or figure." ;
     sh:closed false ;
-    sh:ignoredProperties ( rdf:type ),
-        ( rdf:type ) ;
+    sh:ignoredProperties ( rdf:type ) ;
     sh:property [ sh:datatype xsd:boolean ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -544,10 +581,6 @@ fabio:ComputerProgram a sh:NodeShape ;
             sh:nodeKind sh:Literal ;
             sh:order 7 ;
             sh:path indicium:commit_sha ],
-        [ sh:description "EDAM topic IRIs (multivalued)." ;
-            sh:nodeKind sh:IRI ;
-            sh:order 4 ;
-            sh:path indicium:edam_topics ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
             sh:nodeKind sh:Literal ;
@@ -560,35 +593,6 @@ fabio:ComputerProgram a sh:NodeShape ;
             sh:path indicium:content_url ],
         [ sh:datatype xsd:string ;
             sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 0 ;
-            sh:path dct:identifier ],
-        [ sh:description "Canonical homepage / source URL of the software entity." ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 1 ;
-            sh:path indicium:canonical_url ],
-        [ sh:datatype xsd:string ;
-            sh:description "Version string (e.g. SemVer, git tag, release name)." ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 2 ;
-            sh:path indicium:version ],
-        [ sh:datatype xsd:string ;
-            sh:description "bio.tools registry ID for cross-reference / federation." ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:Literal ;
-            sh:order 5 ;
-            sh:path indicium:bio_tools_id ],
-        [ sh:description "EDAM operation IRI (e.g. http://edamontology.org/operation_3215)." ;
-            sh:maxCount 1 ;
-            sh:nodeKind sh:IRI ;
-            sh:order 3 ;
-            sh:path indicium:edam_operation ],
-        [ sh:datatype xsd:string ;
-            sh:description "Stable IRI (e.g. w3id.org/holobiomicslab/asb-tool/<slug>) or URN identifying the software entity." ;
-            sh:maxCount 1 ;
-            sh:minCount 1 ;
             sh:nodeKind sh:Literal ;
             sh:order 0 ;
             sh:path dct:identifier ] ;

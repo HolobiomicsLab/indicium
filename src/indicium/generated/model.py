@@ -485,7 +485,7 @@ class SoftwareEntity(ConfiguredBaseModel):
     """
     A software tool / package with stable identity, EDAM annotations, and optional bio.tools cross-reference. Distinct from `Script` (in-paper code artefact): SoftwareEntity is a globally identified tool (e.g. MZmine, OpenMS) that multiple papers may cite.
     """
-    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'fabio:ComputerProgram',
+    linkml_meta: ClassVar[LinkMLMeta] = LinkMLMeta({'class_uri': 'indicium:SoftwareEntity',
          'from_schema': 'https://w3id.org/indicium',
          'slot_usage': {'identifier': {'description': 'Stable IRI (e.g. '
                                                       'w3id.org/holobiomicslab/asb-tool/<slug>) '

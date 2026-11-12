@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## Unreleased
+
+### Fixed
+- The KGmemory projection now emits `asb:Claim` and canonical `asb:`
+  SuperPattern predicates while retaining the `mem:SemanticMemory` type. This
+  is visible to consumers of `claim_jsonld()`, whose incorrect `indicium:` class
+  and predicate IRIs are replaced by `https://w3id.org/asb#` IRIs.
+- `Script` and `SoftwareEntity` now have separate SHACL targets, so a Script may
+  omit `dct:identifier` while a SoftwareEntity must provide it. The
+  SoftwareEntity RDF type changes from `fabio:ComputerProgram` to
+  `indicium:SoftwareEntity`; existing expanded SoftwareEntity RDF must add the
+  new type to receive the required-identifier constraint and may retain the
+  FaBiO type for interoperability.
+
 ## 2.0.0 — 2026-11-01
 
 First public release. These breaking changes landed *before* any Indicium package
