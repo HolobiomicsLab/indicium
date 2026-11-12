@@ -10,6 +10,28 @@
         - claim_to_evidence_snippet
         - claim_jsonld
         - MEM_NS
+        - VerificationResult
+        - Claim
+        - Evidence
+        - Source
+        - CitationLink
+        - ClaimType
+        - EvidenceType
+        - SourceType
+        - SuperPatternQualifier
+        - Figure
+        - FigureType
+        - Script
+        - ScriptType
+        - DataAsset
+        - DatasetType
+        - ClaimLink
+        - LinkType
+        - ClaimStatus
+        - TextQuoteSelector
+        - FragmentSelector
+        - IndiciumDocument
+        - SSSOMMapping
 
 ## Vocabulary bases (`indicium.iri_bindings`)
 

@@ -9,7 +9,7 @@ pending registration will add. Every status below was measured on 2026-10-30.
 |---|---|---|---|
 | `asb:` | `https://w3id.org/asb#` | `asb:Claim` and eight slot IRIs: the SuperPattern slots `asb:context`, `asb:subject`, `asb:qualifier`, `asb:relation`, `asb:object`, and `asb:domainQualifier`, `asb:sourceTaskKind`, `asb:workflowCoupling` | Yes |
 | `asbval:` | `https://w3id.org/asb/validation#` | Validation assertion terms used by ASB beside `asb:`. Not a prefix of this schema | Yes |
-| `indicium:` | `https://w3id.org/indicium/` | The LinkML schema `id`, the `indicium` prefix of the JSON-LD context, and every class and slot without its own `class_uri` or `slot_uri`: claim metadata (`claim_status`, `claim_type`, `source_excerpt`), the evidence and source slots (`eco_code`, `quote_exact`, `for_claim`, `of_source`, ...), `ClaimLink`, `CitationLink` and `IndiciumDocument`. The SHACL shapes check 75 property paths under this namespace, and the OWL artefact names every class and slot under it | No (404) |
+| `indicium:` | `https://w3id.org/indicium/` | The LinkML schema `id`, the `indicium` prefix of the JSON-LD context, and every class and slot without its own `class_uri` or `slot_uri`: claim metadata (`claim_status`, `claim_type`, `source_excerpt`), the evidence and source slots (`eco_code`, `quote_exact`, `for_claim`, `of_source`, ...), `ClaimLink`, `CitationLink` and `IndiciumDocument`. Of the 87 distinct IRIs used as SHACL paths, 75 are under this namespace, and the OWL artefact names every class and slot under it | No (404) |
 
 Code never needs to spell these strings. The bases are exported:
 
@@ -63,12 +63,23 @@ registration is merged, and they can change until then:
 ### Two names for one class in the generated artefacts
 
 The SHACL shapes and the pydantic model use the `class_uri` and `slot_uri` of the
-LinkML source. They bind `Claim` and eight of its slots to `asb:` IRIs; `Evidence`,
-`Source`, `Figure`, `Script`, `SoftwareEntity` and `DataAsset` to SEPIO, FaBiO, DoCO
-and DCAT classes; the two selectors to Web Annotation (`oa:`) and `SSSOMMapping` to
-`sssom:Mapping`; a few slots to Dublin Core, PROV and SEPIO properties; and every other
-class and slot to its `indicium:` IRI. Of the 87 property paths in the shapes, 75 are
-under `indicium:` and 8 under `asb:`.
+LinkML source. They bind `Claim` and seven of its distinct slots to `asb:` IRIs,
+and `Evidence.workflow_coupling` adds the eighth `asb:` path. `Evidence`, `Source`,
+`Figure`, `Script` and `DataAsset` use SEPIO, FaBiO, DoCO and DCAT classes;
+`SoftwareEntity` keeps its `indicium:` class. The two selectors use Web Annotation
+(`oa:`) and `SSSOMMapping` uses `sssom:Mapping`. A few slots use Dublin Core, PROV
+and SEPIO properties; every other class and slot uses its `indicium:` IRI.
+
+Repeated constraints can use the same path, so the number of `sh:path` statements
+is larger than the distinct vocabulary footprint:
+
+| Shapes graph | Statements | `indicium:` | `asb:` | Other | Distinct total | Distinct `indicium:` | Distinct `asb:` | Distinct other |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| `src/indicium/generated/shapes.ttl` | 108 | 86 | 10 | 12 | 87 | 75 | 8 | 4 |
+| `docs/schema-assets/indicium.shapes.ttl` | 110 | 86 | 12 | 12 | 87 | 75 | 8 | 4 |
+
+The published asset adds the supplemental qualifier-presence constraint, whose two
+paths are under `asb:`.
 
 The OWL artefact, `indicium.owl.ttl`, is generated with the LinkML default that names
 each class and slot by its schema-native IRI under `indicium:`, including those bound
