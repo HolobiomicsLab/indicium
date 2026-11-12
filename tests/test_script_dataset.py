@@ -2,6 +2,7 @@
 from pathlib import Path
 
 import pytest
+import rdflib
 from linkml_runtime import SchemaView
 
 from indicium.generated.model import (
@@ -20,6 +21,7 @@ from indicium.iri_bindings import (
     SCRIPT_TYPE_IRI,
     expand_curie,
 )
+from indicium.validate import validate_graph
 
 SCHEMA = Path(__file__).parents[1] / "src/indicium/schema/indicium.yaml"
 
@@ -34,10 +36,34 @@ def test_script_class_exists():
     assert sv.get_class("Script") is not None
 
 
-def test_script_class_uri_is_fabio_computer_program():
+def test_script_class_uri_is_distinct_from_software_entity():
     sv = SchemaView(str(SCHEMA))
-    cls = sv.get_class("Script")
-    assert str(cls.class_uri) == "fabio:ComputerProgram"
+    script = sv.get_class("Script")
+    software = sv.get_class("SoftwareEntity")
+    assert str(script.class_uri) == "fabio:ComputerProgram"
+    assert str(software.class_uri) == "indicium:SoftwareEntity"
+
+
+def test_script_without_identifier_conforms():
+    graph = rdflib.Graph().parse(data="""
+        @prefix fabio: <http://purl.org/spar/fabio/> .
+        @prefix indicium: <https://w3id.org/indicium/> .
+        <urn:script:1> a fabio:ComputerProgram ;
+            indicium:script_id "supplementary-script-1" .
+    """, format="turtle")
+    conforms, report = validate_graph(graph)
+    assert conforms is True, report
+
+
+def test_software_entity_without_identifier_does_not_conform():
+    graph = rdflib.Graph().parse(data="""
+        @prefix indicium: <https://w3id.org/indicium/> .
+        <urn:software:1> a indicium:SoftwareEntity ;
+            indicium:version "1.0" .
+    """, format="turtle")
+    conforms, report = validate_graph(graph)
+    assert conforms is False
+    assert "Result Path: dct:identifier" in report
 
 
 def test_script_type_enum_exists():

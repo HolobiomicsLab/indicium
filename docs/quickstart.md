@@ -129,6 +129,7 @@ print(snippet["reason"])       # compound A [inhibits] inhibits growth of cell l
 # JSON-LD node for KGmemory
 node = claim_jsonld(claim_dict)
 print(node["@id"])  # urn:indicium:claim:c001
+print(node["@type"])  # ['https://w3id.org/asb#Claim', 'http://kgmemory.org/ns#SemanticMemory']
 ```
 
 The ASTRA bridge works on the typed model and needs the `astra` extra:

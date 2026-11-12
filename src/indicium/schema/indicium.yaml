@@ -606,7 +606,7 @@ classes:
       identifier:
         required: false
   SoftwareEntity:
-    class_uri: fabio:ComputerProgram
+    class_uri: indicium:SoftwareEntity
     description: >-
       A software tool / package with stable identity, EDAM annotations,
       and optional bio.tools cross-reference. Distinct from `Script`
