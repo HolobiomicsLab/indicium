@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+- Public documentation no longer states that every claim always carries evidence.
+  The README, the documentation index and the schema overview now say what
+  validation enforces (the claim slots) and that evidence is a separate,
+  optional record linked through `supports_claim` or `for_claim`. No schema or
+  validation behaviour changes; `tests/test_claim_evidence_contract.py` pins the
+  documented contract.
+
 ### Fixed
 - The KGmemory projection now emits `asb:Claim` and canonical `asb:`
   SuperPattern predicates while retaining the `mem:SemanticMemory` type. This

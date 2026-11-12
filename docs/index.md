@@ -16,7 +16,9 @@
 Indicium standardizes one thing: the **binding** of a scientific claim to typed
 evidence and to the source that evidence points to, with provenance. A claim minted
 by any tool that imports Indicium has the same structure as one minted by any other,
-merges with it, and never travels without its evidence trace.
+merges with it, and has a defined place for its evidence trace. Whether a given
+claim carries evidence is up to the producer; see
+[What validation enforces](schema/index.md#what-validation-enforces).
 
 <div class="feature-grid" markdown>
 
@@ -114,5 +116,5 @@ SHACL processor on it gives the verdict of `validate_graph`.
 ## The name
 
 *Indicium* (Latin) is "a sign or mark that points to the truth"; in law, the
-evidentiary indication. Every claim carries its **indicia**, the traces that justify
+evidentiary indication. A claim is meant to carry its **indicia**, the traces that justify
 believing it.
