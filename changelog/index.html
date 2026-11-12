@@ -1015,6 +1015,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#changed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Changed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#fixed" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1226,7 +1237,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#changed" class="md-nav__link">
+  <a href="#changed_1" class="md-nav__link">
     <span class="md-ellipsis">
       
         Changed
@@ -1526,6 +1537,15 @@
 and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
 <hr />
 <h2 id="unreleased">Unreleased<a class="headerlink" href="#unreleased" title="Permanent link">&para;</a></h2>
+<h3 id="changed">Changed<a class="headerlink" href="#changed" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Public documentation no longer states that every claim always carries evidence.
+  The README, the documentation index and the schema overview now say what
+  validation enforces (the claim slots) and that evidence is a separate,
+  optional record linked through <code>supports_claim</code> or <code>for_claim</code>. No schema or
+  validation behaviour changes; <code>tests/test_claim_evidence_contract.py</code> pins the
+  documented contract.</li>
+</ul>
 <h3 id="fixed">Fixed<a class="headerlink" href="#fixed" title="Permanent link">&para;</a></h3>
 <ul>
 <li>The KGmemory projection now emits <code>asb:Claim</code> and canonical <code>asb:</code>
@@ -1715,7 +1735,7 @@ SHACL shapes, or any enum.</p>
   carry at least one of <code>asb:qualifier</code> (closed Bucur SuperPattern) or
   <code>asb:domainQualifier</code> (open domain extension).</li>
 </ul>
-<h3 id="changed">Changed<a class="headerlink" href="#changed" title="Permanent link">&para;</a></h3>
+<h3 id="changed_1">Changed<a class="headerlink" href="#changed_1" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong><code>qualifier</code> slot is no longer <code>required</code> on its own.</strong> A Claim previously
   had to carry a core Bucur qualifier; it may now satisfy the "at least one

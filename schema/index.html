@@ -599,6 +599,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#what-validation-enforces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What validation enforces
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1100,6 +1111,14 @@
 <p>The one thing Indicium mints is the <strong>binding</strong>: a claim → typed evidence → a
 source, provenance-stamped. The claim structure is borrowed from Bucur et al.;
 the value Indicium standardizes is the <em>typed grounding of claims in evidence.</em></p>
+<h2 id="what-validation-enforces">What validation enforces<a class="headerlink" href="#what-validation-enforces" title="Permanent link">&para;</a></h2>
+<p><code>validate_graph</code> and the SHACL shapes require the claim slots <code>context</code>, <code>subject</code>,
+<code>relation</code> and <code>object</code>, and at least one of <code>qualifier</code> or <code>domain_qualifier</code>. They
+also apply the required properties of the other classes, for example a
+<code>SoftwareEntity</code> needs an identifier. Evidence is a separate record that points to
+its claim through <code>supports_claim</code> or <code>for_claim</code>. In the model every document
+collection and both of those links are optional, so a claim without evidence is
+valid. A producer that promises evidence for every claim has to check it itself.</p>
 
 
 
