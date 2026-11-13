@@ -13,6 +13,9 @@ Brand folder: `docs/assets/brand/`.
 | `indicium-mark.svg` | mark only, 256 x 256 square | light |
 | `indicium-mark-dark.svg` | mark only, 256 x 256 square | dark |
 | `indicium-mark-512.png` | `indicium-mark.svg` at 512 x 512 px, transparent | light |
+| `favicon.svg` | ecosystem browser-tab icon, 32 x 32 grid | any |
+| `favicon.ico` | same icon, 16, 32 and 48 px | any |
+| `apple-touch-icon.png` | same icon, 180 x 180 px | any |
 
 Which file where:
 
@@ -21,10 +24,11 @@ Which file where:
 | README header | `indicium-mark.svg` with `indicium-mark-dark.svg` |
 | Documentation site header (CNRS blue bar in both schemes) | `indicium-mark-dark.svg` |
 | Documentation site home page | `indicium-mark.svg` with `indicium-mark-dark.svg` |
-| Browser tab | `indicium-mark-512.png` |
+| Browser tab | `favicon.svg`, with `favicon.ico` as fallback |
+| Home-screen icon | `apple-touch-icon.png` |
 | Tools that refuse SVG | `indicium-mark-512.png` |
 
-Both SVGs have a `viewBox`, no embedded raster, no `<text>` element, no external font and no external reference. Each carries a `<title>` and a `<desc>`.
+The browser-tab icon comes from the ecosystem icon family generated in `holobiomicslab_brand`; do not redraw it here. The two mark SVGs have a `viewBox`, no embedded raster, no `<text>` element, no external font and no external reference. Each carries a `<title>` and a `<desc>`.
 
 ## Palette
 
