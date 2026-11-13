@@ -20,7 +20,7 @@
         
       
       
-      <link rel="icon" href="../indicium-mark-512.png">
+      <link rel="icon" href="../favicon.svg">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
@@ -55,6 +55,10 @@
 
     
     
+  
+  <link rel="icon" href="../favicon.ico" sizes="48x48">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
   </head>
   
   
@@ -1008,6 +1012,21 @@
 <td><code>indicium-mark.svg</code> at 512 x 512 px, transparent</td>
 <td>light</td>
 </tr>
+<tr>
+<td><code>favicon.svg</code></td>
+<td>ecosystem browser-tab icon, 32 x 32 grid</td>
+<td>any</td>
+</tr>
+<tr>
+<td><code>favicon.ico</code></td>
+<td>same icon, 16, 32 and 48 px</td>
+<td>any</td>
+</tr>
+<tr>
+<td><code>apple-touch-icon.png</code></td>
+<td>same icon, 180 x 180 px</td>
+<td>any</td>
+</tr>
 </tbody>
 </table>
 <p>Which file where:</p>
@@ -1033,7 +1052,11 @@
 </tr>
 <tr>
 <td>Browser tab</td>
-<td><code>indicium-mark-512.png</code></td>
+<td><code>favicon.svg</code>, with <code>favicon.ico</code> as fallback</td>
+</tr>
+<tr>
+<td>Home-screen icon</td>
+<td><code>apple-touch-icon.png</code></td>
 </tr>
 <tr>
 <td>Tools that refuse SVG</td>
@@ -1041,7 +1064,7 @@
 </tr>
 </tbody>
 </table>
-<p>Both SVGs have a <code>viewBox</code>, no embedded raster, no <code>&lt;text&gt;</code> element, no external font and no external reference. Each carries a <code>&lt;title&gt;</code> and a <code>&lt;desc&gt;</code>.</p>
+<p>The browser-tab icon comes from the ecosystem icon family generated in <code>holobiomicslab_brand</code>; do not redraw it here. The two mark SVGs have a <code>viewBox</code>, no embedded raster, no <code>&lt;text&gt;</code> element, no external font and no external reference. Each carries a <code>&lt;title&gt;</code> and a <code>&lt;desc&gt;</code>.</p>
 <h2 id="palette">Palette<a class="headerlink" href="#palette" title="Permanent link">&para;</a></h2>
 <p>The palette is the one of the ASB brand kit.</p>
 <table>
