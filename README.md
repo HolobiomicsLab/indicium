@@ -166,7 +166,7 @@ Indicium is the shared layer; the projects below mint, store or consume its clai
 |---------|------------|----------------------|
 | [ASTRA](https://astra-spec.org) | A declarative YAML format for scientific analyses: inputs, outputs, decisions and evidence ([astra-spec](https://github.com/LightconeResearch/astra-spec)) | `indicium.astra_bridge` turns claims into ASTRA insights and reads ASTRA findings back as claims |
 | AgenticScienceBuilder (ASB) | Distils research articles into agent skills, task cards and capsules | Depends on `indicium-standard>=2.0.0,<3`; its claims use the `asb:` vocabulary |
-| [asb-skill-collections](https://github.com/HolobiomicsLab/asb-skill-collections) | Registry and release tooling of the ASB skill collections | The v1 trees carry Indicium documents written before 2.0.0 (earlier `asb:` base, not 2.0.0-conformant); the releases of 14 November 2026 are listed in `collections.yaml` |
+| [asb-skill-collections](https://github.com/HolobiomicsLab/asb-skill-collections) | Registry and release tooling of the ASB skill collections | The v1 trees carry Indicium documents written before 2.0.0 (earlier `asb:` base, not 2.0.0-conformant); the current releases are listed in `collections.yaml` |
 | `asb-skills-<domain>` | The skill collections, one repository per domain | Built by ASB; same vocabulary |
 | [Perspicacité](https://github.com/HolobiomicsLab/Perspicacite-AI) | Local-first retrieval-augmented system for searching and organizing the scientific literature | Uses the Indicium stack, when installed, for claim validation, the claim graph and the ASTRA export |
 | Scriptorium | Manuscript authoring | Depends on `indicium-standard>=2.0.0,<3` and the adapters |
