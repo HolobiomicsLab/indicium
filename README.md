@@ -147,15 +147,15 @@ asb_term("Claim")   # 'https://w3id.org/asb#Claim'
 ASB = "https://w3id.org/asb#"   # don't: silently dead after a move
 ```
 
-| Prefix | Namespace | Names | Resolves (measured 2026-10-30) |
+| Prefix | Namespace | Names | Resolves (measured 2026-11-15) |
 |--------|-----------|-------|------------------|
-| `asb:` | `https://w3id.org/asb#` | `asb:Claim` and its SuperPattern slots (`context`, `subject`, `qualifier`, `relation`, `object`), plus `domainQualifier`, `sourceTaskKind` and `workflowCoupling` | Yes. Registered on w3id.org on 29 October 2026; 303 to `holobiomicslab.eu/ns/asb`, which serves Turtle, JSON-LD and HTML |
-| `asbval:` | `https://w3id.org/asb/validation#` | Validation assertion terms used beside `asb:` by ASB | Yes. Same registration; 303 to `holobiomicslab.eu/ns/asbval` |
-| `indicium:` | `https://w3id.org/indicium/` | The schema id, the JSON-LD context prefix, and every class and slot without its own IRI binding: claim metadata, the evidence and source slots, `ClaimLink`, `CitationLink`, `IndiciumDocument` | No (404). Not registered yet; the request files are in [`docs/release/w3id-indicium/`](https://github.com/HolobiomicsLab/indicium/tree/main/docs/release/w3id-indicium) |
+| `asb:` | `https://w3id.org/asb#` | `asb:Claim` and its SuperPattern slots (`context`, `subject`, `qualifier`, `relation`, `object`), plus `domainQualifier`, `sourceTaskKind` and `workflowCoupling` | Yes. Registered on w3id.org on 29 October 2026; 303 to `holobiomicslab.cnrs.fr/ns/asb`, which serves Turtle, JSON-LD and HTML |
+| `asbval:` | `https://w3id.org/asb/validation#` | Validation assertion terms used beside `asb:` by ASB | Yes. Same registration; 303 to `holobiomicslab.cnrs.fr/ns/asbval` |
+| `indicium:` | `https://w3id.org/indicium/` | The schema id, the JSON-LD context prefix, and every class and slot without its own IRI binding: claim metadata, the evidence and source slots, `ClaimLink`, `CitationLink`, `IndiciumDocument` | Yes. 303 to `holobiomicslab.cnrs.fr/ns/indicium`; the request files remain in [`docs/release/w3id-indicium/`](https://github.com/HolobiomicsLab/indicium/tree/main/docs/release/w3id-indicium) as the record of the request |
 
 [`docs/uri-scheme.md`](https://holobiomicslab.github.io/indicium/uri-scheme/) has the redirect chains, the identifier
-conventions for claims and evidence, and what the `/indicium` registration will point
-at. `tests/test_namespace_resolves.py` fetches each namespace when
+conventions for claims and evidence, and where the `/indicium` registration points.
+`tests/test_namespace_resolves.py` fetches each namespace when
 `INDICIUM_NETWORK_TESTS=1` is set.
 
 ## Ecosystem
@@ -166,7 +166,7 @@ Indicium is the shared layer; the projects below mint, store or consume its clai
 |---------|------------|----------------------|
 | [ASTRA](https://astra-spec.org) | A declarative YAML format for scientific analyses: inputs, outputs, decisions and evidence ([astra-spec](https://github.com/LightconeResearch/astra-spec)) | `indicium.astra_bridge` turns claims into ASTRA insights and reads ASTRA findings back as claims |
 | AgenticScienceBuilder (ASB) | Distils research articles into agent skills, task cards and capsules | Depends on `indicium-standard>=2.0.0,<3`; its claims use the `asb:` vocabulary |
-| [asb-skill-collections](https://github.com/HolobiomicsLab/asb-skill-collections) | Registry and release tooling of the ASB skill collections | The v1 trees carry Indicium documents written before 2.0.0 (earlier `asb:` base, not 2.0.0-conformant); later versions will carry 2.0.0 documents |
+| [asb-skill-collections](https://github.com/HolobiomicsLab/asb-skill-collections) | Registry and release tooling of the ASB skill collections | The v1 trees carry Indicium documents written before 2.0.0 (earlier `asb:` base, not 2.0.0-conformant); the releases of 14 November 2026 are listed in `collections.yaml` |
 | `asb-skills-<domain>` | The skill collections, one repository per domain | Built by ASB; same vocabulary |
 | [Perspicacité](https://github.com/HolobiomicsLab/Perspicacite-AI) | Local-first retrieval-augmented system for searching and organizing the scientific literature | Uses the Indicium stack, when installed, for claim validation, the claim graph and the ASTRA export |
 | Scriptorium | Manuscript authoring | Depends on `indicium-standard>=2.0.0,<3` and the adapters |
@@ -174,8 +174,7 @@ Indicium is the shared layer; the projects below mint, store or consume its clai
 | `indicium-adapters` | The `DomainAdapter` and `SHACLProvider` protocols and entry-point discovery | Domain shapes reach `validate_graph(..., extra_shapes=...)` |
 | `indicium-adapters-<domain>` | Domain bundles: agentic-ai, astronomy, epigenomics, genomics, metabarcoding, metabolomics, metagenomics, multi-omics, proteomics, transcriptomics | Ontology terms and SHACL shapes per domain |
 
-AgenticScienceBuilder, Scriptorium, KGmemory, the `asb-skills-<domain>` collections
-and the `indicium-adapters` family are not public yet.
+AgenticScienceBuilder, Scriptorium and KGmemory are not public yet.
 
 ## Development
 

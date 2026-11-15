@@ -1,7 +1,7 @@
 # URI scheme
 
-This page records which IRIs Indicium uses, which of them resolve today, and what the
-pending registration will add. Every status below was measured on 2026-10-30.
+This page records which IRIs Indicium uses and which of them resolve today. Every
+status below was measured on 2026-11-15.
 
 ## Namespaces
 
@@ -9,7 +9,7 @@ pending registration will add. Every status below was measured on 2026-10-30.
 |---|---|---|---|
 | `asb:` | `https://w3id.org/asb#` | `asb:Claim` and eight slot IRIs: the SuperPattern slots `asb:context`, `asb:subject`, `asb:qualifier`, `asb:relation`, `asb:object`, and `asb:domainQualifier`, `asb:sourceTaskKind`, `asb:workflowCoupling` | Yes |
 | `asbval:` | `https://w3id.org/asb/validation#` | Validation assertion terms used by ASB beside `asb:`. Not a prefix of this schema | Yes |
-| `indicium:` | `https://w3id.org/indicium/` | The LinkML schema `id`, the `indicium` prefix of the JSON-LD context, and every class and slot without its own `class_uri` or `slot_uri`: claim metadata (`claim_status`, `claim_type`, `source_excerpt`), the evidence and source slots (`eco_code`, `quote_exact`, `for_claim`, `of_source`, ...), `ClaimLink`, `CitationLink` and `IndiciumDocument`. Of the 87 distinct IRIs used as SHACL paths, 75 are under this namespace, and the OWL artefact names every class and slot under it | No (404) |
+| `indicium:` | `https://w3id.org/indicium/` | The LinkML schema `id`, the `indicium` prefix of the JSON-LD context, and every class and slot without its own `class_uri` or `slot_uri`: claim metadata (`claim_status`, `claim_type`, `source_excerpt`), the evidence and source slots (`eco_code`, `quote_exact`, `for_claim`, `of_source`, ...), `ClaimLink`, `CitationLink` and `IndiciumDocument`. Of the 87 distinct IRIs used as SHACL paths, 75 are under this namespace, and the OWL artefact names every class and slot under it | Yes |
 
 Code never needs to spell these strings. The bases are exported:
 
@@ -29,32 +29,31 @@ redirects lead to documents hosted by the lab, which negotiate the representatio
 
 | Request | Redirect chain | Final response |
 |---|---|---|
-| `https://w3id.org/asb`, `Accept: text/turtle` | 301 to `/asb/`, 303 to `https://holobiomicslab.eu/ns/asb`, 303 to `asb.ttl` | 200 `text/turtle` |
+| `https://w3id.org/asb`, `Accept: text/turtle` | 301 to `/asb/`, 303 to `https://holobiomicslab.cnrs.fr/ns/asb`, 303 to `asb.ttl` | 200 `text/turtle` |
 | `https://w3id.org/asb`, `Accept: application/ld+json` | same, ending at `asb.jsonld` | 200 `application/ld+json` |
 | `https://w3id.org/asb`, `Accept: text/html` | same, ending at `asb.html` | 200 `text/html` |
-| `https://w3id.org/asb/validation`, `Accept: text/turtle` | 303 to `https://holobiomicslab.eu/ns/asbval`, 303 to `asbval.ttl` | 200 `text/turtle` |
+| `https://w3id.org/asb/validation`, `Accept: text/turtle` | 303 to `https://holobiomicslab.cnrs.fr/ns/asbval`, 303 to `asbval.ttl` | 200 `text/turtle` |
 | `https://w3id.org/asb/validation`, `Accept: text/html` | same, ending at `asbval.html` | 200 `text/html` |
 
 The fragment of a hash IRI never reaches the server: `https://w3id.org/asb#Claim` is
 looked up in the document returned for `https://w3id.org/asb`. Cite the w3id IRIs, not
-the `holobiomicslab.eu` addresses behind them; the redirect target can change, the
+the `holobiomicslab.cnrs.fr` addresses behind them; the redirect target can change, the
 identifier does not.
 
 ### `https://w3id.org/indicium/`
 
-Not registered. `https://w3id.org/indicium/` and every IRI under it return 404. The
-request files are ready in the repository, under `docs/release/w3id-indicium/`, and
-wait on two prerequisites: the repository must be public and GitHub Pages must be
-enabled. `RELEASING.md` lists the order.
+Registered. `https://w3id.org/indicium/` returns 303 to
+`https://holobiomicslab.cnrs.fr/ns/indicium`, which negotiates the representation.
+The request files remain in the repository under `docs/release/w3id-indicium/` as the
+record of the request.
 
-The request files propose the rules below. They take effect only when the
-registration is merged, and they can change until then:
+The registration answers as follows (measured 2026-11-15):
 
 | IRI | `Accept` | Target |
 |---|---|---|
-| `https://w3id.org/indicium/` and single-segment terms, for example `.../IndiciumDocument` | `text/turtle` | `docs/schema-assets/indicium.owl.ttl` on the `main` branch, via `raw.githubusercontent.com` |
-| same | `application/ld+json` | `src/indicium/schema/context.jsonld` on `main`, via `raw.githubusercontent.com` |
-| same | anything else | the documentation site, `https://holobiomicslab.github.io/indicium/` |
+| `https://w3id.org/indicium/` and single-segment terms, for example `.../IndiciumDocument` | `text/turtle` | `https://holobiomicslab.cnrs.fr/ns/indicium.ttl` |
+| same | `application/ld+json` | `https://holobiomicslab.cnrs.fr/ns/indicium.jsonld` |
+| same | anything else | `https://holobiomicslab.cnrs.fr/ns/indicium.html` |
 | `.../context.jsonld` | any | `src/indicium/schema/context.jsonld` on `main`, via `raw.githubusercontent.com` |
 | `.../indicium.owl.ttl`, `.../indicium.shapes.ttl`, `.../indicium.schema.json` | any | the file in `docs/schema-assets/` on `main`, via `raw.githubusercontent.com` |
 | `.../<X.Y.Z>/<one of those files>` | any | the file at the tag `v<X.Y.Z>` |
@@ -89,7 +88,7 @@ The ontology document itself is `https://w3id.org/indicium`.
 Each class bound elsewhere carries `skos:exactMatch` to that IRI (`indicium:Claim` to
 `asb:Claim`, `indicium:Evidence` to `SEPIO_0000002`, ...); the slots carry no such
 mapping. Validate data against the SHACL shapes. Most properties they check are
-`indicium:` IRIs, so the pending `/indicium` registration matters for claim and
+`indicium:` IRIs, so the `/indicium` registration matters for claim and
 evidence data, not only for document-level terms.
 
 ## Entity identifiers
@@ -125,7 +124,7 @@ The context is `docs/context.jsonld` in the repository, identical to
 `src/indicium/schema/context.jsonld`, which ships in the wheel. It is generated from
 the `class_uri`, `slot_uri` and enum meanings of the LinkML source (`make context`), so
 its term IRIs are the ones the SHACL shapes check. No public URL serves it today.
-Until one does, load it from the installed package:
+It can also be loaded from the installed package:
 
 ```python
 from importlib.resources import files
@@ -133,8 +132,8 @@ from importlib.resources import files
 context = (files("indicium") / "schema" / "context.jsonld").read_text()
 ```
 
-After the release it will be served by the documentation site at
-`https://holobiomicslab.github.io/indicium/context.jsonld` and, once registered, at
+It is also served by the documentation site at
+`https://holobiomicslab.github.io/indicium/context.jsonld` and at
 `https://w3id.org/indicium/context.jsonld`.
 
 ## Related identifiers of the same lab
