@@ -1136,8 +1136,8 @@
 
 
 <h1 id="uri-scheme">URI scheme<a class="headerlink" href="#uri-scheme" title="Permanent link">&para;</a></h1>
-<p>This page records which IRIs Indicium uses, which of them resolve today, and what the
-pending registration will add. Every status below was measured on 2026-10-30.</p>
+<p>This page records which IRIs Indicium uses and which of them resolve today. Every
+status below was measured on 2026-11-15.</p>
 <h2 id="namespaces">Namespaces<a class="headerlink" href="#namespaces" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -1165,7 +1165,7 @@ pending registration will add. Every status below was measured on 2026-10-30.</p
 <td><code>indicium:</code></td>
 <td><code>https://w3id.org/indicium/</code></td>
 <td>The LinkML schema <code>id</code>, the <code>indicium</code> prefix of the JSON-LD context, and every class and slot without its own <code>class_uri</code> or <code>slot_uri</code>: claim metadata (<code>claim_status</code>, <code>claim_type</code>, <code>source_excerpt</code>), the evidence and source slots (<code>eco_code</code>, <code>quote_exact</code>, <code>for_claim</code>, <code>of_source</code>, ...), <code>ClaimLink</code>, <code>CitationLink</code> and <code>IndiciumDocument</code>. Of the 87 distinct IRIs used as SHACL paths, 75 are under this namespace, and the OWL artefact names every class and slot under it</td>
-<td>No (404)</td>
+<td>Yes</td>
 </tr>
 </tbody>
 </table>
@@ -1191,7 +1191,7 @@ redirects lead to documents hosted by the lab, which negotiate the representatio
 <tbody>
 <tr>
 <td><code>https://w3id.org/asb</code>, <code>Accept: text/turtle</code></td>
-<td>301 to <code>/asb/</code>, 303 to <code>https://holobiomicslab.eu/ns/asb</code>, 303 to <code>asb.ttl</code></td>
+<td>301 to <code>/asb/</code>, 303 to <code>https://holobiomicslab.cnrs.fr/ns/asb</code>, 303 to <code>asb.ttl</code></td>
 <td>200 <code>text/turtle</code></td>
 </tr>
 <tr>
@@ -1206,7 +1206,7 @@ redirects lead to documents hosted by the lab, which negotiate the representatio
 </tr>
 <tr>
 <td><code>https://w3id.org/asb/validation</code>, <code>Accept: text/turtle</code></td>
-<td>303 to <code>https://holobiomicslab.eu/ns/asbval</code>, 303 to <code>asbval.ttl</code></td>
+<td>303 to <code>https://holobiomicslab.cnrs.fr/ns/asbval</code>, 303 to <code>asbval.ttl</code></td>
 <td>200 <code>text/turtle</code></td>
 </tr>
 <tr>
@@ -1218,15 +1218,14 @@ redirects lead to documents hosted by the lab, which negotiate the representatio
 </table>
 <p>The fragment of a hash IRI never reaches the server: <code>https://w3id.org/asb#Claim</code> is
 looked up in the document returned for <code>https://w3id.org/asb</code>. Cite the w3id IRIs, not
-the <code>holobiomicslab.eu</code> addresses behind them; the redirect target can change, the
+the <code>holobiomicslab.cnrs.fr</code> addresses behind them; the redirect target can change, the
 identifier does not.</p>
 <h3 id="httpsw3idorgindicium"><code>https://w3id.org/indicium/</code><a class="headerlink" href="#httpsw3idorgindicium" title="Permanent link">&para;</a></h3>
-<p>Not registered. <code>https://w3id.org/indicium/</code> and every IRI under it return 404. The
-request files are ready in the repository, under <code>docs/release/w3id-indicium/</code>, and
-wait on two prerequisites: the repository must be public and GitHub Pages must be
-enabled. <code>RELEASING.md</code> lists the order.</p>
-<p>The request files propose the rules below. They take effect only when the
-registration is merged, and they can change until then:</p>
+<p>Registered. <code>https://w3id.org/indicium/</code> returns 303 to
+<code>https://holobiomicslab.cnrs.fr/ns/indicium</code>, which negotiates the representation.
+The request files remain in the repository under <code>docs/release/w3id-indicium/</code> as the
+record of the request.</p>
+<p>The registration answers as follows (measured 2026-11-15):</p>
 <table>
 <thead>
 <tr>
@@ -1239,17 +1238,17 @@ registration is merged, and they can change until then:</p>
 <tr>
 <td><code>https://w3id.org/indicium/</code> and single-segment terms, for example <code>.../IndiciumDocument</code></td>
 <td><code>text/turtle</code></td>
-<td><code>docs/schema-assets/indicium.owl.ttl</code> on the <code>main</code> branch, via <code>raw.githubusercontent.com</code></td>
+<td><code>https://holobiomicslab.cnrs.fr/ns/indicium.ttl</code></td>
 </tr>
 <tr>
 <td>same</td>
 <td><code>application/ld+json</code></td>
-<td><code>src/indicium/schema/context.jsonld</code> on <code>main</code>, via <code>raw.githubusercontent.com</code></td>
+<td><code>https://holobiomicslab.cnrs.fr/ns/indicium.jsonld</code></td>
 </tr>
 <tr>
 <td>same</td>
 <td>anything else</td>
-<td>the documentation site, <code>https://holobiomicslab.github.io/indicium/</code></td>
+<td><code>https://holobiomicslab.cnrs.fr/ns/indicium.html</code></td>
 </tr>
 <tr>
 <td><code>.../context.jsonld</code></td>
@@ -1332,7 +1331,7 @@ The ontology document itself is <code>https://w3id.org/indicium</code>.
 Each class bound elsewhere carries <code>skos:exactMatch</code> to that IRI (<code>indicium:Claim</code> to
 <code>asb:Claim</code>, <code>indicium:Evidence</code> to <code>SEPIO_0000002</code>, ...); the slots carry no such
 mapping. Validate data against the SHACL shapes. Most properties they check are
-<code>indicium:</code> IRIs, so the pending <code>/indicium</code> registration matters for claim and
+<code>indicium:</code> IRIs, so the <code>/indicium</code> registration matters for claim and
 evidence data, not only for document-level terms.</p>
 <h2 id="entity-identifiers">Entity identifiers<a class="headerlink" href="#entity-identifiers" title="Permanent link">&para;</a></h2>
 <p>Producers mint their own identifiers; Indicium does not allocate them. Producers may
@@ -1362,13 +1361,13 @@ presence in an export.</p>
 <code>src/indicium/schema/context.jsonld</code>, which ships in the wheel. It is generated from
 the <code>class_uri</code>, <code>slot_uri</code> and enum meanings of the LinkML source (<code>make context</code>), so
 its term IRIs are the ones the SHACL shapes check. No public URL serves it today.
-Until one does, load it from the installed package:</p>
+It can also be loaded from the installed package:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">importlib.resources</span><span class="w"> </span><span class="kn">import</span> <span class="n">files</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">context</span> <span class="o">=</span> <span class="p">(</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;indicium&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;schema&quot;</span> <span class="o">/</span> <span class="s2">&quot;context.jsonld&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
 </code></pre></div>
-<p>After the release it will be served by the documentation site at
-<code>https://holobiomicslab.github.io/indicium/context.jsonld</code> and, once registered, at
+<p>It is also served by the documentation site at
+<code>https://holobiomicslab.github.io/indicium/context.jsonld</code> and at
 <code>https://w3id.org/indicium/context.jsonld</code>.</p>
 <h2 id="related-identifiers-of-the-same-lab">Related identifiers of the same lab<a class="headerlink" href="#related-identifiers-of-the-same-lab" title="Permanent link">&para;</a></h2>
 <table>
